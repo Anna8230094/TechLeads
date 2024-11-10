@@ -32,6 +32,23 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>kotlin-stdlib-jdk8</artifactId>
+					<groupId>org.jetbrains.kotlin</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20240303</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.testifyproject.junit5</groupId>
 			<artifactId>junit5</artifactId>
 			<version>1.0.6</version>
