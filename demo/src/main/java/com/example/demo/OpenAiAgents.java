@@ -14,42 +14,44 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class OpenAiAggents {
+public class OpenAiAgents {
 
     private String model;
     private String message;
     private String instructions;
     private String name;
     private String assistantId = "";
+    private String threadId = "";
     private final String key = loadKey();
 
     // an empty constructor for testing key
-    public OpenAiAggents() {
+    public OpenAiAgents() {
 
     }
 
-    public OpenAiAggents(String model, String instructions, String name){
+    public OpenAiAgents(String model, String instructions, String name) {
         this.model = model;
         this.instructions = instructions;
         this.name = name;
     }
 
     // contructor with all private fields
-    public OpenAiAggents(String model, String message, String instructions, String name) {
+    public OpenAiAgents(String model, String message, String instructions, String name) {
         this.model = model;
         this.message = message;
         this.instructions = instructions;
         this.name = name;
+        // Goerge told to me to put here the createAggent method,thread
     }
 
-    // creatAssostant
-    public void createOpenAssistant() throws IOException {
+    // creatAssistant
+    public void createAggent() throws IOException {
 
-        String jsonRequest = creatJsonForAssistant();
-        Response response = sendCreateAssistantRequest(jsonRequest);
+        String jsonRequest = buildJsonForAssistant();
+        Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
         if (response != null && response.isSuccessful()) {
-            assistantId = extractAssistantId(response);
+            assistantId = extractId(response);
             if (assistantId != null) {
                 setAssistantId(assistantId);
                 System.out.println("Assistant created successfully. ID: " + getAssistantId());
@@ -63,7 +65,7 @@ public class OpenAiAggents {
     }
 
     // creating json object
-    public String creatJsonForAssistant() {
+    public String buildJsonForAssistant() {
 
         JSONObject jsonRequest = new JSONObject();
         jsonRequest.put("instructions", getInstructions());
@@ -75,7 +77,7 @@ public class OpenAiAggents {
     }
 
     // send request to assistant API
-    public Response sendCreateAssistantRequest(String jsonRequest) throws IOException {
+    public Response sendRequest(String jsonRequest, String url) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         MediaType mediaType = MediaType.parse("application/json");
@@ -84,7 +86,7 @@ public class OpenAiAggents {
         RequestBody body = RequestBody.create(mediaType, jsonRequest);
 
         Request request = new Request.Builder()
-                .url("https://api.openai.com/v1/assistants")
+                .url(url)
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", key)
@@ -94,8 +96,8 @@ public class OpenAiAggents {
         return client.newCall(request).execute();
     }
 
-    // extract the id of assistant from response body
-    public String extractAssistantId(Response response) throws JSONException, IOException {
+    // extract the id  from JsonObject
+    public String extractId(Response response) throws JSONException, IOException {
         JSONObject jsonResponse = new JSONObject(response.body().string());
         return jsonResponse.getString("id");
     }
@@ -112,21 +114,35 @@ public class OpenAiAggents {
         }
     }
 
+    // The method that create the Thread
+    public void createThread() throws IOException {
+
+        String jsonRequest = "";
+        Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
+
+        //It is possible to create a method that will do that because i use that if else statement a lot of time in my code
+        if (response != null && response.isSuccessful()) {
+            threadId = extractId(response);
+            if (threadId != null) {
+                setThreadId(threadId);
+                System.out.println("Thread id is created successfully. ID: " +getThreadId());
+            } else {
+                System.out.println("Failed to extract thread ID.");
+            }
+        } else {
+            System.out.println("The creation of thread is unable");
+        }
+    }
+
+
+
     // some getters and setters for private fields
     public String getModel() {
         return this.model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public String getMessage() {
         return this.message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getInstructions() {
@@ -141,16 +157,20 @@ public class OpenAiAggents {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAssistantId() {
         return assistantId;
     }
 
     public void setAssistantId(String assistantId) {
         this.assistantId = assistantId;
+    }
+
+    public void setThreadId(String threadId) {
+        this.threadId = threadId;
+    }
+
+    public String getThreadId() {
+        return threadId;
     }
 
     public String getKey() {

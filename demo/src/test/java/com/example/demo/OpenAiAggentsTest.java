@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 public class OpenAiAggentsTest {
 
     
-    private final OpenAiAggents openAiAggents = new OpenAiAggents();
+    private final OpenAiAgents openAiAgents = new OpenAiAgents();
    
 
     @Test
     void loadKeyTest() {
-        assertNotNull(openAiAggents.loadKey(), "The open api key is not set");
+        assertNotNull(openAiAgents.loadKey(), "The open api key is not set");
     }
 
 
