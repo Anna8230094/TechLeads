@@ -36,12 +36,11 @@ public class OpenAiAgents {
     }
 
     // contructor with all private fields
-    public OpenAiAgents(String model, String message, String instructions, String name) {
+    public OpenAiAgents(String model, String message, String instructions, String name) throws IOException {
         this.model = model;
         this.message = message;
         this.instructions = instructions;
         this.name = name;
-        // Goerge told to me to put here the createAggent method,thread
     }
 
     // creatAssistant
@@ -89,7 +88,7 @@ public class OpenAiAgents {
                 .url(url)
                 .post(body)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", key)
+                .addHeader("Authorization", "Bearer " +key)
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
