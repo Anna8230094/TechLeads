@@ -15,20 +15,18 @@ import okhttp3.ResponseBody;
 
 public class OpenAiAgentsTest {
 
-    
-   
     private OpenAiAgents openAiAgents;
 
     @BeforeEach
-    void setUp() {
-        openAiAgents = new OpenAiAgents("gpt-4", "Generate a summary", "TestAgent");
+    void setUp(){
+        openAiAgents = new OpenAiAgents("gpt-4", "Tell me hi in german","You are a german translator", "Translator");
     }
 
     @Test
     void testLoadKey() {
         OpenAiAgents emptyAgent = new OpenAiAgents();
         String apiKey = emptyAgent.getKey();
-        
+
         assertNotNull(apiKey, "API Key should be loaded and not null.");
         assertTrue(apiKey.startsWith("sk-"), "API Key should start with 'sk-'"); // Example of API key format check
     }
@@ -36,6 +34,7 @@ public class OpenAiAgentsTest {
     @Test
     void testExtractId() throws IOException {
         String JsonResponse = "{\"id\":\"test-assistant-id\"}";
+        
         @SuppressWarnings("deprecation")
         Response response = new Response.Builder()
                 .code(200)
@@ -44,7 +43,7 @@ public class OpenAiAgentsTest {
                 .request(new Request.Builder().url("https://api.openai.com/v1/assistants").build())
                 .body(ResponseBody.create(MediaType.parse("application/json"), JsonResponse))
                 .build();
-        
+
         String extractedId = openAiAgents.extractId(response);
         assertEquals("test-assistant-id", extractedId);
     }
@@ -60,19 +59,37 @@ public class OpenAiAgentsTest {
 
     @Test
     void testCreateAssistantIntegration() throws IOException {
-        openAiAgents.createAggent();
+        openAiAgents.buildAgent();
         assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
         assertFalse(openAiAgents.getAssistantId().isEmpty(), "Assistant ID should not be empty.");
     }
 
     @Test
-    void testCreateThread() {
+    void testbuildThread() {
         try {
-            openAiAgents.createThread();
+            openAiAgents.buildThread();
             String threadId = openAiAgents.getThreadId();
             assertNotNull(threadId, "Thread ID should not be null after creation.");
             assertFalse(threadId.isEmpty(), "Thread ID should not be empty after creation.");
             System.out.println("Thread created successfully. ID: " + threadId);
+
+        } catch (IOException e) {
+            fail("IOException occurred: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testAddMessage() {
+        try {
+            openAiAgents.buildAgent();
+            assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
+
+            openAiAgents.buildThread();
+            assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+
+            openAiAgents.addMessage();
+
+            System.out.println("Message added successfully to thread ID: " + openAiAgents.getThreadId());
 
         } catch (IOException e) {
             fail("IOException occurred: " + e.getMessage());
