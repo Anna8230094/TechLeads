@@ -1,9 +1,12 @@
 package com.example.demo;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +21,8 @@ public class OpenAiAgentsTest {
     private OpenAiAgents openAiAgents;
 
     @BeforeEach
-    void setUp(){
-        openAiAgents = new OpenAiAgents("gpt-4", "Tell me hi in german","You are a german translator", "Translator");
+    void setUp() {
+        openAiAgents = new OpenAiAgents("gpt-4o-mini", "Tell me hi in german", "You are a german translator", "Translator");
     }
 
     @Test
@@ -34,7 +37,7 @@ public class OpenAiAgentsTest {
     @Test
     void testExtractId() throws IOException {
         String JsonResponse = "{\"id\":\"test-assistant-id\"}";
-        
+
         @SuppressWarnings("deprecation")
         Response response = new Response.Builder()
                 .code(200)
@@ -59,7 +62,7 @@ public class OpenAiAgentsTest {
 
     @Test
     void testCreateAssistantIntegration() throws IOException {
-        openAiAgents.buildAgent();
+        openAiAgents.createAgent();
         assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
         assertFalse(openAiAgents.getAssistantId().isEmpty(), "Assistant ID should not be empty.");
     }
@@ -67,7 +70,7 @@ public class OpenAiAgentsTest {
     @Test
     void testbuildThread() {
         try {
-            openAiAgents.buildThread();
+            openAiAgents.createThread();
             String threadId = openAiAgents.getThreadId();
             assertNotNull(threadId, "Thread ID should not be null after creation.");
             assertFalse(threadId.isEmpty(), "Thread ID should not be empty after creation.");
@@ -81,10 +84,10 @@ public class OpenAiAgentsTest {
     @Test
     void testAddMessage() {
         try {
-            openAiAgents.buildAgent();
+            openAiAgents.createAgent();
             assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
 
-            openAiAgents.buildThread();
+            openAiAgents.createThread();
             assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
 
             openAiAgents.addMessage();
@@ -95,4 +98,45 @@ public class OpenAiAgentsTest {
             fail("IOException occurred: " + e.getMessage());
         }
     }
+
+    @Test
+    void testRun() {
+        try {
+            openAiAgents.createAgent();
+            assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
+
+            openAiAgents.createThread();
+            assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+
+            openAiAgents.addMessage();
+
+            openAiAgents.run();
+            System.out.println("Run method executed successfully for thread ID: " + openAiAgents.getThreadId());
+
+        } catch (IOException e) {
+            fail("IOException occurred: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetRequest() {
+        try {
+            openAiAgents.createAgent();
+            assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
+
+            openAiAgents.createThread();
+            assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+
+            openAiAgents.addMessage();
+
+            openAiAgents.run();
+
+            openAiAgents.getRequest();
+            System.out.println("getRequest method executed successfully for thread ID: " + openAiAgents.getThreadId());
+
+        } catch (IOException e) {
+            fail("IOException occurred: " + e.getMessage());
+        }
+    }
+
 }

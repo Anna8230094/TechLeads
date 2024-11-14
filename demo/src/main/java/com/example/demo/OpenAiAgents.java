@@ -29,7 +29,7 @@ public class OpenAiAgents {
     }
 
     // contructor with all private fields
-    public OpenAiAgents(String model, String message, String instructions, String name){
+    public OpenAiAgents(String model, String message, String instructions, String name) {
         this.model = model;
         this.message = message;
         this.instructions = instructions;
@@ -37,7 +37,7 @@ public class OpenAiAgents {
     }
 
     // creatAssistant
-    public void buildAgent() throws IOException {
+    public void createAgent() throws IOException {
 
         String jsonRequest = buildJsonForAssistant();
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
@@ -107,11 +107,11 @@ public class OpenAiAgents {
     }
 
     // The method that create the Thread
-    public void buildThread() throws IOException {
+    public void createThread() throws IOException {
 
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
-
+        System.out.println(response);
         if (response != null && response.isSuccessful()) {
             threadId = extractId(response);
             if (threadId != null) {
@@ -125,22 +125,73 @@ public class OpenAiAgents {
         }
     }
 
-    // Adding message to assistant
+    // Adding message to the assistant
     public void addMessage() throws IOException {
+
         JSONObject jsonObject = new JSONObject()
                 .put("role", "user")
                 .put("content", getMessage());
 
         String jsonRequest = jsonObject.toString();
+
         Response response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + getThreadId() + "/messages");
-       
+        System.out.println(response);
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message add message successfully.");
         } else {
             System.out.println("Failed to add message ");
         }
 
+    }
+
+    public void run() throws IOException {
+
+        JSONObject jsonObject = new JSONObject()
+                .put("assistant_id", getAssistantId())
+                .put("instructions", getInstructions());
+
+        String jsonRequest = jsonObject.toString();
+
+        Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads/" + getThreadId() + "/runs");
+        System.out.println(response);
+        if (response.isSuccessful() && response.body() != null) {
+            System.out.println("Message sent successfully to user.");
+        } else {
+            System.out.println("Failed to get response ");
+        }
+
+    }
+
+    // get Answer from assistant
+    public void getRequest() throws IOException {
+
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/threads/" + getThreadId() + "/messages")
+                .get()
+                .addHeader("Authorization","Bearer "+ key)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("OpenAI-Beta", "assistants=v2")
+                .build();
+
+        Response response = client.newCall(request).execute();
+        System.out.println(response);
+        if (response.isSuccessful() && response.body() != null) {
+            System.out.println("I got the result.");
+            String responseBody = response.body().string();
+
+            JSONObject jsonResponse = new JSONObject(responseBody);
+            String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
+                    .getJSONArray("content").getJSONObject(0).getJSONObject("text")
+                    .getString("value");
+                    
+            System.out.println(assistantsResult);
+        } else {
+            System.out.println("Failed to get the result");
+
+        }
     }
 
     // some getters and setters for private fields
