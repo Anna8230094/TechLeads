@@ -44,12 +44,8 @@ public class OpenAiAgents {
 
         if (response != null && response.isSuccessful()) {
             assistantId = extractId(response);
-            if (assistantId != null) {
-                setAssistantId(assistantId);
-                System.out.println("Assistant created successfully. ID: " + getAssistantId());
-            } else {
-                System.out.println("Failed to extract assistant ID.");
-            }
+            setAssistantId(assistantId);
+            System.out.println("Assistant created successfully. ID: " + getAssistantId());
         } else {
             System.out.println("The creation of assistant is unable");
         }
@@ -96,6 +92,7 @@ public class OpenAiAgents {
 
     // The method that load key from application.properties
     public String loadKey() {
+
         Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             properties.load(input);
@@ -111,15 +108,11 @@ public class OpenAiAgents {
 
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
-        System.out.println(response);
+
         if (response != null && response.isSuccessful()) {
             threadId = extractId(response);
-            if (threadId != null) {
-                setThreadId(threadId);
-                System.out.println("Thread id is created successfully. ID: " + getThreadId());
-            } else {
-                System.out.println("Failed to extract thread ID.");
-            }
+            setThreadId(threadId);
+            System.out.println("Thread id is created successfully. ID: " + getThreadId());
         } else {
             System.out.println("The creation of thread is unable");
         }
@@ -136,7 +129,7 @@ public class OpenAiAgents {
 
         Response response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + getThreadId() + "/messages");
-        System.out.println(response);
+
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message add message successfully.");
         } else {
@@ -154,7 +147,7 @@ public class OpenAiAgents {
         String jsonRequest = jsonObject.toString();
 
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads/" + getThreadId() + "/runs");
-        System.out.println(response);
+
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
         } else {
@@ -167,31 +160,29 @@ public class OpenAiAgents {
     public void getRequest() throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
-
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/threads/" + getThreadId() + "/messages")
                 .get()
-                .addHeader("Authorization","Bearer "+ key)
+                .addHeader("Authorization", "Bearer " + key)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
         Response response = client.newCall(request).execute();
-        System.out.println(response);
-        if (response.isSuccessful() && response.body() != null) {
-            System.out.println("I got the result.");
-            String responseBody = response.body().string();
 
+        if (response.isSuccessful() && response.body() != null) {
+            String responseBody = response.body().string();
             JSONObject jsonResponse = new JSONObject(responseBody);
+
             String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
                     .getJSONArray("content").getJSONObject(0).getJSONObject("text")
                     .getString("value");
-                    
+
             System.out.println(assistantsResult);
         } else {
             System.out.println("Failed to get the result");
-
         }
+
     }
 
     // some getters and setters for private fields
