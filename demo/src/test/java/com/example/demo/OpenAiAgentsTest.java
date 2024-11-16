@@ -2,78 +2,44 @@ package com.example.demo;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import okhttp3.MediaType;
-import okhttp3.Protocol;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class OpenAiAgentsTest {
 
-    private OpenAiAgents openAiAgents;
+    private static  OpenAiAgent openAiAgents;
+    private static  OpenAiAssistant openAiAssistant;
+    String assistantId;
+
 
     @BeforeEach
-    void setUp() {
-        openAiAgents = new OpenAiAgents("gpt-4o-mini", "Tell me hi in german", "You are a german translator",
-                "Translator");
+    void setUp() throws IOException {
+        openAiAssistant = new OpenAiAssistant("gpt-4o-mini", "You are a german translator", "Translator");
+        assistantId = openAiAssistant.getAssistantId();
+        openAiAgents = new OpenAiAgent( "Tell me hi in german", "You are a german translator", assistantId);
     }
 
     @Test
     void loadKeyTest() {
-        OpenAiAgents openAiAgent = new OpenAiAgents();
-        String apiKey = openAiAgent.getKey();
+        String apiKey = openAiAgents.getKey();
         assertNotNull(apiKey, "API Key should be loaded and not null.");
     }
 
     @Test
-    void extractIdTest() throws IOException {
-        String JsonResponse = "{\"id\":\"test-assistant-id\"}";
-
-        @SuppressWarnings("deprecation")
-        Response response = new Response.Builder()
-                .code(200)
-                .message("OK")
-                .protocol(Protocol.HTTP_1_1)
-                .request(new Request.Builder().url("https://api.openai.com/v1/assistants").build())
-                .body(ResponseBody.create(MediaType.parse("application/json"), JsonResponse))
-                .build();
-
-        String extractedId = openAiAgents.extractId(response);
-        assertEquals("test-assistant-id", extractedId);
-    }
-
-    @Test
-    void sendRequestTest() throws IOException {
-        String jsonRequest = openAiAgents.buildJsonForAssistant();
-        Response response = openAiAgents.sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
-        assertNotNull(response, "Response should not be null.");
-    }
-
-    @Test
-    void createAssistantTest() throws IOException {
-        openAiAgents.createAgent();
-        assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
-    }
-
-    @Test
     void buildThreadTest() throws IOException {
-        openAiAgents.createThread();
-        String threadId = openAiAgents.getThreadId();
-        assertNotNull(threadId, "Thread ID should not be null after creation.");
-        System.out.println("Thread created successfully. ID: " + threadId);
+        assertNotNull(openAiAgents.createThread(), "Thread ID should not be null after creation.");
+        System.out.println("Thread created successfully. ID: " + openAiAgents.getThreadId());
     }
 
     @Test
     void testAddMessage() throws IOException {
-        openAiAgents.createAgent();
-        assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
-
-        openAiAgents.createThread();
+        openAiAgents.getThreadId();
         assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
 
         openAiAgents.addMessage();
@@ -82,10 +48,8 @@ public class OpenAiAgentsTest {
 
     @Test
     void testRun() throws IOException {
-        openAiAgents.createAgent();
-        assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
-
-        openAiAgents.createThread();
+    
+        assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
         assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
 
         openAiAgents.addMessage();
@@ -96,19 +60,34 @@ public class OpenAiAgentsTest {
 
     @Test
     void testGetRequest() throws IOException {
-        openAiAgents.createAgent();
-        assertNotNull(openAiAgents.getAssistantId(), "Assistant ID should not be null after creation.");
-
-        openAiAgents.createThread();
+    
+        assertNotNull(openAiAssistant.getAssistantId());
         assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
 
         openAiAgents.addMessage();
-
         openAiAgents.run();
 
         openAiAgents.getRequest();
         System.out.println("getRequest method executed successfully for thread ID: " + openAiAgents.getThreadId());
 
+    }
+
+    @AfterAll
+    @SuppressWarnings("unused")
+    static void deleteAssistants() throws IOException{
+         OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/assistants/" + openAiAssistant.getAssistantId())
+                .delete()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + openAiAssistant.loadKey())
+                .addHeader("OpenAI-Beta", "assistants=v2")
+                .build();
+                
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful())
+            System.out.println("The delete of assistant is unable");
     }
 
 }

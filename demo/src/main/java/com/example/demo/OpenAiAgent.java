@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,54 +13,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class OpenAiAgents {
+public final class OpenAiAgent {
 
-    private String model;
     private String message;
     private String instructions;
-    private String name;
-    private String assistantId = "";
     private String threadId = "";
     private final String key = loadKey();
-
-    public OpenAiAgents() {
-
-    }
+    private final String assistantId;
 
     // contructor with all private fields
-    public OpenAiAgents(String model, String message, String instructions, String name) {
-        this.model = model;
+    public OpenAiAgent(String message, String instructions, String assistantId) throws IOException {
         this.message = message;
         this.instructions = instructions;
-        this.name = name;
-    }
-
-    // creatAssistant
-    public void createAgent() throws IOException {
-
-        String jsonRequest = buildJsonForAssistant();
-        Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
-
-        if (response != null && response.isSuccessful()) {
-            assistantId = extractId(response);
-            setAssistantId(assistantId);
-            System.out.println("Assistant created successfully. ID: " + getAssistantId());
-        } else {
-            System.out.println("The creation of assistant is unable");
-        }
-
-    }
-
-    // creating json object
-    public String buildJsonForAssistant() {
-
-        JSONObject jsonRequest = new JSONObject();
-        jsonRequest.put("instructions", getInstructions());
-        jsonRequest.put("name", getName());
-        jsonRequest.put("model", getModel());
-        jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "code_interpreter")));
-
-        return jsonRequest.toString();
+        this.assistantId = assistantId;
+        this.threadId = createThread();
     }
 
     // send request to assistant API
@@ -104,17 +69,18 @@ public class OpenAiAgents {
     }
 
     // The method that create the Thread
-    public void createThread() throws IOException {
+    public String createThread() throws IOException {
 
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
 
         if (response != null && response.isSuccessful()) {
             threadId = extractId(response);
-            setThreadId(threadId);
             System.out.println("Thread id is created successfully. ID: " + getThreadId());
+            return threadId;
         } else {
             System.out.println("The creation of thread is unable");
+            throw new IOException();
         }
     }
 
@@ -141,7 +107,7 @@ public class OpenAiAgents {
     public void run() throws IOException {
 
         JSONObject jsonObject = new JSONObject()
-                .put("assistant_id", getAssistantId())
+                .put("assistant_id", assistantId)
                 .put("instructions", getInstructions());
 
         String jsonRequest = jsonObject.toString();
@@ -186,10 +152,6 @@ public class OpenAiAgents {
     }
 
     // some getters and setters for private fields
-    public String getModel() {
-        return this.model;
-    }
-
     public String getMessage() {
         return this.message;
     }
@@ -202,28 +164,16 @@ public class OpenAiAgents {
         this.instructions = instructions;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getAssistantId() {
-        return assistantId;
-    }
-
-    public void setAssistantId(String assistantId) {
-        this.assistantId = assistantId;
-    }
-
-    public void setThreadId(String threadId) {
-        this.threadId = threadId;
-    }
-
     public String getThreadId() {
         return threadId;
     }
 
     public String getKey() {
         return key;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }
