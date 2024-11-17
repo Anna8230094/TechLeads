@@ -11,7 +11,7 @@ public class HomeController {
   
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("message", "Welcome to my website!");
+        model.addAttribute("message", "Welcome to Hire&Go!");
         return "home";
     }
 
