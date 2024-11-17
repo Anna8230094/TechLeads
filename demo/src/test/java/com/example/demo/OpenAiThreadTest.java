@@ -11,9 +11,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OpenAiAgentsTest {
+public class OpenAiThreadTest {
 
-    private static  OpenAiAgent openAiAgents;
+    private static  OpenAiThread openAiThread;
     private static  OpenAiAssistant openAiAssistant;
     String assistantId;
 
@@ -22,53 +22,53 @@ public class OpenAiAgentsTest {
     void setUp() throws IOException {
         openAiAssistant = new OpenAiAssistant("gpt-4o-mini", "You are a german translator", "Translator");
         assistantId = openAiAssistant.getAssistantId();
-        openAiAgents = new OpenAiAgent( "Tell me hi in german", "You are a german translator", assistantId);
+        openAiThread = new OpenAiThread( "Tell me hi in german", "You are a german translator", assistantId);
     }
 
     @Test
     void loadKeyTest() {
-        String apiKey = openAiAgents.getKey();
+        String apiKey = openAiThread.getKey();
         assertNotNull(apiKey, "API Key should be loaded and not null.");
     }
 
     @Test
     void buildThreadTest() throws IOException {
-        assertNotNull(openAiAgents.createThread(), "Thread ID should not be null after creation.");
-        System.out.println("Thread created successfully. ID: " + openAiAgents.getThreadId());
+        assertNotNull(openAiThread.createThread(), "Thread ID should not be null after creation.");
+        System.out.println("Thread created successfully. ID: " + openAiThread.getThreadId());
     }
 
     @Test
     void testAddMessage() throws IOException {
-        openAiAgents.getThreadId();
-        assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+        openAiThread.getThreadId();
+        assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiAgents.addMessage();
-        System.out.println("Message added successfully to thread ID: " + openAiAgents.getThreadId());
+        openAiThread.addMessage();
+        System.out.println("Message added successfully to thread ID: " + openAiThread.getThreadId());
     }
 
     @Test
     void testRun() throws IOException {
     
         assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
-        assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+        assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiAgents.addMessage();
+        openAiThread.addMessage();
 
-        openAiAgents.run();
-        System.out.println("Run method executed successfully for thread ID: " + openAiAgents.getThreadId());
+        openAiThread.run();
+        System.out.println("Run method executed successfully for thread ID: " + openAiThread.getThreadId());
     }
 
     @Test
     void testGetRequest() throws IOException {
     
         assertNotNull(openAiAssistant.getAssistantId());
-        assertNotNull(openAiAgents.getThreadId(), "Thread ID should not be null after creation.");
+        assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiAgents.addMessage();
-        openAiAgents.run();
+        openAiThread.addMessage();
+        openAiThread.run();
 
-        openAiAgents.getRequest();
-        System.out.println("getRequest method executed successfully for thread ID: " + openAiAgents.getThreadId());
+        openAiThread.getRequest();
+        System.out.println("getRequest method executed successfully for thread ID: " + openAiThread.getThreadId());
 
     }
 

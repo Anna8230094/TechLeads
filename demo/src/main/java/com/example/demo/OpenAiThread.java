@@ -13,7 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public final class OpenAiAgent {
+public final class OpenAiThread {
 
     private String message;
     private String instructions;
@@ -22,7 +22,7 @@ public final class OpenAiAgent {
     private final String assistantId;
 
     // contructor with all private fields
-    public OpenAiAgent(String message, String instructions, String assistantId) throws IOException {
+    public OpenAiThread(String message, String instructions, String assistantId) throws IOException {
         this.message = message;
         this.instructions = instructions;
         this.assistantId = assistantId;
