@@ -1,11 +1,10 @@
 package com.example.demo;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import okhttp3.OkHttpClient;
@@ -16,10 +15,10 @@ public class OpenAiAssistantTest {
 
     private static OpenAiAssistant openAiAssistant;
 
-    @BeforeEach
+    @BeforeAll
     @SuppressWarnings("unused")
-    void setUp() throws IOException {
-        openAiAssistant = new OpenAiAssistant("gpt-4o-mini", "You are a german translator", "Translator");
+    static void setUp() throws IOException {
+        openAiAssistant = new OpenAiAssistant("gpt-4o", "You are a german translator", "Translator");
     }
 
     @Test

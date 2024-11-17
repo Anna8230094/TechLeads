@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public final  class OpenAiAssistant {
+public final class OpenAiAssistant {
 
     private String model;
     private String instructions;
@@ -57,8 +57,13 @@ public final  class OpenAiAssistant {
         jsonRequest.put("instructions", getInstructions());
         jsonRequest.put("name", getName());
         jsonRequest.put("model", getModel());
-        jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "code_interpreter")));
 
+        if (getModel().equals("gpt-4o")) {
+            jsonRequest.put("tools",
+                    new JSONArray().put(new JSONObject().put("type", "code_interpreter").put("type", "file_search")));
+        } else {
+            jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "code_interpreter")).put(new JSONObject().put("type", "file_search")));
+        }
         return jsonRequest.toString();
     }
 
