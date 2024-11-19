@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.openai;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public final class OpenAiThread {
+public class OpenAiThread {
 
     private String message;
     private String instructions;
@@ -69,7 +69,7 @@ public final class OpenAiThread {
     }
 
     // The method that create the Thread
-    public String createThread() throws IOException {
+    public  String createThread() throws IOException {
 
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
