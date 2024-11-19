@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@RequestMapping("hireandgo/home")
+@RequestMapping("/hireandgo/home")
 public class HomeController {
 
     @GetMapping("/")
