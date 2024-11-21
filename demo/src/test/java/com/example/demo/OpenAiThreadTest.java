@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.openai.OpenAiAssistant;
@@ -21,7 +21,7 @@ public class OpenAiThreadTest {
     String assistantId;
 
 
-    @BeforeEach
+    @BeforeAll
     void setUp() throws IOException {
         openAiAssistant = new OpenAiAssistant("gpt-4o-mini", "You are a german translator", "Translator");
         assistantId = openAiAssistant.getAssistantId();
@@ -76,7 +76,6 @@ public class OpenAiThreadTest {
     }
 
     @AfterAll
-    @SuppressWarnings("unused")
     static void deleteAssistants() throws IOException{
          OkHttpClient client = new OkHttpClient();
 

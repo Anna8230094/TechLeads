@@ -71,7 +71,7 @@ public class OpenAiThread {
     }
 
     // The method that create the Thread
-    public  String createThread() throws IOException {
+    public String createThread() throws IOException {
 
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
@@ -119,7 +119,7 @@ public class OpenAiThread {
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
             System.out.println(response.body().string());
-    
+
         } else {
             System.out.println("Failed to get response ");
         }
@@ -127,7 +127,7 @@ public class OpenAiThread {
     }
 
     // get Answer from assistant
-    public void getRequest() throws IOException {
+    public Response getRequest() throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
@@ -142,16 +142,17 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             String responseBody = response.body().string();
-            System.out.println(response);
             JSONObject jsonResponse = new JSONObject(responseBody);
 
             String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
                     .getJSONArray("content").getJSONObject(0).getJSONObject("text")
                     .getString("value");
-
             System.out.println(assistantsResult);
+           
+            return response;//or returns assistantResult
         } else {
             System.out.println("Failed to get the result");
+            throw new IOException();
         }
 
     }
@@ -184,6 +185,7 @@ public class OpenAiThread {
     public void setRunId(String runId) {
         this.runId = runId;
     }
+
     public String getRunId() {
         return runId;
     }
