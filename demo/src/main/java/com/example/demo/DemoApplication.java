@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.demo.openai.OpenAiThread;
 import com.example.demo.openai.agents.Register;
 
-import okhttp3.Response;
+
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -28,7 +28,7 @@ public class DemoApplication implements CommandLineRunner {
 		regisThread.run();
 
 		//This respons will be used as an input in other agents
-		Response registerResponse = regisThread.getRequest();
+		String registerResponse = regisThread.getRequest();
 
 	}
 

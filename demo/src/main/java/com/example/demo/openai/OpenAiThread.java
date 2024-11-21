@@ -127,7 +127,7 @@ public class OpenAiThread {
     }
 
     // get Answer from assistant
-    public Response getRequest() throws IOException {
+    public String getRequest() throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
@@ -149,7 +149,7 @@ public class OpenAiThread {
                     .getString("value");
             System.out.println(assistantsResult);
            
-            return response;//or returns assistantResult
+            return assistantsResult;//or returns assistantResult
         } else {
             System.out.println("Failed to get the result");
             throw new IOException();
