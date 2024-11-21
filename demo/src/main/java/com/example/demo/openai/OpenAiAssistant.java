@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public final class OpenAiAssistant {
+public class OpenAiAssistant {
 
     private String model;
     private String instructions;
@@ -22,11 +22,8 @@ public final class OpenAiAssistant {
     private String assistantId;
     private final String key = loadKey();
 
-    public OpenAiAssistant() {
-
-    }
-
     // contructor with all private fields
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public OpenAiAssistant(String model, String instructions, String name) throws IOException {
         this.model = model;
         this.instructions = instructions;
@@ -43,6 +40,7 @@ public final class OpenAiAssistant {
         if (response != null && response.isSuccessful()) {
             assistantId = extractId(response);
             System.out.println("Assistant created successfully. ID: " + getAssistantId());
+            System.out.println(response);
             return assistantId;
         } else {
             System.out.println("The creation of assistant is unable");
@@ -62,7 +60,7 @@ public final class OpenAiAssistant {
             jsonRequest.put("tools",
                     new JSONArray().put(new JSONObject().put("type", "code_interpreter").put("type", "file_search")));
         } else {
-            jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "code_interpreter")).put(new JSONObject().put("type", "file_search")));
+            jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "code_interpreter")));
         }
         return jsonRequest.toString();
     }

@@ -20,8 +20,10 @@ public class OpenAiThread {
     private String threadId = "";
     private final String key = loadKey();
     private final String assistantId;
+    private String runId;
 
     // contructor with all private fields
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public OpenAiThread(String message, String instructions, String assistantId) throws IOException {
         this.message = message;
         this.instructions = instructions;
@@ -108,7 +110,7 @@ public class OpenAiThread {
 
         JSONObject jsonObject = new JSONObject()
                 .put("assistant_id", assistantId)
-                .put("instructions", getInstructions());
+                .put("stream", true);
 
         String jsonRequest = jsonObject.toString();
 
@@ -116,6 +118,8 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
+            System.out.println(response.body().string());
+    
         } else {
             System.out.println("Failed to get response ");
         }
@@ -138,6 +142,7 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             String responseBody = response.body().string();
+            System.out.println(response);
             JSONObject jsonResponse = new JSONObject(responseBody);
 
             String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
@@ -174,6 +179,13 @@ public class OpenAiThread {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void setRunId(String runId) {
+        this.runId = runId;
+    }
+    public String getRunId() {
+        return runId;
     }
 
 }
