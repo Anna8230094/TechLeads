@@ -19,7 +19,7 @@ public class OpenAiThread {
     private String instructions;
     private String threadId = "";
     private final String key = loadKey();
-    private final String assistantId;
+    protected final String assistantId;
     private String runId;
 
     // contructor with all private fields

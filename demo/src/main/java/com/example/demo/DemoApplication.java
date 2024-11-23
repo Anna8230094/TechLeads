@@ -1,13 +1,13 @@
 package com.example.demo;
 
+import java.io.File;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.demo.openai.OpenAiThread;
-import com.example.demo.openai.agents.Register;
-
-
+import com.example.demo.openai.agents.Extractor;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -19,17 +19,15 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
-		// Creation of register assistant
-		Register register = new Register(Register.MODEL, Register.INSTRUCTIONS, Register.NAME);
-		String message ="Here are the details provided by the user:\nIndustry: Tech\nRole: Software Engineer\nProficiency Level: Mid-Level\nRelated Qualification: Python";
-		OpenAiThread regisThread = new OpenAiThread(message, Register.INSTRUCTIONS, register.getAssistantId());
-		regisThread.addMessage();
-		regisThread.run();
-
-		//This respons will be used as an input in other agents
-		String registerResponse = regisThread.getRequest();
-
+		
+		File file = Extractor.getFile();
+		Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS + file, Extractor.NAME);
+		String message = "The file is: ";
+		OpenAiThread extractorTread = new OpenAiThread(message +file, Extractor.INSTRUCTIONS, extractor.getAssistantId());
+		extractorTread.addMessage();
+		extractorTread.run();
+		String extractorResponse = extractorTread.getRequest();
+		
 	}
 
 }
