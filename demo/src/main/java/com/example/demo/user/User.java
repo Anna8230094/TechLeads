@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 @Entity
 @Table
 public class User {
-
+   
     @Id
     @SequenceGenerator(
         name ="user_sequence",
@@ -28,8 +28,7 @@ public class User {
     private String email;
     private String typeOfIndustry; 
 
-    public User(){
-
+    public User() {
     }
 
     public User(Long id,String first_name,String last_name, String email,String typeOfIndustry) {
@@ -88,6 +87,8 @@ public class User {
     public void setTypeOfIndustry(String typeOfIndustry) {
         this.typeOfIndustry = typeOfIndustry;
     }
+    
+    
     @Override
     public String toString() {
         return "User{" +
