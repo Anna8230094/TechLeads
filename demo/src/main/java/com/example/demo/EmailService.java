@@ -25,8 +25,7 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
-    public void sendEmail(
-            String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String text) throws MessagingException {
 
         try {
             // Input validation
@@ -45,7 +44,14 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(text, true);
+            
+
+            String htmlContent = "<p>Hello ,</p>" +
+                    "<p>Thank you for using HireandGo. Please click the link below to view your confirmation:</p>" +
+                    "<p><a href=\"" + websiteLink + "\">View Confirmation</a></p>" +
+                    "<p>Best regards,<br>HireandGo Team</p>";
+
+            helper.setText(htmlContent, true);
 
             emailSender.send(message);
 
@@ -69,6 +75,7 @@ public class EmailService {
             System.err.println("Unexpected messaging error: " + e.getMessage());
             throw new RuntimeException("Unexpected error while sending email.", e);
         }
+        
 
     }
 }
