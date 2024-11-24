@@ -27,7 +27,7 @@ public class DemoApplication {
 			System.out.println("Enter the body of the email:");
 			String body = scanner.nextLine();
 
-			String to = "annamegalou3@gmail.com ";
+			String to = "aggmegalou@gmail.com ";
 			emailService.sendEmail(to, subject, body);
 
 			System.out.println("Email sent successfully to " + to + "!");
