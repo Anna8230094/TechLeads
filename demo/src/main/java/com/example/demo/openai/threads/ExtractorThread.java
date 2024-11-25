@@ -8,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 
-import com.example.demo.openai.OpenAiThread;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -34,7 +32,7 @@ public class ExtractorThread extends OpenAiThread {
             return null;
         }
     }
-
+    
     @Async
     public Response uploadFile() throws IOException, InterruptedException, ExecutionException {
 

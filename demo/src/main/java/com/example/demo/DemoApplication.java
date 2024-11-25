@@ -4,10 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.demo.openai.OpenAiThread;
-import com.example.demo.openai.agents.Extractor;
 import com.example.demo.openai.agents.Register;
-import com.example.demo.openai.threads.ExtractorThread;
+import com.example.demo.openai.threads.OpenAiThread;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -29,16 +27,18 @@ public class DemoApplication implements CommandLineRunner {
 		openAiThread.addMessage();
 		openAiThread.run();
 		String registerResponse = openAiThread.getRequest();
+		System.out.println(registerResponse);
 
 
-		Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS, Extractor.NAME);
+		/*Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS, Extractor.NAME);
 
-		ExtractorThread extractorThread = new ExtractorThread(registerResponse, Extractor.INSTRUCTIONS, extractor.getAssistantId());
+		String messageExtractor = "Tell me some informations about the pdf";
+		ExtractorThread extractorThread = new ExtractorThread(messageExtractor, Extractor.INSTRUCTIONS, extractor.getAssistantId());
 		extractorThread.uploadFile();		
 		extractorThread.createThread();
 		extractorThread.addMessage();
 		extractorThread.run();
-		extractorThread.getRequest();
+		extractorThread.getRequest();*/
 
 
 	}

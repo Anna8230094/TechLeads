@@ -1,14 +1,15 @@
 package com.example.demo;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.openai.OpenAiAssistant;
-import com.example.demo.openai.OpenAiThread;
+import com.example.demo.openai.agents.OpenAiAssistant;
+import com.example.demo.openai.threads.OpenAiThread;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
