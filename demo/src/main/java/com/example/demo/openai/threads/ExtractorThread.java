@@ -2,11 +2,9 @@ package com.example.demo.openai.threads;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.scheduling.annotation.Async;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -23,27 +21,27 @@ public class ExtractorThread extends OpenAiThread {
         super(message, instructions, assistantId);
     }
 
-    public String getFile() {
+    /*public String getFile() {
         File file = new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf");
         if (file.exists()) {
             System.out.println("I got the file");
-            return file.getAbsolutePath();
+            return file;
         } else {
             return null;
         }
-    }
+    }*/
     
-    @Async
-    public Response uploadFile() throws IOException, InterruptedException, ExecutionException {
+    
+    public void uploadFile() throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
 
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file", getFile(),
+                .addFormDataPart("file","/C:/Users/user/Downloads/CV - Anna Megalou.pdf" ,
                         RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File(getFile())))
+                                new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf")))
                 .build();
 
         Request request = new Request.Builder()
@@ -56,8 +54,6 @@ public class ExtractorThread extends OpenAiThread {
         if (response.isSuccessful() && response.body() != null) {
             fileId = extractId(response);
         }
-        return response;
-
     }
 
     @Override

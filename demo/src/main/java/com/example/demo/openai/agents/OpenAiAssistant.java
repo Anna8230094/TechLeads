@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +54,9 @@ public class OpenAiAssistant {
         jsonRequest.put("instructions", getInstructions());
         jsonRequest.put("name", getName());
         jsonRequest.put("model", getModel());
+        if (getModel().equals("gpt-4o")) {
+            jsonRequest.put("tools", new JSONArray().put(new JSONObject().put("type", "file_search")));
+        }
         return jsonRequest.toString();
     }
 
