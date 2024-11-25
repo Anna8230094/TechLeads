@@ -118,8 +118,7 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
-            System.out.println(response.body().string());
-
+            
         } else {
             System.out.println("Failed to get response ");
         }
@@ -148,8 +147,8 @@ public class OpenAiThread {
                     .getJSONArray("content").getJSONObject(0).getJSONObject("text")
                     .getString("value");
             System.out.println(assistantsResult);
-           
-            return assistantsResult;//or returns assistantResult
+            return assistantsResult;// or returns assistantResult
+
         } else {
             System.out.println("Failed to get the result");
             throw new IOException();
