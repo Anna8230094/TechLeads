@@ -1,11 +1,9 @@
-package com.example;
+package com.example.demo.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.Applicants;
-import com.example.demo.ApplicantsService;
 
 @Component
 public class ApplicantsComponent implements CommandLineRunner{
