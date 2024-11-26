@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Quicksand:wght@300..700&display=swap');
+
 *{
     margin: 0px;
     padding: 0px;
@@ -68,35 +69,26 @@ nav ul li .active{
   white-space: nowrap;
 } 
 .article p{
-  font-size: 18px;
+  font-size: 25px;
   color: rgb(255, 25, 52);
   line-height: 1,5;
   margin-bottom: 50px;
+  font-family:  "Quicksand", sans-serif;
+
 }
-.buttonSignIn{
+.buttonLetsStart{
   color: rgb(11, 47, 154);
   text-decoration: none;
   text-transform: uppercase;
   padding: 12px 25px;
   letter-spacing: 1,5px;
   background-color: coral;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: bold;
   font-size: 18px;
   border-radius: 20px;
 }
-.buttonSignUp{
-  color: rgb(11, 47, 154);
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 12px 25px;
-  letter-spacing: 1,5px;
-  background-color: coral;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-weight: bold;
-  font-size: 18px;
-  border-radius: 20px;
-}
+
 
 .logo{
     background: url("images/logo.png");
