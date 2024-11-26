@@ -15,8 +15,10 @@ public class ApplicantsComponent implements CommandLineRunner{
 	public void run(String... args) {
 
 		Applicants applicant = new Applicants();
-		applicant.setName("John Doe");
-		applicant.setEmail("john.doe@example.com");
+		applicant.setFirstName("OLY");
+		applicant.setLastName("MEGALOU");
+		applicant.setEmail("oly.meg@example.com");
+		applicant.setIndustry("Finance");
 		applicantsService.saveApplicants(applicant);
 
 	}

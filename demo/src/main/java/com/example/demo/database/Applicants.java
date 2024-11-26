@@ -14,8 +14,10 @@ public class Applicants {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String first_name;
+    private String last_name;
     private String email;
+    private String typeOfIndustry;
 
     // Getters and Setters
     public Long getId() {
@@ -26,12 +28,19 @@ public class Applicants {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return first_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String first_name) {
+        this.first_name = first_name;
+    }
+    public String getLastName() {
+        return last_name;
+    }
+
+    public void setLastName(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getEmail() {
@@ -40,5 +49,12 @@ public class Applicants {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getIndustry() {
+        return typeOfIndustry;
+    }
+
+    public void setIndustry(String typeOfIndustry) {
+        this.typeOfIndustry = typeOfIndustry;
     }
 }
