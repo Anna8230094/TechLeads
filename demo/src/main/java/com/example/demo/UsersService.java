@@ -1,15 +1,15 @@
-package com.example.demo.database;
+package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ApplicantsService {
+public class UsersService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public Applicants saveApplicants(Applicants applicants) {
-        return userRepository.save(applicants);
+    public Users saveUsers(Users users) {
+        return userRepository.save(users);
     }
-}
+} 

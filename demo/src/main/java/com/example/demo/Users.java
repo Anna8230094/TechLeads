@@ -1,4 +1,4 @@
-package com.example.demo.database;
+package com.example.demo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="applicants")
-public class Applicants {
+@Table(name = "users")
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,7 @@ public class Applicants {
     public void setFirstName(String first_name) {
         this.first_name = first_name;
     }
+
     public String getLastName() {
         return last_name;
     }
@@ -50,6 +51,7 @@ public class Applicants {
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getIndustry() {
         return typeOfIndustry;
     }
