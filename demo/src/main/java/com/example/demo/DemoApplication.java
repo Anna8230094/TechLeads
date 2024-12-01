@@ -1,24 +1,17 @@
 package com.example.demo;
 
-import java.util.Scanner;
-
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-
-import com.example.demo.mail.EmailService;
 
 @SpringBootApplication
-public class DemoApplication  {
+public class DemoApplication {//implements CommandLineRunner 
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 
 	}
-
-	/*@Override
+/*
+	@Override
 	public void run(String... args) throws Exception {
 
 		String messageRegiser = "Here are the details provided by the user:Industry: Tech,Role: Software Engineer,Proficiency Level: Mid-Level,Related Qualification: Python";
@@ -34,7 +27,7 @@ public class DemoApplication  {
 
 		Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS, Extractor.NAME);
 
-		String messageExtractor = "Tell me some informations about the pdf";
+		String messageExtractor = "Convert to me  the pdf in csv format not a tablr or file";
 		ExtractorThread extractorThread = new ExtractorThread(messageExtractor, Extractor.INSTRUCTIONS,
 				extractor.getAssistantId());
 		extractorThread.uploadFile();
@@ -44,7 +37,7 @@ public class DemoApplication  {
 		extractorThread.getRequest();
 
 
-	}*/
+	}
 
 	@Bean
     @SuppressWarnings("ConvertToTryWithResources")
@@ -67,5 +60,5 @@ public class DemoApplication  {
 		};
 
 	}
-
+*/
 }
