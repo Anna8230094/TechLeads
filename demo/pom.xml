@@ -31,6 +31,20 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>3.3.5</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>net.optionfactory.spring</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>19.12</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>inline</artifactId>
