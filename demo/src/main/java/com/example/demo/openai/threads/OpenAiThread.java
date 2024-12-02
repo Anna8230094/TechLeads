@@ -3,6 +3,7 @@ package com.example.demo.openai.threads;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,7 +107,7 @@ public class OpenAiThread {
 
     }
 
-    public void run() throws IOException {
+    public CompletableFuture <String> run() throws IOException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("assistant_id", getAssistantId())
@@ -118,11 +119,12 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
-            System.out.println(response.body().string());//This hows to me the stream
+            //This hows to me the stream
             //I must with some way to wait the result from the assistant in order to show it in the next method sendRequest
-
+            return CompletableFuture.completedFuture(response.body().string());
         } else {
             System.out.println("Failed to get response ");
+            throw new IOException();
         }
 
     }
@@ -148,8 +150,7 @@ public class OpenAiThread {
             String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
                     .getJSONArray("content").getJSONObject(0).getJSONObject("text")
                     .getString("value");
-            System.out.println(assistantsResult);
-           return assistantsResult;
+            return assistantsResult;
 
         } else {
             System.out.println("Failed to get the result");
@@ -190,6 +191,7 @@ public class OpenAiThread {
     public String getRunId() {
         return runId;
     }
+
     public String getAssistantId() {
         return assistantId;
     }
