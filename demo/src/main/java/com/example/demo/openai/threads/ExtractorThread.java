@@ -2,6 +2,8 @@ package com.example.demo.openai.threads;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,25 +23,28 @@ public class ExtractorThread extends OpenAiThread {
         super(message, instructions, assistantId);
     }
 
-    /*public String getFile() {
-        File file = new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf");
-        if (file.exists()) {
-            System.out.println("I got the file");
-            return file;
-        } else {
-            return null;
-        }
-    }*/
-    
-    
-    public void uploadFile() throws IOException {
+    /*
+     * public String getFile() {
+     * File file = new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf");
+     * if (file.exists()) {
+     * System.out.println("I got the file");
+     * return file;
+     * } else {
+     * return null;
+     * }
+     * }
+     */
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+    public CompletableFuture<String> uploadFile() throws IOException {
+
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS).build();
 
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file","/C:/Users/user/Downloads/CV - Anna Megalou.pdf" ,
+                .addFormDataPart("file", "/C:/Users/user/Downloads/CV - Anna Megalou.pdf",
                         RequestBody.create(MediaType.parse("application/octet-stream"),
                                 new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf")))
                 .build();
@@ -50,10 +55,11 @@ public class ExtractorThread extends OpenAiThread {
                 .addHeader("Authorization", "Bearer " + getKey())
                 .build();
         Response response = client.newCall(request).execute();
-        
+
         if (response.isSuccessful() && response.body() != null) {
             fileId = extractId(response);
         }
+        return CompletableFuture.completedFuture(fileId);
     }
 
     @Override
@@ -62,7 +68,8 @@ public class ExtractorThread extends OpenAiThread {
                 .put("role", "user")
                 .put("content", getMessage())
                 .put("attachments",
-                        new JSONArray().put(new JSONObject().put("file_id", getFileId()).put("tools", new JSONArray().put(new JSONObject().put("type", "file_search")))));
+                        new JSONArray().put(new JSONObject().put("file_id", getFileId()).put("tools",
+                                new JSONArray().put(new JSONObject().put("type", "file_search")))));
 
         String jsonRequest = jsonObject.toString();
 

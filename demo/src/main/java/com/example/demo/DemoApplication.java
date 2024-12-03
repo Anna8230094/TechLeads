@@ -1,44 +1,42 @@
 package com.example.demo;
 
+import java.util.Scanner;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+import com.example.demo.mail.EmailService;
+
 
 @SpringBootApplication
-public class DemoApplication {//implements CommandLineRunner 
+public class DemoApplication /*implements CommandLineRunner*/ {
 
+	//@Autowired
+	//public static OpenAiService openAIService = new OpenAiService();
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 
 	}
-/*
-	@Override
+
+	/*@Override
 	public void run(String... args) throws Exception {
 
+
 		String messageRegiser = "Here are the details provided by the user:Industry: Tech,Role: Software Engineer,Proficiency Level: Mid-Level,Related Qualification: Python";
-		Register register = new Register(Register.MODEL, Register.INSTRUCTIONS, Register.NAME);
+		CompletableFuture<String> registerResponse = openAIService.registerResponse(messageRegiser);
 
-		OpenAiThread openAiThread = new OpenAiThread(messageRegiser, Register.INSTRUCTIONS, register.getAssistantId());
+		String messageExtractor = "The pdf is that i want from you to extract informations is the following: ";
+		CompletableFuture<String>extractorResponse = openAIService.ExtractorResponse(messageExtractor);
 
-		openAiThread.createThread();
-		openAiThread.addMessage();
-		openAiThread.run();
-		String registerResponse = openAiThread.getRequest();
-		System.out.println(registerResponse);
+		CompletableFuture.allOf(registerResponse, extractorResponse).join();
 
-		Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS, Extractor.NAME);
-
-		String messageExtractor = "Convert to me  the pdf in csv format not a tablr or file";
-		ExtractorThread extractorThread = new ExtractorThread(messageExtractor, Extractor.INSTRUCTIONS,
-				extractor.getAssistantId());
-		extractorThread.uploadFile();
-		extractorThread.createThread();
-		extractorThread.addMessage();
-		extractorThread.run();
-		extractorThread.getRequest();
-
-
-	}
-
+		System.out.println("Register Response: " + registerResponse.get());
+        System.out.println("Extractor Response: " + extractorResponse.get());
+	}*/
+	
 	@Bean
     @SuppressWarnings("ConvertToTryWithResources")
 	public CommandLineRunner commandLineRunner(ApplicationContext context) {
@@ -60,5 +58,6 @@ public class DemoApplication {//implements CommandLineRunner
 		};
 
 	}
-*/
+	
+
 }

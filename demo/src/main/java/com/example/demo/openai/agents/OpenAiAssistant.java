@@ -14,12 +14,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class OpenAiAssistant {
 
-    private  String model;
-    private  String instructions;
-    private  String name;
+    private final String model;
+    private final String instructions;
+    private final String name;
     private String assistantId;
     private final String key = loadKey();
 
