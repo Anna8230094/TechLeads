@@ -1,9 +1,7 @@
 package com.example.demo;
 
 import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,34 +9,33 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import com.example.demo.mail.EmailService;
-import com.example.demo.openai.service.OpenAiService;
 
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplication /*implements CommandLineRunner*/ {
 
-	@Autowired
-	public static OpenAiService openAIService = new OpenAiService();
+	//@Autowired
+	//public static OpenAiService openAIService = new OpenAiService();
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 
 
 		String messageRegiser = "Here are the details provided by the user:Industry: Tech,Role: Software Engineer,Proficiency Level: Mid-Level,Related Qualification: Python";
 		CompletableFuture<String> registerResponse = openAIService.registerResponse(messageRegiser);
 
-		String messageExtractor = "Convert to me  the pdf in csv format not a tablr or file";
+		String messageExtractor = "The pdf is that i want from you to extract informations is the following: ";
 		CompletableFuture<String>extractorResponse = openAIService.ExtractorResponse(messageExtractor);
 
 		CompletableFuture.allOf(registerResponse, extractorResponse).join();
 
 		System.out.println("Register Response: " + registerResponse.get());
         System.out.println("Extractor Response: " + extractorResponse.get());
-	}
+	}*/
 	
 	@Bean
     @SuppressWarnings("ConvertToTryWithResources")

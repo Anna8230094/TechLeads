@@ -41,13 +41,13 @@ public class OpenAiService {
         CompletableFuture.allOf(file).join();
 
         extractorThread.addMessage();
+        
         CompletableFuture<String> run = extractorThread.run();
         String response = extractorThread.getRequest();
         CompletableFuture.allOf(run).join();
+
         System.out.println(run.get());
 
         return CompletableFuture.completedFuture(response);
     }
 }
-
-

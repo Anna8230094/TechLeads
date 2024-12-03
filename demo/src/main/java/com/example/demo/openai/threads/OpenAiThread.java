@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,12 @@ public class OpenAiThread {
     // send request to assistant API
     public Response sendRequest(String jsonRequest, String url) throws IOException {
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
         MediaType mediaType = MediaType.parse("application/json");
 
         @SuppressWarnings("deprecation")
@@ -107,7 +113,7 @@ public class OpenAiThread {
 
     }
 
-    public CompletableFuture <String> run() throws IOException {
+    public CompletableFuture<String> run() throws IOException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("assistant_id", getAssistantId())
@@ -119,8 +125,6 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message sent successfully to user.");
-            //This hows to me the stream
-            //I must with some way to wait the result from the assistant in order to show it in the next method sendRequest
             return CompletableFuture.completedFuture(response.body().string());
         } else {
             System.out.println("Failed to get response ");
@@ -132,7 +136,12 @@ public class OpenAiThread {
     // get Answer from assistant
     public String getRequest() throws IOException {
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/threads/" + getThreadId() + "/messages")
                 .get()

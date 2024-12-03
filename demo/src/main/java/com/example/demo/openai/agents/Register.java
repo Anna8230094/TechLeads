@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Register extends OpenAiAssistant {
 
-    public static final String INSTRUCTIONS = "You are part of a system that reviews CVs from candidates on different domains, each job will be specific to a position/role. Based on the registration info I want you to create a structured CSV (not a file) containing all the information, that the following AI agents will need to review the CVs. This will not be for a specific candidate rather more the requirements for the role.";
+    public static final String INSTRUCTIONS = "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)";
     public static final String MODEL = "gpt-4o-mini";
     public static final String NAME = "Register";
 
