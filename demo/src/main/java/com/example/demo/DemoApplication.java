@@ -39,8 +39,6 @@ public class DemoApplication implements CommandLineRunner {
 		System.out.println("Register Response: " + registerResponse.get());
         System.out.println("Extractor Response: " + extractorResponse.get());
 
-		String messageReviewer = "Based on ";
-		CompletableFuture<String>ReviewerResponse = openAIService.ReviewerResponse();
 		
 		/*αφού πήρα την απάντηση από τον extractor πέρνει θέση ο rewier.
 		Αμα το αποτέλεσμα που μου επιστρέψει είναι διορθώσεις πρέπει να κανα πάρει σειρά ο extractor
