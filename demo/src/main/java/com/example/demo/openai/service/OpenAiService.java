@@ -62,6 +62,7 @@ public class OpenAiService {
         OpenAiThread openAiThread = new OpenAiThread(messageRanking, RankingAgent.INSTRUCTIONS,
                 rankingAgent.getAssistantId());
         // i add the message in thread
+        
         openAiThread.addMessage();
 
         // i execute async the run method
