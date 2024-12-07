@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.openai.agents.Extractor;
+import com.example.demo.openai.agents.ExtractorResearcher;
 import com.example.demo.openai.agents.Register;
 import com.example.demo.openai.threads.ExtractorThread;
 import com.example.demo.openai.threads.OpenAiThread;
@@ -47,6 +48,22 @@ public class OpenAiService {
         CompletableFuture.allOf(run).join();
 
         System.out.println(run.get());
+
+        return CompletableFuture.completedFuture(response);
+    }
+
+    @Async
+    public CompletableFuture<String> extractorResearcherResponse(String researcherExtractot) throws Exception {
+
+        ExtractorResearcher extractorResearcher = new ExtractorResearcher(ExtractorResearcher.MODEL, ExtractorResearcher.INSTRUCTIONS, ExtractorResearcher.NAME);
+        OpenAiThread openAiThread = new OpenAiThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS, extractorResearcher.getAssistantId());
+
+        openAiThread.addMessage();
+        CompletableFuture<String> run = openAiThread.run();
+        CompletableFuture.allOf(run).join();
+        System.out.println(run.get());
+
+        String response = openAiThread.getRequest();
 
         return CompletableFuture.completedFuture(response);
     }
