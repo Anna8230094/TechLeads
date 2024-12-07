@@ -1,7 +1,9 @@
 package com.example.demo;
 
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,19 +11,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import com.example.demo.mail.EmailService;
+import com.example.demo.openai.service.OpenAiService;
 
 
 @SpringBootApplication
-public class DemoApplication /*implements CommandLineRunner*/ {
+public class DemoApplication implements CommandLineRunner {
 
-	//@Autowired
-	//public static OpenAiService openAIService = new OpenAiService();
+	@Autowired
+	public static OpenAiService openAIService = new OpenAiService();
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 
 	}
 
-	/*@Override
+	@Override
 	public void run(String... args) throws Exception {
 
 
@@ -35,7 +38,19 @@ public class DemoApplication /*implements CommandLineRunner*/ {
 
 		System.out.println("Register Response: " + registerResponse.get());
         System.out.println("Extractor Response: " + extractorResponse.get());
-	}*/
+
+		String messageReviewer = "Based on ";
+		CompletableFuture<String>ReviewerResponse = openAIService.ReviewerResponse();
+		
+		/*αφού πήρα την απάντηση από τον extractor πέρνει θέση ο rewier.
+		Αμα το αποτέλεσμα που μου επιστρέψει είναι διορθώσεις πρέπει να κανα πάρει σειρά ο extractor
+		και με το ίδιο threadid μα του δώσω το νέο μήνυμα από τον rewier αλλάζοντασ το role από user και βάζοντας system.
+		Αυτή η διαδικασία επαναλαμβάνετε μέχρι να πάρω ως απάντηση από τον assistant correct.
+		Στη συνέχει καταχωρείτε το αποτέλεσμα στην βάση δεδομένων.
+		*/
+
+		
+	}
 	
 	@Bean
     @SuppressWarnings("ConvertToTryWithResources")
