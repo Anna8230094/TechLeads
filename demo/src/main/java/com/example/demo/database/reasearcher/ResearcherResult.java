@@ -1,4 +1,4 @@
-package com.example.demo.database;
+package com.example.demo.database.reasearcher;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +14,10 @@ public class ResearcherResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String resume;
+
+    public ResearcherResult(String resume){
+        this.resume = resume;
+    }
 
     // Getters and Setters
     public Long getId() {

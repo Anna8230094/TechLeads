@@ -1,4 +1,4 @@
-package com.example.demo.database;
+package com.example.demo.database.reasearcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +11,3 @@ public class ResearcherService {
         return researcherRepository.save(researcherResult);
     }
 }
-
-
