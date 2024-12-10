@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -16,13 +17,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@Service("ExtractorThread")
 public class ExtractorThread extends OpenAiThread {
 
     private String fileId = "";
-
-    public ExtractorThread(String message, String instructions, String assistantId) throws IOException {
-        super(message, instructions, assistantId);
-    }
 
     /*
      * public String getFile() {

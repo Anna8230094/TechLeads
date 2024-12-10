@@ -3,6 +3,8 @@ package com.example.demo.openai.service;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +17,37 @@ import com.example.demo.openai.threads.OpenAiThread;
 @Service
 public class OpenAiService {
 
+    @Autowired
+    public Register register;
+    @Autowired
+    public Extractor extractor;
+    @Autowired
+    public ExtractorResearcher extractorResearcher;
+
+    @Autowired
+    @Qualifier(value = "OpenAiThread")
+    public OpenAiThread registerOpenAiThread;
+    @Autowired
+    @Qualifier(value = "ExtractorThread")
+    public ExtractorThread extractorOpenAiThread;
+    @Autowired
+    @Qualifier(value = "OpenAiThread")
+    public OpenAiThread extractorResearcherOpenAiThread;
+
     @Async
     public CompletableFuture<String> registerResponse(String messageRegister) throws Exception {
 
-        Register register = new Register(Register.MODEL, Register.INSTRUCTIONS, Register.NAME);
-        OpenAiThread openAiThread = new OpenAiThread(messageRegister, Register.INSTRUCTIONS, register.getAssistantId());
+        register.createAiAssistant();
+        registerOpenAiThread.createThread(messageRegister, Register.INSTRUCTIONS, register.getAssistantId());
 
-        CompletableFuture<String> message = openAiThread.addMessage();
+        CompletableFuture<String> message = registerOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();
 
-        CompletableFuture<String> run = openAiThread.run();
+        CompletableFuture<String> run = registerOpenAiThread.run();
         CompletableFuture.allOf(run).join();
         System.out.println(run.get());
 
-        String response = openAiThread.getRequest();
+        String response = registerOpenAiThread.getRequest();
 
         return CompletableFuture.completedFuture(response);
     }
@@ -36,19 +55,19 @@ public class OpenAiService {
     @Async
     public CompletableFuture<String> ExtractorResponse(String messageExtractor) throws Exception {
 
-        Extractor extractor = new Extractor(Extractor.MODEL, Extractor.INSTRUCTIONS, Extractor.NAME);
-        ExtractorThread extractorThread = new ExtractorThread(messageExtractor, Extractor.INSTRUCTIONS,
+        extractor.createAiAssistant();
+        extractorOpenAiThread.createThread(messageExtractor, Extractor.INSTRUCTIONS,
                 extractor.getAssistantId());
 
-        CompletableFuture<String > file = extractorThread.uploadFile();
+        CompletableFuture<String > file = extractorOpenAiThread.uploadFile();
         CompletableFuture.allOf(file).join();
 
 
-        CompletableFuture<String > message =extractorThread.addMessage();
+        CompletableFuture<String > message =extractorOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();
         
-        CompletableFuture<String> run = extractorThread.run();
-        String response = extractorThread.getRequest();
+        CompletableFuture<String> run = extractorOpenAiThread.run();
+        String response = extractorOpenAiThread.getRequest();
         CompletableFuture.allOf(run).join();
 
         System.out.println(run.get());
@@ -59,17 +78,17 @@ public class OpenAiService {
     @Async
     public CompletableFuture<String> extractorResearcherResponse(String researcherExtractot) throws Exception {
 
-        ExtractorResearcher extractorResearcher = new ExtractorResearcher(ExtractorResearcher.MODEL, ExtractorResearcher.INSTRUCTIONS, ExtractorResearcher.NAME);
-        OpenAiThread openAiThread = new OpenAiThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS, extractorResearcher.getAssistantId());
+        extractorResearcher.createAiAssistant();
+        registerOpenAiThread.createThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS, extractorResearcher.getAssistantId());
 
-        CompletableFuture<String> message = openAiThread.addMessage();
+        CompletableFuture<String> message = registerOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();
 
-        CompletableFuture<String> run = openAiThread.run();
+        CompletableFuture<String> run = registerOpenAiThread.run();
         CompletableFuture.allOf(run).join();
         System.out.println(run.get());
 
-        String response = openAiThread.getRequest();
+        String response = registerOpenAiThread.getRequest();
 
         return CompletableFuture.completedFuture(response);
     }

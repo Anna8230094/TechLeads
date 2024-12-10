@@ -8,7 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -16,23 +18,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@Service("OpenAiThread")
 public class OpenAiThread {
 
     private String message;
     private String instructions;
     private String threadId = "";
-    private final String key = loadKey();
-    protected final String assistantId;
-    private String runId;
 
-    // contructor with all private fields
-    @SuppressWarnings("OverridableMethodCallInConstructor")
-    public OpenAiThread(String message, String instructions, String assistantId) throws IOException {
-        this.message = message;
-        this.instructions = instructions;
-        this.assistantId = assistantId;
-        this.threadId = createThread();
-    }
+     @Value("${openai.api.key}")
+    private String key;
+
+    protected String assistantId;
+    private String runId;
 
     // send request to assistant API
     public Response sendRequest(String jsonRequest, String url) throws IOException {
@@ -66,21 +63,24 @@ public class OpenAiThread {
     }
 
     // The method that load key from application.properties
-    public String loadKey() {
+    // public String loadKey() {
 
-        Properties properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            properties.load(input);
-            return properties.getProperty("openai.api.key");
-        } catch (IOException e) {
-            System.err.print(e);
-            return null;
-        }
-    }
+    //     Properties properties = new Properties();
+    //     try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+    //         properties.load(input);
+    //         return properties.getProperty("openai.api.key");
+    //     } catch (IOException e) {
+    //         System.err.print(e);
+    //         return null;
+    //     }
+    // }
 
     // The method that create the Thread
-    public String createThread() throws IOException {
-
+    public String createThread(String message, String instructions, String assistantId) throws IOException {
+        this.message = message;
+        this.instructions = instructions;
+        this.assistantId = assistantId;
+        
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
 

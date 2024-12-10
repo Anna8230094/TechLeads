@@ -2,6 +2,10 @@ package com.example.demo.openai.agents;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service
 public class ReviewerResearcher extends OpenAiAssistant {
 
     public static final String INSTRUCTIONS = "You are responsible for a cv ranking procedure where other agents are part of as well."
@@ -12,8 +16,10 @@ public class ReviewerResearcher extends OpenAiAssistant {
     public static final String MODEL = "gpt-4o-mini";
     public static final String NAME = "ReviewerResearcher";
 
-    public ReviewerResearcher(String model, String instructions, String name) throws IOException {
-        super(model, instructions, name);
+    {
+        instructions = INSTRUCTIONS;
+        model = MODEL;
+        name = NAME;
     }
 
 }

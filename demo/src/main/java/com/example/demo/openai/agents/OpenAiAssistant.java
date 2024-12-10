@@ -7,6 +7,8 @@ import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -14,26 +16,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@Service
 public class OpenAiAssistant {
 
-    private final String model;
-    private final String instructions;
-    private final String name;
+    protected String model;
+    protected String instructions;
+    protected String name;
     private String assistantId;
-    private final String key = loadKey();
+    
+    @Value("${openai.api.key}")
+    private String key;
 
-    // contructor with all private fields
-    @SuppressWarnings("OverridableMethodCallInConstructor")
-    public OpenAiAssistant(String model, String instructions, String name) throws IOException {
-        this.model = model;
-        this.instructions = instructions;
-        this.name = name;
-        this.assistantId = createAiAssistant();
-    }
 
     // creatAssistant
     public String createAiAssistant() throws IOException {
-
         String jsonRequest = buildJsonForAssistant();
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
