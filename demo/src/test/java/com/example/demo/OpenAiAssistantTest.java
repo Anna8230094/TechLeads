@@ -18,9 +18,8 @@ public class OpenAiAssistantTest {
     private static  OpenAiAssistant openAiAssistant;
 
     @BeforeAll
-    @SuppressWarnings("unused")
     static void setUp() throws IOException {
-        openAiAssistant = new OpenAiAssistant("gpt-4o", "You are a german translator", "Translator");
+        openAiAssistant = new OpenAiAssistant();
     }
 
     @Test
@@ -34,7 +33,6 @@ public class OpenAiAssistantTest {
     }
 
     @AfterAll
-    @SuppressWarnings("unused")
     static void deleteAssistant() throws IOException {
 
         OkHttpClient client = new OkHttpClient();

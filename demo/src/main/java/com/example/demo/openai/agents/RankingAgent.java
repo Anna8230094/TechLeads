@@ -1,8 +1,5 @@
 package com.example.demo.openai.agents;
 
-import java.io.IOException;
-
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

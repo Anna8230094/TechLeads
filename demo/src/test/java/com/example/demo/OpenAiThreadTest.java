@@ -24,9 +24,9 @@ public class OpenAiThreadTest {
 
     @BeforeAll
     void setUp() throws IOException {
-        openAiAssistant = new OpenAiAssistant("gpt-4o-mini", "You are a german translator", "Translator");
+        openAiAssistant = new OpenAiAssistant();
         assistantId = openAiAssistant.getAssistantId();
-        openAiThread = new OpenAiThread( "Tell me hi in german", "You are a german translator", assistantId);
+        openAiThread = new OpenAiThread();
     }
 
     @Test
@@ -37,7 +37,7 @@ public class OpenAiThreadTest {
 
     @Test
     void buildThreadTest() throws IOException {
-        assertNotNull(openAiThread.createThread(), "Thread ID should not be null after creation.");
+        assertNotNull(openAiThread.createThread( "Tell me hi in german", "You are a german translator", assistantId), "Thread ID should not be null after creation.");
         System.out.println("Thread created successfully. ID: " + openAiThread.getThreadId());
     }
 
