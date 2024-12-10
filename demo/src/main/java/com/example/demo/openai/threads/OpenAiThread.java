@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Async;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -94,7 +95,8 @@ public class OpenAiThread {
     }
 
     // Adding message to the assistant
-    public void addMessage() throws IOException {
+    @Async
+    public CompletableFuture<String> addMessage() throws IOException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("role", "user")
@@ -107,8 +109,10 @@ public class OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message add message successfully.");
+            return CompletableFuture.completedFuture(response.body().string());
         } else {
-            System.out.println("Failed to add message ");
+            System.err.println("Failed to add message ");
+            throw new Error();
         }
 
     }

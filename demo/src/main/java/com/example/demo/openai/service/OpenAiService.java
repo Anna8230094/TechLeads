@@ -21,7 +21,9 @@ public class OpenAiService {
         Register register = new Register(Register.MODEL, Register.INSTRUCTIONS, Register.NAME);
         OpenAiThread openAiThread = new OpenAiThread(messageRegister, Register.INSTRUCTIONS, register.getAssistantId());
 
-        openAiThread.addMessage();
+        CompletableFuture<String> message = openAiThread.addMessage();
+        CompletableFuture.allOf(message).join();
+
         CompletableFuture<String> run = openAiThread.run();
         CompletableFuture.allOf(run).join();
         System.out.println(run.get());
@@ -41,7 +43,9 @@ public class OpenAiService {
         CompletableFuture<String > file = extractorThread.uploadFile();
         CompletableFuture.allOf(file).join();
 
-        extractorThread.addMessage();
+
+        CompletableFuture<String > message =extractorThread.addMessage();
+        CompletableFuture.allOf(message).join();
         
         CompletableFuture<String> run = extractorThread.run();
         String response = extractorThread.getRequest();
@@ -58,7 +62,9 @@ public class OpenAiService {
         ExtractorResearcher extractorResearcher = new ExtractorResearcher(ExtractorResearcher.MODEL, ExtractorResearcher.INSTRUCTIONS, ExtractorResearcher.NAME);
         OpenAiThread openAiThread = new OpenAiThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS, extractorResearcher.getAssistantId());
 
-        openAiThread.addMessage();
+        CompletableFuture<String> message = openAiThread.addMessage();
+        CompletableFuture.allOf(message).join();
+
         CompletableFuture<String> run = openAiThread.run();
         CompletableFuture.allOf(run).join();
         System.out.println(run.get());

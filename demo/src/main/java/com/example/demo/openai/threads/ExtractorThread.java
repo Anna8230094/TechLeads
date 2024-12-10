@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.scheduling.annotation.Async;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -44,9 +45,9 @@ public class ExtractorThread extends OpenAiThread {
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file", "/C:/Users/user/Downloads/CV - Anna Megalou.pdf",
+                .addFormDataPart("file", System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf",
                         RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf")))
+                                new File(System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf")))
                 .build();
 
         Request request = new Request.Builder()
@@ -63,7 +64,8 @@ public class ExtractorThread extends OpenAiThread {
     }
 
     @Override
-    public void addMessage() throws IOException {
+    @Async
+    public CompletableFuture<String> addMessage() throws IOException {
         JSONObject jsonObject = new JSONObject()
                 .put("role", "user")
                 .put("content", getMessage())
@@ -78,8 +80,10 @@ public class ExtractorThread extends OpenAiThread {
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message add message successfully.");
+            return CompletableFuture.completedFuture(response.body().string());
         } else {
-            System.out.println("Failed to add message ");
+            System.err.println("Failed to add message ");
+            throw new Error();
         }
     }
 
