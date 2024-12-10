@@ -47,14 +47,6 @@ public class DemoApplication implements CommandLineRunner {
 		System.out.println("ExtractorResearcher response is :"+ extractorResearcherResponse.get());
 
 		
-		/*αφού πήρα την απάντηση από τον extractor πέρνει θέση ο rewier.
-		Αμα το αποτέλεσμα που μου επιστρέψει είναι διορθώσεις πρέπει να κανα πάρει σειρά ο extractor
-		και με το ίδιο threadid μα του δώσω το νέο μήνυμα από τον rewier αλλάζοντασ το role από user και βάζοντας system.
-		Αυτή η διαδικασία επαναλαμβάνετε μέχρι να πάρω ως απάντηση από τον assistant correct.
-		Στη συνέχει καταχωρείτε το αποτέλεσμα στην βάση δεδομένων.
-		*/
-
-		
 	}
 	
 	@Bean
