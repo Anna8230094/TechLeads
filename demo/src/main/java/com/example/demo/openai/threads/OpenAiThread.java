@@ -23,7 +23,7 @@ public class OpenAiThread {
     private String instructions;
     private String threadId = "";
 
-     @Value("${openai.api.key}")
+    @Value("${openai.api.key}")
     private String key;
 
     protected String assistantId;
@@ -63,29 +63,31 @@ public class OpenAiThread {
     // The method that load key from application.properties
     // public String loadKey() {
 
-    //     Properties properties = new Properties();
-    //     try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-    //         properties.load(input);
-    //         return properties.getProperty("openai.api.key");
-    //     } catch (IOException e) {
-    //         System.err.print(e);
-    //         return null;
-    //     }
+    // Properties properties = new Properties();
+    // try (InputStream input =
+    // getClass().getClassLoader().getResourceAsStream("application.properties")) {
+    // properties.load(input);
+    // return properties.getProperty("openai.api.key");
+    // } catch (IOException e) {
+    // System.err.print(e);
+    // return null;
+    // }
     // }
 
     // The method that create the Thread
-    public String createThread(String message, String instructions, String assistantId) throws IOException {
+    @Async
+    public  CompletableFuture<String> createThread(String message, String instructions, String assistantId) throws IOException {
         this.message = message;
         this.instructions = instructions;
         this.assistantId = assistantId;
-        
+
         String jsonRequest = "";
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads");
 
         if (response != null && response.isSuccessful()) {
             threadId = extractId(response);
             System.out.println("Thread id is created successfully. ID: " + getThreadId());
-            return threadId;
+            return CompletableFuture.completedFuture(threadId);
         } else {
             System.out.println("The creation of thread is unable");
             throw new IOException();

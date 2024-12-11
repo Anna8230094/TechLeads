@@ -37,8 +37,12 @@ public class OpenAiService {
     @Async
     public CompletableFuture<String> registerResponse(String messageRegister) throws Exception {
 
-        register.createAiAssistant();
-        registerOpenAiThread.createThread(messageRegister, Register.INSTRUCTIONS, register.getAssistantId());
+        CompletableFuture<String> create = register.createAiAssistant();
+        CompletableFuture<String> thread = registerOpenAiThread.createThread(messageRegister, Register.INSTRUCTIONS,
+                register.getAssistantId());
+
+        CompletableFuture.allOf(create).join();
+        CompletableFuture.allOf(thread).join();
 
         CompletableFuture<String> message = registerOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();
@@ -59,13 +63,12 @@ public class OpenAiService {
         extractorOpenAiThread.createThread(messageExtractor, Extractor.INSTRUCTIONS,
                 extractor.getAssistantId());
 
-        CompletableFuture<String > file = extractorOpenAiThread.uploadFile();
+        CompletableFuture<String> file = extractorOpenAiThread.uploadFile();
         CompletableFuture.allOf(file).join();
 
-
-        CompletableFuture<String > message =extractorOpenAiThread.addMessage();
+        CompletableFuture<String> message = extractorOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();
-        
+
         CompletableFuture<String> run = extractorOpenAiThread.run();
         String response = extractorOpenAiThread.getRequest();
         CompletableFuture.allOf(run).join();
@@ -79,7 +82,8 @@ public class OpenAiService {
     public CompletableFuture<String> extractorResearcherResponse(String researcherExtractot) throws Exception {
 
         extractorResearcher.createAiAssistant();
-        registerOpenAiThread.createThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS, extractorResearcher.getAssistantId());
+        registerOpenAiThread.createThread(researcherExtractot, ExtractorResearcher.INSTRUCTIONS,
+                extractorResearcher.getAssistantId());
 
         CompletableFuture<String> message = registerOpenAiThread.addMessage();
         CompletableFuture.allOf(message).join();

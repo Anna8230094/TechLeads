@@ -45,7 +45,6 @@ public class DemoApplication implements CommandLineRunner {
 		CompletableFuture.allOf(extractorResearcherResponse).join();
 
 		System.out.println("ExtractorResearcher response is :"+ extractorResearcherResponse.get());
-
 		
 	}
 	

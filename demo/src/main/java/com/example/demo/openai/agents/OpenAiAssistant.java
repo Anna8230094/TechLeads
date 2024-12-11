@@ -3,11 +3,13 @@ package com.example.demo.openai.agents;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import okhttp3.MediaType;
@@ -29,14 +31,15 @@ public class OpenAiAssistant {
 
 
     // creatAssistant
-    public String createAiAssistant() throws IOException {
+    @Async
+    public  CompletableFuture <String> createAiAssistant() throws IOException {
         String jsonRequest = buildJsonForAssistant();
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
         if (response != null && response.isSuccessful()) {
             assistantId = extractId(response);
             System.out.println("Assistant created successfully. ID: " + getAssistantId());
-            return assistantId;
+            return CompletableFuture.completedFuture(assistantId);
         } else {
             System.out.println("The creation of assistant is unable");
             throw new IOException();
