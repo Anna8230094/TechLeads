@@ -1,4 +1,4 @@
-package com.example.demo.database;
+/*package com.example.demo.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -53,4 +53,4 @@ public class DatabseComponent implements CommandLineRunner {
         researcerService.saveResearcherResult(new ResearcherResult("mmm"));
     }
 
-}
+}*/

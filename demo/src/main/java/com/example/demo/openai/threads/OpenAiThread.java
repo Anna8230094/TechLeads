@@ -19,7 +19,6 @@ import okhttp3.Response;
 @Service("OpenAiThread")
 public class OpenAiThread {
 
-    private String message;
     private String instructions;
     private String threadId = "";
 
@@ -60,24 +59,8 @@ public class OpenAiThread {
         return jsonResponse.getString("id");
     }
 
-    // The method that load key from application.properties
-    // public String loadKey() {
-
-    // Properties properties = new Properties();
-    // try (InputStream input =
-    // getClass().getClassLoader().getResourceAsStream("application.properties")) {
-    // properties.load(input);
-    // return properties.getProperty("openai.api.key");
-    // } catch (IOException e) {
-    // System.err.print(e);
-    // return null;
-    // }
-    // }
-
-    // The method that create the Thread
     @Async
-    public  CompletableFuture<String> createThread(String message, String instructions, String assistantId) throws IOException {
-        this.message = message;
+    public  CompletableFuture<String> createThread( String instructions, String assistantId) throws IOException {
         this.instructions = instructions;
         this.assistantId = assistantId;
 
@@ -96,11 +79,11 @@ public class OpenAiThread {
 
     // Adding message to the assistant
     @Async
-    public CompletableFuture<String> addMessage() throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message ) throws IOException {
 
         JSONObject jsonObject = new JSONObject()
-                .put("role", "user")
-                .put("content", getMessage());
+                .put("role", role)
+                .put("content", message);
 
         String jsonRequest = jsonObject.toString();
 
@@ -173,9 +156,6 @@ public class OpenAiThread {
     }
 
     // some getters and setters for private fields
-    public String getMessage() {
-        return this.message;
-    }
 
     public String getInstructions() {
         return this.instructions;
@@ -191,10 +171,6 @@ public class OpenAiThread {
 
     public String getKey() {
         return key;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public void setRunId(String runId) {
