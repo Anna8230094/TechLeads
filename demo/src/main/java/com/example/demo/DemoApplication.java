@@ -37,7 +37,7 @@ public class DemoApplication /*implements CommandLineRunner*/ {
         System.out.println("Extractor Response: " + extractorResponse.get());
 	}*/
 	
-	@Bean
+	/*@Bean
     @SuppressWarnings("ConvertToTryWithResources")
 	public CommandLineRunner commandLineRunner(ApplicationContext context) {
 		return args -> {
@@ -57,7 +57,7 @@ public class DemoApplication /*implements CommandLineRunner*/ {
 			scanner.close();
 		};
 
-	}
+	}*/
 	
 
 }

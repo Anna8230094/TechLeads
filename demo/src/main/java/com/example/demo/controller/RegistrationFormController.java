@@ -12,5 +12,4 @@ public class RegistrationFormController {
     public String registrationControl() {
         return "registrationform";
     }
-
 }
