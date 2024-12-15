@@ -55,11 +55,9 @@ public class DemoApplication implements CommandLineRunner {
 		String response = reviewerResponse.get();
 
 		// step 5:check the ansswer of rewier
-		System.out.println("LLLLL");
-
-		System.out.println(response.toString());
-		while (true) {
-			if (!response.contains( "---- NO CHANGES REQUIRED, ANALYSIS GOOD ----" ) ){
+		int count = 0;
+		while (count < 5) {
+			if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
 				System.out.println("THE REVIEWER SYGGEST CORRECTIONS");
 				String systemMessage = reviewerResponse.get();
 				CompletableFuture<String> extarctorResearcherCorrections = openAIService
@@ -67,13 +65,12 @@ public class DemoApplication implements CommandLineRunner {
 				CompletableFuture.allOf(extarctorResearcherCorrections).join();
 
 				messageReviewer = "The response of extraxtorReasearcher is: "
-						+ extarctorResearcherCorrections.get();	
-				reviewerResponse= openAIService.reviewerResponse(messageReviewer);
+						+ extarctorResearcherCorrections.get();
+				reviewerResponse = openAIService.reviewerResponse(messageReviewer);
 				CompletableFuture.allOf(reviewerResponse).join();
 
 				response = reviewerResponse.get();
-				System.out.println("PPPPPPP");
-
+				count++;
 				System.out.println(response.toString());
 			} else {
 				break;
