@@ -15,7 +15,7 @@ import com.example.demo.openai.service.OpenAiService;
 
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplication{ //implements CommandLineRunner 
 
 	@Autowired
 	public OpenAiService openAIService;
@@ -24,7 +24,7 @@ public class DemoApplication implements CommandLineRunner {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 
 
@@ -68,7 +68,7 @@ public class DemoApplication implements CommandLineRunner {
 			scanner.close();
 		};
 
-	}
+	}*/
 	
 
 }
