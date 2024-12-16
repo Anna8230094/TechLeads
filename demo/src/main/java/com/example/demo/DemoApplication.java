@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.demo.database.reasearcher.ResearcherResult;
 import com.example.demo.database.reasearcher.ResearcherService;
 import com.example.demo.openai.service.OpenAiService;
 
@@ -17,7 +18,10 @@ public class DemoApplication implements CommandLineRunner {
 	public OpenAiService openAIService;
 
 	@Autowired
-	public ResearcherService researcherService;
+	ResearcherService researcherService;
+
+	@Autowired 
+	ResearcherResult researcherResult;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -44,6 +48,9 @@ public class DemoApplication implements CommandLineRunner {
 		CompletableFuture<String> extractorResearcherResponse = openAIService
 				.extractorResearcherResponse(extractorResearcherMessage);
 		CompletableFuture.allOf(extractorResearcherResponse).join();
+		System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
+		researcherResult.setResume(extractorResearcherMessage);
+		System.out.println();
 
 		System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
 

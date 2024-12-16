@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.database.reasearcher.ResearcherResult;
+import com.example.demo.database.reasearcher.ResearcherService;
 import com.example.demo.openai.agents.Extractor;
 import com.example.demo.openai.agents.ExtractorResearcher;
 import com.example.demo.openai.agents.OpenAiAssistant;
+import com.example.demo.openai.agents.OpenAiAssistant;
 import com.example.demo.openai.agents.Register;
+import com.example.demo.openai.agents.ReviewerResearcher;
 import com.example.demo.openai.agents.ReviewerResearcher;
 import com.example.demo.openai.threads.ExtractorThread;
 import com.example.demo.openai.threads.OpenAiThread;
@@ -82,6 +86,12 @@ public class OpenAiService {
 
     @Async
     public CompletableFuture<String> ExtractorResponse(String messageExtractor) throws Exception {
+        return processRequest(messageExtractor, Extractor.INSTRUCTIONS, extractor, extractorOpenAiThread, true);
+    }
+
+    @Async
+    public CompletableFuture<String> extractorResearcherResponse(String researcherExtractor) throws Exception {
+        return processRequest(researcherExtractor, ExtractorResearcher.INSTRUCTIONS, extractorResearcher, extractorResearcherOpenAiThread, false);
         return processRequest(messageExtractor, Extractor.INSTRUCTIONS, extractor, extractorOpenAiThread, true);
     }
 
