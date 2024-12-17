@@ -14,6 +14,8 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
 	public OpenAiService openAIService;
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -56,12 +58,11 @@ public class DemoApplication implements CommandLineRunner {
 			if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
 				System.out.println("THE REVIEWER SYGGEST CORRECTIONS");
 				String systemMessage = reviewerResponse.get();
-				CompletableFuture<String> extarctorResearcherCorrections = openAIService
-						.extractorResearcherResponse(systemMessage);
-				CompletableFuture.allOf(extarctorResearcherCorrections).join();
+				extractorResearcherResponse = openAIService.extractorResearcherResponse(systemMessage);
+				CompletableFuture.allOf(extractorResearcherResponse).join();
 
 				messageReviewer = "The response of extraxtorReasearcher is: "
-						+ extarctorResearcherCorrections.get();
+						+ extractorResearcherResponse.get();
 				reviewerResponse = openAIService.reviewerResponse(messageReviewer);
 				CompletableFuture.allOf(reviewerResponse).join();
 

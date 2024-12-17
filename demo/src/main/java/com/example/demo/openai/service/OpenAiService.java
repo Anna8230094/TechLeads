@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.openai.agents.Extractor;
 import com.example.demo.openai.agents.ExtractorResearcher;
 import com.example.demo.openai.agents.OpenAiAssistant;
+import com.example.demo.openai.agents.RankingAgent;
 import com.example.demo.openai.agents.Register;
+import com.example.demo.openai.agents.ReviewerRanking;
 import com.example.demo.openai.agents.ReviewerResearcher;
 import com.example.demo.openai.threads.ExtractorThread;
 import com.example.demo.openai.threads.OpenAiThread;
@@ -27,7 +29,10 @@ public class OpenAiService {
     public ExtractorResearcher extractorResearcher;
     @Autowired
     public ReviewerResearcher reviewerResearcher;
-    
+    @Autowired
+    public ReviewerRanking reviewerRanking;
+    @Autowired
+    public RankingAgent rankingAgent;
 
     @Autowired
     @Qualifier(value = "OpenAiThread")
@@ -41,12 +46,17 @@ public class OpenAiService {
     @Autowired
     @Qualifier(value = "OpenAiThread")
     public OpenAiThread reviewerResearcherThread;
-
+    @Autowired
+    @Qualifier(value = "OpenAiThread")
+    public OpenAiThread reviewerRankingThread;
+    @Autowired
+    @Qualifier(value= "OpenAiThread")
+    public OpenAiThread rankingAgentThread;
 
 
     @Async
     public CompletableFuture<String> processRequest(String message, String instructions, OpenAiAssistant assistant,
-                                                     OpenAiThread thread, boolean uploadFile) throws Exception {
+            OpenAiThread thread, boolean uploadFile) throws Exception {
         // Step 1: Create AI Assistant
         CompletableFuture<String> createAssistant = assistant.createAiAssistant();
         CompletableFuture.allOf(createAssistant).join();
@@ -87,20 +97,35 @@ public class OpenAiService {
 
     @Async
     public CompletableFuture<String> extractorResearcherResponse(String researcherExtractor) throws Exception {
-        return processRequest(researcherExtractor, ExtractorResearcher.INSTRUCTIONS, extractorResearcher, extractorResearcherOpenAiThread, false);
+        return processRequest(researcherExtractor, ExtractorResearcher.INSTRUCTIONS, extractorResearcher,
+                extractorResearcherOpenAiThread, false);
     }
-
 
     @Async
     public CompletableFuture<String> reviewerResponse(String reviewerMessage) throws Exception {
-        return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher, reviewerResearcherThread, false);
+        return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher,
+                reviewerResearcherThread, false);
     }
 
-    @Async//I must change the methods name
-    public CompletableFuture <String> correctExtracrorResearcherResponse(String extractorResearcherMessage) throws Exception {
+    @Async
+    public CompletableFuture<String> reviewerRanking(String reviewerRankingmessage) throws Exception {
+        return processRequest(reviewerRankingmessage, ReviewerRanking.INSTRUCTIONS, reviewerRanking, reviewerRankingThread,
+                false);
+
+    }
+    @Async
+    public CompletableFuture<String> rankingAgent(String rankingAgentmessage) throws Exception {
+        return processRequest(rankingAgentmessage, RankingAgent.INSTRUCTIONS, rankingAgent, rankingAgentThread,
+                false);
+
+    }
+
+    @Async // I must change the methods name
+    public CompletableFuture<String> correctExtracrorResearcherResponse(String extractorResearcherMessage)
+            throws Exception {
         extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage);
         extractorResearcherOpenAiThread.run();
-        String response =extractorResearcherOpenAiThread.getRequest();
+        String response = extractorResearcherOpenAiThread.getRequest();
         return CompletableFuture.completedFuture(response);
 
     }
