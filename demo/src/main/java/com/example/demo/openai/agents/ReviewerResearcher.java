@@ -5,10 +5,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewerResearcher extends OpenAiAssistant {
 
-    public static final String INSTRUCTIONS = "You are responsible for a cv ranking procedure where other agents are part of as well."
-            + "Your role is to receive the Researcher’s result and review it as well as estimate the results and decide whether or not"
-            + "they are correct or they need further corrections. 1. Check if Researcher’s results are correct."
-            + "If they are, return “they are correct”. 2. If results are not correct, suggest corrections. ";
+    public static final String INSTRUCTIONS = "You are part of a system that reviews CVs from candidates on different domains.\n"
+            +
+            "YOU ARE THE REVIEWER IN THAT HIRING COMPANY THAT TAKES THE FINAL DECISION. YOUR ANSWER WILL IMPACT THE COMPANY.\n"
+            +
+            "Based on that I want you to review a CV that I already have summarized in a CSV format.\n" +
+            "Your answer should consist of either 2 responses:\n" +
+            "1. ---- REQUIRES CHANGES ----\n" +
+            "2. ---- NO CHANGES REQUIRED, ANALYSIS GOOD ----\n" +
+            "\n" +
+            "If changes are required you will need to add feedback for the agents to correct their response\n" +
+            "Otherwise you are free to respond only with the \"---- NO CHANGES REQUIRED, ANALYSIS GOOD ----\"\n" +
+            "";
 
     public static final String MODEL = "gpt-4o-mini";
     public static final String NAME = "ReviewerResearcher";

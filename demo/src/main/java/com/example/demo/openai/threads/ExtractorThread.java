@@ -63,10 +63,10 @@ public class ExtractorThread extends OpenAiThread {
 
     @Override
     @Async
-    public CompletableFuture<String> addMessage() throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message) throws IOException {
         JSONObject jsonObject = new JSONObject()
                 .put("role", "user")
-                .put("content", getMessage())
+                .put("content", message)
                 .put("attachments",
                         new JSONArray().put(new JSONObject().put("file_id", getFileId()).put("tools",
                                 new JSONArray().put(new JSONObject().put("type", "file_search")))));
