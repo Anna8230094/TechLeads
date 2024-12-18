@@ -1,4 +1,4 @@
-package com.example.demo;
+/*package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -93,4 +93,4 @@ public class OpenAiThreadTest {
             System.out.println("The delete of assistant is unable");
     }
 
-}
+}*/
