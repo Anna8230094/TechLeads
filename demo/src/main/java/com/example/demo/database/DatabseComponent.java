@@ -50,7 +50,23 @@ public class DatabseComponent implements CommandLineRunner {
         usersService.saveUsers(user3);
         usersService.saveUsers(user4);
 
-        researcerService.saveResearcherResult(new ResearcherResult("mmm"));
+        ResearcherResult rr1 = new ResearcherResult();
+        rr1.setResume("resume cv");
+
+        ResearcherResult rr2 = new ResearcherResult();
+        rr2.setResume("resume cv2");
+
+        ResearcherResult rr3 = new ResearcherResult();
+        rr3.setResume("resume cv3");
+
+        ResearcherResult rr4 = new ResearcherResult();
+        rr4.setResume("resume cv4");
+
+        researcerService.saveResearcherResult(rr1);
+        researcerService.saveResearcherResult(rr2);
+        researcerService.saveResearcherResult(rr3);
+        researcerService.saveResearcherResult(rr4);
+
     }
 
 }

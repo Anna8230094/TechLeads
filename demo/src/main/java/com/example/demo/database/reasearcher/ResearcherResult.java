@@ -15,7 +15,10 @@ public class ResearcherResult {
     private Long id;
     private String resume;
 
-    public ResearcherResult(String resume){
+    public ResearcherResult() {
+    }
+
+    public ResearcherResult(String resume) {
         this.resume = resume;
     }
 

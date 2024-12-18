@@ -19,6 +19,18 @@ public class Users {
     private String email;
     private String typeOfIndustry;
 
+    public Users(){
+
+    }
+    public Users(String first_name, String last_name,String email,String typeOfIndustry) {
+
+        this.first_name=first_name;
+        this.last_name=last_name;
+        this.email=email;
+        this.typeOfIndustry=typeOfIndustry;
+    
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;
