@@ -19,15 +19,48 @@
 
         <fieldset>
             <p>Job Position's Requirements</p>
-            <label for="hard-skills">Hard Skills<input id="hard-skills" name="hard-skills" type="text" required/></label>
-            <label for="soft-skills">Soft Skills<input id="soft-skills" name="soft-skills" type="text" required/></label>
-            <label for="other-traits">Other Traits<input id="other-traits" name="other-traits" type="text"/></label>
+            <label for="hard-skills">Hard Skills</label>
+            <textarea id="hard-skills" name="hard-skills" rows="4" cols="50" required></textarea>
+              
+            <label for="soft-skills">Soft Skills</label>
+            <textarea id="soft-skills" name="soft-skills" rows="4" cols="50" required></textarea>
+            
+            <label for="other-traits">Other Traits</label>
+            <textarea id="other-traits" name="other-traits" rows="4" cols="50"></textarea>
         </fieldset>
 
         <fieldset>
-            <p>Upload all CVs here!</p>
-            <label for="cv-upload">Upload CVs:<input id="cv-upload" name="cv-upload[]" type="file" multiple required /></label>
-        </fieldset>
+          <p>Upload all CVs here!</p>
+          <label for="cv-upload">Upload CVs:</label>
+          <input id="cv-upload" name="cv-upload[]" type="file" multiple required />
+      
+          <ul id="file-list"></ul>
+      </fieldset>
+      
+      <script>
+          const fileInput = document.getElementById('cv-upload');
+          const fileList = document.getElementById('file-list');
+          let filesArray = [];
+      
+          // Όταν επιλέγονται αρχεία
+          fileInput.addEventListener('change', (event) => {
+              // Προσθέτουμε τα νέα αρχεία στη λίστα
+              Array.from(event.target.files).forEach((file) => {
+                  filesArray.push(file);
+                  const listItem = document.createElement('li');
+                  listItem.textContent = file.name;
+                  fileList.appendChild(listItem);
+              });
+      
+              // Αδειάζουμε το input για να επιτρέψουμε νέα επιλογή
+              fileInput.value = '';
+          });
+      
+          // Ενέργεια για το κουμπί "Add more files"
+          document.getElementById('add-files').addEventListener('click', () => {
+              fileInput.click();
+          });
+      </script>      
         
         <input type="submit" value="Submit"/>
     </form>
