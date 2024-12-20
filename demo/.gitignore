@@ -33,3 +33,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.DS_Store//ΑΥΤΟ
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+env.properties///ΑΥΤΟ

@@ -1,5 +1,9 @@
 package com.example.demo.database.user;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +20,12 @@ public class Users {
 
     private String first_name;
     private String last_name;
-    private String email;
     private String typeOfIndustry;
+    private String email;
+    private List<String> hardSkills;
+    private List<String> softSkills;
+    private List<String> otherTraits;
+    private List<MultipartFile> files;
 
     // Getters and Setters
     public Long getId() {
@@ -58,5 +66,37 @@ public class Users {
 
     public void setIndustry(String typeOfIndustry) {
         this.typeOfIndustry = typeOfIndustry;
+    }
+
+    public void setHardSkills(List<String> hardSkills) {
+        this.hardSkills = hardSkills;
+    }
+
+    public List<String> getHardSkills() {
+        return hardSkills;
+    }
+
+    public void setSoftSkills(List<String> softSkills) {
+        this.softSkills = softSkills;
+    }
+
+    public List<String> getSoftSkills() {
+        return softSkills;
+    }
+
+    public void setOtherTraits(List<String> otherTraits) {
+        this.otherTraits = otherTraits;
+    }
+
+    public List<String> getOtherTraits() {
+        return otherTraits;
+    }
+
+    public void setFiles(List<MultipartFile> files) {
+        this.files = files;
+    }
+
+    public List<MultipartFile> getFiles() {
+        return files;
     }
 }
