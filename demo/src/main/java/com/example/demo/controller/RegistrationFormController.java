@@ -10,6 +10,5 @@ public class RegistrationFormController {
     @GetMapping("/registrationform.html")
     public String registrationControl() {
         return "registrationform";
-    }
-    
+    }    
 }

@@ -1,4 +1,7 @@
 package com.example.demo.model;
+
+import java.nio.file.Files;
+
 public class User {
     private String name;
     private String field;
@@ -6,6 +9,7 @@ public class User {
     private String hardSkills;
     private String softSkills;
     private String otherTraits;
+    private Files files;
     public void setName(String name) {
         this.name = name;
     }
@@ -52,5 +56,13 @@ public class User {
 
     public String getOtherTraits() {
         return otherTraits;
+    }
+
+    public void setFiles(Files files) {
+        this.files = files;
+    }
+
+    public Files getFiles() {
+        return files;
     }
 }
