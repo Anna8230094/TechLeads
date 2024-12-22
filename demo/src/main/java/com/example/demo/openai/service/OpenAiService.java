@@ -2,7 +2,6 @@
 package com.example.demo.openai.service;
 
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
@@ -50,9 +49,8 @@ public class OpenAiService {
     @Qualifier(value = "OpenAiThread")
     public OpenAiThread reviewerRankingThread;
     @Autowired
-    @Qualifier(value= "OpenAiThread")
+    @Qualifier(value = "OpenAiThread")
     public OpenAiThread rankingAgentThread;
-
 
     @Async
     public CompletableFuture<String> processRequest(String message, String instructions, OpenAiAssistant assistant,
@@ -109,10 +107,12 @@ public class OpenAiService {
 
     @Async
     public CompletableFuture<String> reviewerRanking(String reviewerRankingmessage) throws Exception {
-        return processRequest(reviewerRankingmessage, ReviewerRanking.INSTRUCTIONS, reviewerRanking, reviewerRankingThread,
+        return processRequest(reviewerRankingmessage, ReviewerRanking.INSTRUCTIONS, reviewerRanking,
+                reviewerRankingThread,
                 false);
 
     }
+
     @Async
     public CompletableFuture<String> rankingAgent(String rankingAgentmessage) throws Exception {
         return processRequest(rankingAgentmessage, RankingAgent.INSTRUCTIONS, rankingAgent, rankingAgentThread,
@@ -129,4 +129,68 @@ public class OpenAiService {
         return CompletableFuture.completedFuture(response);
 
     }
+
+    
+    @Async
+    public CompletableFuture<Void> processReviewerResearcherAgent(String initialMessage) throws Exception {
+        CompletableFuture<String> agentResponse = reviewerResponse(initialMessage);
+        CompletableFuture.allOf(agentResponse).join();
+
+        String response = agentResponse.get();
+        int count = 0;
+
+        while (count < 5) {
+            if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+                System.out.println("CORRECTIONS REQUIRED BY THE REVIEWER");
+                String correctionMessage = agentResponse.get();
+                CompletableFuture<String> correctionResponse = extractorResearcherResponse(correctionMessage);
+                CompletableFuture.allOf(correctionResponse).join();
+
+                String newMessage = "The corrected response is: " + correctionResponse.get();
+                agentResponse = reviewerResponse(newMessage);
+                CompletableFuture.allOf(agentResponse).join();
+
+                response = agentResponse.get();
+                count++;
+                System.out.println(response);
+            } else {
+                System.out.println("NO FURTHER CORRECTIONS REQUIRED");
+                break;
+            }
+        }
+
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Async
+    public CompletableFuture<Void> processReviewerRankingAgent(String initialMessage) throws Exception {
+        CompletableFuture<String> agentResponse = reviewerRanking(initialMessage);
+        CompletableFuture.allOf(agentResponse).join();
+
+        String response = agentResponse.get();
+        int count = 0;
+
+        while (count < 5) {
+            if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+                System.out.println("CORRECTIONS REQUIRED BY THE REVIEWER RANKING");
+                String correctionMessage = agentResponse.get();
+                CompletableFuture<String> correctionResponse = rankingAgent(correctionMessage);
+                CompletableFuture.allOf(correctionResponse).join();
+
+                String newMessage = "The corrected response is: " + correctionResponse.get();
+                agentResponse = reviewerRanking(newMessage);
+                CompletableFuture.allOf(agentResponse).join();
+
+                response = agentResponse.get();
+                count++;
+                System.out.println(response);
+            } else {
+                System.out.println("NO FURTHER CORRECTIONS REQUIRED");
+                break;
+            }
+        }
+
+        return CompletableFuture.completedFuture(null);
+    }
+
 }

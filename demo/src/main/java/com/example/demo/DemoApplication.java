@@ -15,7 +15,6 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	public OpenAiService openAIService;
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
@@ -50,58 +49,45 @@ public class DemoApplication implements CommandLineRunner {
 		CompletableFuture<String> reviewerResponse = openAIService.reviewerResponse(messageReviewer);
 		CompletableFuture.allOf(reviewerResponse).join();
 
-		String response = reviewerResponse.get();
-
-		// step 5:check the ansswer of rewier
-		int count = 0;
-		while (count < 5) {
-			if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-				System.out.println("THE REVIEWER SYGGEST CORRECTIONS");
-				String systemMessage = reviewerResponse.get();
-				extractorResearcherResponse = openAIService.extractorResearcherResponse(systemMessage);
-				CompletableFuture.allOf(extractorResearcherResponse).join();
-
-				messageReviewer = "The response of extraxtorReasearcher is: "
-						+ extractorResearcherResponse.get();
-				reviewerResponse = openAIService.reviewerResponse(messageReviewer);
-				CompletableFuture.allOf(reviewerResponse).join();
-
-				response = reviewerResponse.get();
-				count++;
-				System.out.println(response.toString());
-			} else {
-				break;
-			}
-		}
-		// researcherResult.setResume(extractorResearcherMessage);
-		// researcherService.saveResearcherResult(researcherResult);
-		// System.out.println(researcherRepository.findAll());
+		// step 5: Create reviewer ranking
+		String messageReviewerRanking = "The response of RankingAgent is: [INSERT_RANKING_RESULT]";
+		CompletableFuture<String> reviewerRankingResponse = openAIService.reviewerRanking(messageReviewerRanking);
+		CompletableFuture.allOf(reviewerRankingResponse).join();
 
 	}
-
-	/*
-	 * @Bean
-	 * 
-	 * @SuppressWarnings("ConvertToTryWithResources")
-	 * public CommandLineRunner commandLineRunner(ApplicationContext context) {
-	 * return args -> {
-	 * Scanner scanner = new Scanner(System.in);
-	 * EmailService emailService = context.getBean(EmailService.class);
-	 * 
-	 * System.out.println("Enter the subject of the email:");
-	 * String subject = scanner.nextLine();
-	 * 
-	 * System.out.println("Enter the body of the email:");
-	 * String body = scanner.nextLine();
-	 * 
-	 * String to = "annamegalou3@gmail.com ";
-	 * emailService.sendEmail(to, subject, body);
-	 * 
-	 * System.out.println("Email sent successfully to " + to + "!");
-	 * scanner.close();
-	 * };
-	 * 
-	 * }
-	 */
-
+	 
+ 
+	 
 }
+
+	
+	// researcherResult.setResume(extractorResearcherMessage);
+	// researcherService.saveResearcherResult(researcherResult);
+	// System.out.println(researcherRepository.findAll());
+
+
+
+/*
+ * @Bean
+ * 
+ * @SuppressWarnings("ConvertToTryWithResources")
+ * public CommandLineRunner commandLineRunner(ApplicationContext context) {
+ * return args -> {
+ * Scanner scanner = new Scanner(System.in);
+ * EmailService emailService = context.getBean(EmailService.class);
+ * 
+ * System.out.println("Enter the subject of the email:");
+ * String subject = scanner.nextLine();
+ * 
+ * System.out.println("Enter the body of the email:");
+ * String body = scanner.nextLine();
+ * 
+ * String to = "annamegalou3@gmail.com ";
+ * emailService.sendEmail(to, subject, body);
+ * 
+ * System.out.println("Email sent successfully to " + to + "!");
+ * scanner.close();
+ * };
+ * 
+ * }
+ */
