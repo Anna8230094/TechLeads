@@ -17,8 +17,8 @@ import com.example.demo.openai.service.OpenAiService;
 @SpringBootApplication
 public class DemoApplication{ //implements CommandLineRunner 
 
-	@Autowired
-	public OpenAiService openAIService;
+	/*@Autowired
+	public OpenAiService openAIService;*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
