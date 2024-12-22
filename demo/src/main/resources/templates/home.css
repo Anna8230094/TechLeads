@@ -16,6 +16,13 @@ header{
   padding: 0 50px;
 }
 
+.name {
+  float: left;
+  color: rgb(5, 7, 114) ;
+  font-size: 1.2rem;
+  padding: 0.8rem 0;
+}
+
 .navbar{
   float: right;
   display: flex;
@@ -47,6 +54,10 @@ header{
 .navbar nav li a:hover {
   background-color: #172d5c;
   color: rgb(76, 108, 163);
+}
+
+.navbar nav li .active {
+  background-color: #5366b6;
 }
 
 .content{
