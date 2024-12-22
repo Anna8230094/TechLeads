@@ -8,25 +8,25 @@
   <body>
     <h1>Hire&Go</h1>
 
-    <form method="post">
+    <form th:action="@{/registrationform}" th:object="${User}" method="post" enctype="multipart/form-data"></form>
 
         <fieldset>
             <p>Company's Information</p>
-            <label for="companys-name">Company's Name<input id="companys-name" name="companys-name" type="text" required /></label>
-            <label for="companys-field">Company's Field<input id="companys-field" name="companys-field" type="text" required /></label>
+            <label for="name">Company's Name<input id="name" name="name" type="text" required /></label>
+            <label for="field">Company's Field<input id="field" name="field" type="text" required /></label>
             <label for="email">User's Email<input id="email" name="email" type="email" required /></label>
         </fieldset>
 
         <fieldset>
             <p>Job Position's Requirements</p>
-            <label for="hard-skills">Hard Skills<input id="hard-skills" name="hard-skills" type="text" required/></label>
-            <label for="soft-skills">Soft Skills<input id="soft-skills" name="soft-skills" type="text" required/></label>
-            <label for="other-traits">Other Traits<input id="other-traits" name="other-traits" type="text"/></label>
+            <label for="hardSkills">Hard Skills<input id="hardSkills" name="hardSkills" type="text" required/></label>
+            <label for="softSkills">Soft Skills<input id="softSkills" name="softSkills" type="text" required/></label>
+            <label for="otherTraits">Other Traits<input id="otherTraits" name="otherTraits" type="text"/></label>
         </fieldset>
 
         <fieldset>
             <p>Upload all CVs here!</p>
-            <label for="cv-upload">Upload CVs:<input id="cv-upload" name="cv-upload[]" type="file" multiple required /></label>
+            <label for="files">Upload CVs:<input id="files" name="files" type="file" /></label>
         </fieldset>
         
         <input type="submit" value="Submit"/>

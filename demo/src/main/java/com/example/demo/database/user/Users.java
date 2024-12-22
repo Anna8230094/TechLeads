@@ -1,5 +1,6 @@
 package com.example.demo.database.user;
 
+import java.nio.file.Files;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +17,12 @@ public class Users {
 
     private String first_name;
     private String last_name;
-    private String email;
     private String typeOfIndustry;
+    private String email;
+    private String hardSkills;
+    private String softSkills;
+    private String otherTraits;
+
 
     // Getters and Setters
     public Long getId() {
@@ -59,4 +64,29 @@ public class Users {
     public void setIndustry(String typeOfIndustry) {
         this.typeOfIndustry = typeOfIndustry;
     }
+
+    public void setHardSkills(String hardSkills) {
+        this.hardSkills = hardSkills;
+    }
+
+    public String getHardSkills() {
+        return hardSkills;
+    }
+
+    public void setSoftSkills(String softSkills) {
+        this.softSkills = softSkills;
+    }
+
+    public String getSoftSkills() {
+        return softSkills;
+    }
+
+    public void setOtherTraits(String otherTraits) {
+        this.otherTraits = otherTraits;
+    }
+
+    public String getOtherTraits() {
+        return otherTraits;
+    }
+
 }

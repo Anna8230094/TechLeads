@@ -14,7 +14,7 @@ import com.example.demo.mail.EmailService;
 import com.example.demo.openai.service.OpenAiService;
 
 @SpringBootApplication
-public class DemoApplication{ //implements CommandLineRunner 
+public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
 	public OpenAiService openAIService;
