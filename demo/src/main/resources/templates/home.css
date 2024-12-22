@@ -6,8 +6,13 @@
   font-family: 'Roboto', sans-serif;
 }
 
-header{
-  background: rgb(41, 4, 4);
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(203, 200, 200, 0.721);
 }
 
 .container {
@@ -99,6 +104,8 @@ header{
   cursor: pointer;
   display: none;
 }
+
+
 
 @media(max-width: 925px){
   .container {
