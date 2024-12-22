@@ -1,6 +1,5 @@
 package com.example.demo.database.reasearcher;
 
-import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

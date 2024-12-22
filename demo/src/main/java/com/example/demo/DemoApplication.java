@@ -14,15 +14,16 @@ import com.example.demo.mail.EmailService;
 import com.example.demo.openai.service.OpenAiService;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplication  {//implements CommandLineRunner
 
-	@Autowired
+	/*@Autowired
 	public OpenAiService openAIService;
+	*/
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 
 		// Step 1:create register
@@ -103,7 +104,7 @@ public class DemoApplication implements CommandLineRunner {
 	  scanner.close();
 	  };
 	  
-	 }
+	 }*/
 	 
 
 }

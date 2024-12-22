@@ -1,6 +1,6 @@
 package com.example.demo.database.user;
 
-import java.nio.file.Files;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
