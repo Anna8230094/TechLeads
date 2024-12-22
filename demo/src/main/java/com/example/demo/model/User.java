@@ -9,7 +9,7 @@ public class User {
     private String hardSkills;
     private String softSkills;
     private String otherTraits;
-    private Files files;
+   // private Files files;
     public void setName(String name) {
         this.name = name;
     }
@@ -58,11 +58,11 @@ public class User {
         return otherTraits;
     }
 
-    public void setFiles(Files files) {
+   /*  public void setFiles(Files files) {
         this.files = files;
     }
 
     public Files getFiles() {
         return files;
-    }
+    }*/
 }
