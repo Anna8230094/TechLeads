@@ -13,7 +13,7 @@ public class ResearcherResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_researcher;
     private String resume;
 
     public ResearcherResult(){
@@ -21,12 +21,12 @@ public class ResearcherResult {
     }
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Long getIdResearcher() {
+        return id_researcher;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdResearcher(Long id_researcher) {
+        this.id_researcher = id_researcher;
     }
 
     public String getResume() {
