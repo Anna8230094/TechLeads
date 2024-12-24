@@ -25,6 +25,14 @@ header {
   padding: 0 50px;
 }
 
+.people {
+  background-size:contain;
+  width: 200px;
+  margin-top: 530px;
+  position: absolute;
+  right: 16%;
+}
+
 .name {
   float: left;
   color: rgb(5, 7, 114) ;
@@ -137,19 +145,18 @@ header {
 
 }
 .buttonLetsStart{
-  display: inline-block;
-  color: rgb(255, 255, 255);
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 12px 25px;
-  letter-spacing: 1,5px;
-  background-color: #5366b6;
-  font-weight: bold;
-  font-size: 18px;
-  border-radius: 100px;
-  margin-top: 55px;
-  position: relative;
-  left: 190px;
+ 
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    padding: 12px 25px;
+    letter-spacing: 0px;
+    background-color: #5366b6;
+    font-size: 18px;
+    border-radius: 100px;
+    margin: 20px auto; 
+    display: block;
+    text-align: center;
+  
 }
 .buttonLetsStart:hover{
   background-color: #172d5c;
@@ -223,6 +230,9 @@ p{
   .navbar nav li a{
     font-size: 1rem;
   } 
+  .people {
+    display: none;
+  }
 }
 
 @media(max-width: 757px){
