@@ -10,12 +10,13 @@ import jakarta.persistence.Table;
 @Table(name = "ResearcherResult")
 public class ResearcherResult {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String resume;
 
-    public ResearcherResult(String resume){
+    public ResearcherResult(){
         this.resume = resume;
     }
 
