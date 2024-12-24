@@ -8,7 +8,7 @@ import com.example.demo.database.user.Users;
 import com.example.demo.database.user.UsersService;
 
 @Component
-public class DatabseComponent implements CommandLineRunner {
+public class DatabaseComponent implements CommandLineRunner {
     @Autowired
     UsersService usersService;
     @Autowired
