@@ -60,3 +60,5 @@ public class Users {
         this.typeOfIndustry = typeOfIndustry;
     }
 }
+
+
