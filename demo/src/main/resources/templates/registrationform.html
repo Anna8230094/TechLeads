@@ -10,42 +10,38 @@
 <body>
   <h1>Hire&Go</h1>
 
-  <form th:action="@{/registrationform}" th:object="${User}" method="post" enctype="multipart/form-data">
+  <form th:action="@{/registrationform}" method="post" enctype="multipart/form-data">
 
     <fieldset>
       <p>Company's Information</p>
-      <label for="companysname">Company's Name<input id="companysname" name="companysname" type="text"
-          required /></label>
-      <label for="companysfield">Company's Field<input id="companysfield" name="companysfield" type="text"
-          required /></label>
+      <label for="name">Company's Name<input id="name" name="name" type="text" required /></label>
+      <label for="field">Company's Field<input id="field" name="field" type="text" required /></label>
       <label for="email">User's Email<input id="email" name="email" type="email" required /></label>
     </fieldset>
 
     <fieldset>
       <p>Job Position's Requirements</p>
-      <label for="hardskills">Hard Skills</label>
-      <textarea id="hardskills" name="hardskills" rows="4" cols="50" required></textarea>
+      <label for="hardSkills">Hard Skills</label>
+      <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" required></textarea>
 
-      <label for="softskills">Soft Skills</label>
-      <textarea id="softskills" name="softskills" rows="4" cols="50" required></textarea>
+      <label for="softSkills">Soft Skills</label>
+      <textarea id="softSkills" name="softSkills" rows="4" cols="50" required></textarea>
 
-      <label for="othertraits">Other Traits</label>
-      <textarea id="othertraits" name="othertraits" rows="4" cols="50"></textarea>
+      <label for="otherTraits">Other Traits</label>
+      <textarea id="otherTraits" name="otherTraits" rows="4" cols="50"></textarea>
     </fieldset>
 
     <fieldset>
       <p>Upload all CVs here!</p>
       <label for="files">Upload CVs:</label>
-      <input id="files" name="files[]" type="file" multiple />
+      <input id="file" name="file" type="file"  multiple required/>
       <ul id="file-list"></ul>
     </fieldset>
 
     <script>
-      const fileInput = document.getElementById('files');
+      const fileInput = document.getElementById('file');
       const fileList = document.getElementById('file-list');
       let filesArray = [];
-      const submit = document.getElementById('submit');
-
       // Όταν επιλέγονται αρχεία
       fileInput.addEventListener('change', (event) => {
         // Προσθέτουμε τα νέα αρχεία στη λίστα
@@ -60,16 +56,9 @@
           }
 
         });
-        // Αδειάζουμε το input για να επιτρέψουμε νέα επιλογή
-        fileInput.value = '';
-
+        fileInput = filesArray;
       });
 
-      // Ενέργεια για το κουμπί "Add more files"
-      document.getElementById('add-files').addEventListener('click', () => {
-        fileInput.click();
-      });
-      
     </script>
     <input  type="submit" value="Submit"  />
     

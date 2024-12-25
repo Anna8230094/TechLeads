@@ -10,17 +10,27 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import com.example.demo.files.FilesStorageRepository;
 import com.example.demo.mail.EmailService;
 import com.example.demo.openai.service.OpenAiService;
 
+import jakarta.annotation.Resource;
+
 @SpringBootApplication
-public class DemoApplication  {//implements CommandLineRunner
+public class DemoApplication implements CommandLineRunner{
 
 	/*@Autowired
 	public OpenAiService openAIService;
 	*/
+	@Resource
+  	FilesStorageRepository storageService;
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+	}
+	@Override
+	public void run(String... arg) throws Exception {
+  //    storageService.deleteAll();
+	  storageService.init();
 	}
 
 	/*@Override
