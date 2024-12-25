@@ -43,11 +43,10 @@ public class ExtractorThread extends OpenAiThread {
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file", System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf",
+                .addFormDataPart("file", System.getProperty("user.dir") + "/TechLeads/demo/src/main/resources/static/CV - Anna Megalou.pdf",
                         RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File(System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf")))
+                                new File(System.getProperty("user.dir") + "/TechLeads/demo/src/main/resources/static/CV - Anna Megalou.pdf")))
                 .build();
-
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/files")
                 .post(body)

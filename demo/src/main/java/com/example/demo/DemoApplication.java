@@ -22,38 +22,21 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		// Step 1:create register
-		String messageRegiser = "Here are the details provided by the user:Industry: Tech,Role: Software Engineer,Proficiency Level: Mid-Level,Related Qualification: Python";
-		CompletableFuture<String> registerResponse = openAIService.registerResponse(messageRegiser);
 
-		// step 2:create extractor
-		String messageExtractor = "The pdf is that i want from you to extract informations is the following: ";
-		CompletableFuture<String> extractorResponse = openAIService.ExtractorResponse(messageExtractor);
+		
+		//step 5:create ranking
+		String messageRanking = " The resume from the database are:";
+		CompletableFuture<String> rankingResponse = openAIService.reviewerRanking(messageRanking);
+		CompletableFuture.allOf(rankingResponse).join();
 
-		CompletableFuture.allOf(registerResponse, extractorResponse).join();
-		System.out.println("Register Response: " + registerResponse.get());
-		System.out.println("Extractor Response: " + extractorResponse.get());
 
-		// step 3:Create extractorResearcher
-		String extractorResearcherMessage = "The resume csv is:" + extractorResponse.get()
-				+ "/n The job position in csv is:" + registerResponse.get();
-		CompletableFuture<String> extractorResearcherResponse = openAIService
-				.extractorResearcherResponse(extractorResearcherMessage);
-		CompletableFuture.allOf(extractorResearcherResponse).join();
-		System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
 
-		System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
-
-		// step 4:Create reviewer reasearcher
-		String messageReviewer = "The response of extraxtorReasearcher is: " + extractorResearcherResponse.get();
-		CompletableFuture<String> reviewerResponse = openAIService.reviewerResponse(messageReviewer);
-		CompletableFuture.allOf(reviewerResponse).join();
-
-		// step 5: Create reviewer ranking
+		//step 6: Create reviewer ranking
 		String messageReviewerRanking = "The response of RankingAgent is: [INSERT_RANKING_RESULT]";
 		CompletableFuture<String> reviewerRankingResponse = openAIService.reviewerRanking(messageReviewerRanking);
 		CompletableFuture.allOf(reviewerRankingResponse).join();
 
+		
 	}
 	 
  

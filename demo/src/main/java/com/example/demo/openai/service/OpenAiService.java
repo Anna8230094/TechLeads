@@ -52,9 +52,60 @@ public class OpenAiService {
     @Qualifier(value = "OpenAiThread")
     public OpenAiThread rankingAgentThread;
 
+    // this method is called from controller class after the for submit
+    public void startRankingProcess() throws Exception {
+        // με κάποιον τρόπο θα πρεπει να εκτελείται μία for για όλα τα αρχεία που
+        // παίρνουμε από την φόρμα
+        // μέσα σε αυτήν την for θα υπάρχει όλος ο απαραίτητος κώδικας από τον register
+        // μεχρι τον rewierrExtractorReasearcher
+
+        // Step 1:create register
+        // we must get this information from database
+        String messageRegiser = "Here are the details provided by the user:Industry: Tech,Role: Software Engineer,Proficiency Level: Mid-Level,Related Qualification: Python";
+        CompletableFuture<String> registerResponse = registerResponse(messageRegiser);
+        System.out.println("Register Response: " + registerResponse.get());
+        CompletableFuture.allOf(registerResponse).join();
+        // for{
+        // step 2:create extractor
+        // we must change the extractorThread methd in order to get every time a
+        // different cv
+        String messageExtractor = "The pdf is that i want from you to extract informations is the following: ";
+        CompletableFuture<String> extractorResponse = extractorResponse(messageExtractor);
+        CompletableFuture.allOf(extractorResponse).join();
+        System.out.println("Extractor Response: " + extractorResponse.get());
+
+        // step 3:Create extractorResearcher
+        String extractorResearcherMessage = "The resume in csv is:" + extractorResponse.get()
+                + "/n The job position in csv is:" + registerResponse.get();
+        CompletableFuture<String> extractorResearcherResponse = extractorResearcherResponse(extractorResearcherMessage);
+        CompletableFuture.allOf(extractorResearcherResponse).join();
+        System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
+
+        // step 4:Create reviewer reasearcher
+        String messageResearcherReviewer = "The response of extraxtorReasearcher is: "
+                + extractorResearcherResponse.get();
+        CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(messageResearcherReviewer);
+        CompletableFuture.allOf(reviewerExtractorResponse).join();
+
+        // check if the extractorresearcher gave the willing results
+        String revieweResponse = reviewerExtractorResponse.get();
+        if (!revieweResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+            extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, revieweResponse);
+        }
+        // }end for
+        // insert data into researcher :extractorResearcherResponse in DB researcher
+        //the ranking gets data from researcher database 
+
+
+
+    }
+
+    // executing the procedure of creating an assistant until getting assistants
+    // response
     @Async
     public CompletableFuture<String> processRequest(String message, String instructions, OpenAiAssistant assistant,
             OpenAiThread thread, boolean uploadFile) throws Exception {
+
         // Step 1: Create AI Assistant
         CompletableFuture<String> createAssistant = assistant.createAiAssistant();
         CompletableFuture.allOf(createAssistant).join();
@@ -64,6 +115,7 @@ public class OpenAiService {
         CompletableFuture.allOf(createThread).join();
 
         // Step 3: Optional File Upload
+        // the upload file must have an argument with the cv path or file
         if (uploadFile && thread instanceof ExtractorThread) {
             CompletableFuture<String> fileUpload = ((ExtractorThread) thread).uploadFile();
             CompletableFuture.allOf(fileUpload).join();
@@ -89,7 +141,7 @@ public class OpenAiService {
     }
 
     @Async
-    public CompletableFuture<String> ExtractorResponse(String messageExtractor) throws Exception {
+    public CompletableFuture<String> extractorResponse(String messageExtractor) throws Exception {
         return processRequest(messageExtractor, Extractor.INSTRUCTIONS, extractor, extractorOpenAiThread, true);
     }
 
@@ -100,7 +152,7 @@ public class OpenAiService {
     }
 
     @Async
-    public CompletableFuture<String> reviewerResponse(String reviewerMessage) throws Exception {
+    public CompletableFuture<String> reviewerExtractorResponse(String reviewerMessage) throws Exception {
         return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher,
                 reviewerResearcherThread, false);
     }
@@ -120,77 +172,44 @@ public class OpenAiService {
 
     }
 
-    @Async // I must change the methods name
+    // We need the assistant to give instruction to another assistant in order to
+    // get a more efficient response
+    @Async
     public CompletableFuture<String> correctExtracrorResearcherResponse(String extractorResearcherMessage)
             throws Exception {
+        // we keep the same thread id
         extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage);
         extractorResearcherOpenAiThread.run();
         String response = extractorResearcherOpenAiThread.getRequest();
         return CompletableFuture.completedFuture(response);
-
     }
 
-    
+    // Check if the result of Extractor Reasearcher is the willing
     @Async
-    public CompletableFuture<Void> processReviewerResearcherAgent(String initialMessage) throws Exception {
-        CompletableFuture<String> agentResponse = reviewerResponse(initialMessage);
-        CompletableFuture.allOf(agentResponse).join();
+    public CompletableFuture<String> checkRewierReasearcherResult(String extractorReasercherResult,
+            String reviewerResponse) throws Exception {
 
-        String response = agentResponse.get();
+        // executing check max 5 times else accept the last answer
+        String finalResponse =null;
         int count = 0;
+        do {
+            System.out.println("THE REVIEWER SYGGEST CORRECTIONS");
+            CompletableFuture<String> extarctorResearcherCorrections = correctExtracrorResearcherResponse(
+                    reviewerResponse);
+            CompletableFuture.allOf(extarctorResearcherCorrections).join();
 
-        while (count < 5) {
-            if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-                System.out.println("CORRECTIONS REQUIRED BY THE REVIEWER");
-                String correctionMessage = agentResponse.get();
-                CompletableFuture<String> correctionResponse = extractorResearcherResponse(correctionMessage);
-                CompletableFuture.allOf(correctionResponse).join();
+            extractorReasercherResult = "The response of extraxtorReasearcher after corrections is: " + extarctorResearcherCorrections.get();
+            CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(extractorReasercherResult);
+            CompletableFuture.allOf(reviewerExtractorResponse).join();
 
-                String newMessage = "The corrected response is: " + correctionResponse.get();
-                agentResponse = reviewerResponse(newMessage);
-                CompletableFuture.allOf(agentResponse).join();
+            reviewerResponse = reviewerExtractorResponse.get();
+            finalResponse = extarctorResearcherCorrections.get();
+            count++;
+            System.out.println(reviewerResponse.toString());
+        } while (count < 5 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
 
-                response = agentResponse.get();
-                count++;
-                System.out.println(response);
-            } else {
-                System.out.println("NO FURTHER CORRECTIONS REQUIRED");
-                break;
-            }
-        }
-
-        return CompletableFuture.completedFuture(null);
-    }
-
-    @Async
-    public CompletableFuture<Void> processReviewerRankingAgent(String initialMessage) throws Exception {
-        CompletableFuture<String> agentResponse = reviewerRanking(initialMessage);
-        CompletableFuture.allOf(agentResponse).join();
-
-        String response = agentResponse.get();
-        int count = 0;
-
-        while (count < 5) {
-            if (!response.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-                System.out.println("CORRECTIONS REQUIRED BY THE REVIEWER RANKING");
-                String correctionMessage = agentResponse.get();
-                CompletableFuture<String> correctionResponse = rankingAgent(correctionMessage);
-                CompletableFuture.allOf(correctionResponse).join();
-
-                String newMessage = "The corrected response is: " + correctionResponse.get();
-                agentResponse = reviewerRanking(newMessage);
-                CompletableFuture.allOf(agentResponse).join();
-
-                response = agentResponse.get();
-                count++;
-                System.out.println(response);
-            } else {
-                System.out.println("NO FURTHER CORRECTIONS REQUIRED");
-                break;
-            }
-        }
-
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture(finalResponse);
     }
 
 }
+   

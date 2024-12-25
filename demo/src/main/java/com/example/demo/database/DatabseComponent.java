@@ -1,4 +1,4 @@
-/*package com.example.demo.database;
+package com.example.demo.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -50,7 +50,7 @@ public class DatabseComponent implements CommandLineRunner {
         usersService.saveUsers(user3);
         usersService.saveUsers(user4);
 
-        researcerService.saveResearcherResult(new ResearcherResult("mmm"));
+        researcerService.saveResearcherResult(new ResearcherResult("mmm", null));
     }
 
-}*/
+}
