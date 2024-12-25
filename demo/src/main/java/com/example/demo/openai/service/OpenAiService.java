@@ -88,15 +88,31 @@ public class OpenAiService {
         CompletableFuture.allOf(reviewerExtractorResponse).join();
 
         // check if the extractorresearcher gave the willing results
-        String revieweResponse = reviewerExtractorResponse.get();
-        if (!revieweResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-            extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, revieweResponse);
+        String reviewerResponse = reviewerExtractorResponse.get();
+        if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+            extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, reviewerResponse);
         }
+
+        // step 5:create ranking
+        String messageRanking = " The resume from the database are:"; // database whene is ready
+        CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
+        CompletableFuture.allOf(rankingResponse).join();
+
+        // step 6: Create reviewer ranking
+        String messageReviewerRanking = "The response of RankingAgent is:" + rankingResponse.get();
+        CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
+        CompletableFuture.allOf(reviewerRankingResponse).join();
+
+        // Check if the ReviewerRanking gave the willing results
+        String responseOfReviewerRanking = reviewerRankingResponse.get();
+        if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+            rankingResponse = checkRankingReviewerResult(messageReviewerRanking, responseOfReviewerRanking);
+
+        }
+
         // }end for
         // insert data into researcher :extractorResearcherResponse in DB researcher
-        //the ranking gets data from researcher database 
-
-
+        // the ranking gets data from researcher database
 
     }
 
@@ -158,7 +174,7 @@ public class OpenAiService {
     }
 
     @Async
-    public CompletableFuture<String> reviewerRanking(String reviewerRankingmessage) throws Exception {
+    public CompletableFuture<String> reviewerRankingResponse(String reviewerRankingmessage) throws Exception {
         return processRequest(reviewerRankingmessage, ReviewerRanking.INSTRUCTIONS, reviewerRanking,
                 reviewerRankingThread,
                 false);
@@ -166,7 +182,7 @@ public class OpenAiService {
     }
 
     @Async
-    public CompletableFuture<String> rankingAgent(String rankingAgentmessage) throws Exception {
+    public CompletableFuture<String> rankingAgentResponse(String rankingAgentmessage) throws Exception {
         return processRequest(rankingAgentmessage, RankingAgent.INSTRUCTIONS, rankingAgent, rankingAgentThread,
                 false);
 
@@ -184,21 +200,33 @@ public class OpenAiService {
         return CompletableFuture.completedFuture(response);
     }
 
+    @Async
+    public CompletableFuture<String> correctRankingAgentResponse(String rankingAgentMessage)
+            throws Exception {
+        // we keep the same thread id
+        reviewerRankingThread.addMessage("assistant", rankingAgentMessage);
+        reviewerRankingThread.run();
+        String response =  reviewerRankingThread.getRequest();
+        return CompletableFuture.completedFuture(response);
+
+    }
+
     // Check if the result of Extractor Reasearcher is the willing
     @Async
     public CompletableFuture<String> checkRewierReasearcherResult(String extractorReasercherResult,
             String reviewerResponse) throws Exception {
 
         // executing check max 5 times else accept the last answer
-        String finalResponse =null;
+        String finalResponse = null;
         int count = 0;
         do {
-            System.out.println("THE REVIEWER SYGGEST CORRECTIONS");
+            System.out.println("THE REVIEWER SUGGEST CORRECTIONS");
             CompletableFuture<String> extarctorResearcherCorrections = correctExtracrorResearcherResponse(
                     reviewerResponse);
             CompletableFuture.allOf(extarctorResearcherCorrections).join();
 
-            extractorReasercherResult = "The response of extraxtorReasearcher after corrections is: " + extarctorResearcherCorrections.get();
+            extractorReasercherResult = "The response of extraxtorReasearcher after corrections is: "
+                    + extarctorResearcherCorrections.get();
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(extractorReasercherResult);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
 
@@ -211,5 +239,31 @@ public class OpenAiService {
         return CompletableFuture.completedFuture(finalResponse);
     }
 
+    @Async
+    public CompletableFuture<String> checkRankingReviewerResult(String rankingAgentResult, 
+             String reviewerResponse ) throws Exception{
+        //executing check max 5 times else accept the last answer
+        String finalResponse = null;
+        int count = 0;
+        do{
+            System.out.println("THE REVIEWERRANKING SUGGEST CORRECTIONS");
+            CompletableFuture<String> rankingAgentCorrections = correctRankingAgentResponse(reviewerResponse);
+            CompletableFuture.allOf(rankingAgentCorrections).join();
+
+            rankingAgentResult= "The response of RankingAgent after corrections is: "
+                    + rankingAgentCorrections.get();
+            CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(rankingAgentResult);
+            CompletableFuture.allOf( reviewerRankingResponse).join();
+
+            reviewerResponse = reviewerRankingResponse.get();
+            finalResponse = rankingAgentCorrections.get();
+            count++;
+            System.out.println(reviewerResponse.toString());
+
+
+        }while(count < 5 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        return CompletableFuture.completedFuture(finalResponse);
+
+    }
+
 }
-   

@@ -1,7 +1,5 @@
 package com.example.demo;
 
-import java.util.concurrent.CompletableFuture;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,33 +20,13 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-
-		
-		//step 5:create ranking
-		String messageRanking = " The resume from the database are:";
-		CompletableFuture<String> rankingResponse = openAIService.reviewerRanking(messageRanking);
-		CompletableFuture.allOf(rankingResponse).join();
-
-
-
-		//step 6: Create reviewer ranking
-		String messageReviewerRanking = "The response of RankingAgent is: [INSERT_RANKING_RESULT]";
-		CompletableFuture<String> reviewerRankingResponse = openAIService.reviewerRanking(messageReviewerRanking);
-		CompletableFuture.allOf(reviewerRankingResponse).join();
-
-		
 	}
-	 
- 
-	 
+
 }
 
-	
-	// researcherResult.setResume(extractorResearcherMessage);
-	// researcherService.saveResearcherResult(researcherResult);
-	// System.out.println(researcherRepository.findAll());
-
-
+// researcherResult.setResume(extractorResearcherMessage);
+// researcherService.saveResearcherResult(researcherResult);
+// System.out.println(researcherRepository.findAll());
 
 /*
  * @Bean
