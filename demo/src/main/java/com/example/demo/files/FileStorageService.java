@@ -3,6 +3,7 @@ package com.example.demo.files;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.nio.file.Files;
 
 import org.springframework.stereotype.Service;
@@ -25,9 +26,15 @@ public class FileStorageService implements FilesStorageRepository {
     }
 
     @Override
-    public void save(MultipartFile file) {
+    public void save(List <MultipartFile> file) {
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            file.forEach(f->{
+                try {
+                    Files.copy(f.getInputStream(), this.root.resolve(f.getOriginalFilename()));
+                } catch (IOException e) {
+                    System.err.println("Saving list is not possible");
+                }
+            });
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

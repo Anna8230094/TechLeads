@@ -10,7 +10,7 @@
 <body>
   <h1>Hire&Go</h1>
 
-  <form th:action="@{/registrationform}" method="post" enctype="multipart/form-data">
+  <form th:action="@{/registrationform}" method="post" th:object="${User}" enctype="multipart/form-data">
 
     <fieldset>
       <p>Company's Information</p>
@@ -34,7 +34,7 @@
     <fieldset>
       <p>Upload all CVs here!</p>
       <label for="files">Upload CVs:</label>
-      <input id="file" name="file" type="file"  multiple required/>
+      <input id="file" name="file" type="file" multiple required/>
       <ul id="file-list"></ul>
     </fieldset>
 

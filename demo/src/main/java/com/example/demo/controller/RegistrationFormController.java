@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.io.File;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,18 +30,18 @@ public class RegistrationFormController {
     }
 
     @PostMapping("/registrationform") 
-    public String handleRegistration(@RequestParam("file") MultipartFile file/* , @ModelAttribute User user */,Model model) {
-       /*  System.out.println("Name:" + user.getName());
+    public String handleRegistration(@RequestParam("file") List <MultipartFile> file, @ModelAttribute User user ,Model model) {
+        System.out.println("Name:" + user.getName());
         System.out.println("Field:" + user.getField());
         System.out.println("Email:" + user.getEmail());
         System.out.println("Hard Skills:" + user.getHardSkills());
         System.out.println("Soft Skills:" + user.getSoftSkills());
         System.out.println("Other Traits:" + user.getOtherTraits());
-*/
+
         try{
             filesStorageService.save(file);
             System.out.println(",,");
-            System.out.println("Uploaded the file successfully: " + file.getOriginalFilename());
+           file.forEach(f-> System.out.println(f.getOriginalFilename()));
         } catch (Exception e) {
             System.err.println("the upload of file is not possible");
         }
