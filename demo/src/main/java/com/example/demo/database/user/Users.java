@@ -1,4 +1,5 @@
 package com.example.demo.database.user;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +13,17 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+    @Column(name= "name", nullable=false, length = 100)
     private String name;
+    @Column(name= "email", nullable=false, unique= true, length = 100)
     private String email;
+    @Column(name= "field", length = 100)
     private String field;
+    @Column(name= "hard_skills",columnDefinition = "TEXT")
     private String hardSkills;
+    @Column(name= "soft_skills",columnDefinition = "TEXT")
     private String softSkills;
+    @Column(name= "other_traits",columnDefinition = "TEXT")
     private String otherTraits;
 
     public Users() {
