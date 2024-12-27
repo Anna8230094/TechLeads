@@ -1,5 +1,5 @@
 
-package com.example.demo.database.rankingresult;
+package com.example.demo.database.ranking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

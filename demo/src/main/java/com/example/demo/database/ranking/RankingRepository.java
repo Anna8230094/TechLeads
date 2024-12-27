@@ -1,4 +1,4 @@
-package com.example.demo.database.rankingresult;
+package com.example.demo.database.ranking;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
