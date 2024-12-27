@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 public class RankingService {
 
     @Autowired
-    private RankingRepository RankingRepository;
-
-    public RankingResult saveRankingResult(RankingResult rankingResult) {
-
-        return RankingRepository.save(rankingResult);
+    private static RankingRepository RankingRepository;
+    
+        public static RankingResult saveRankingResult(RankingResult rankingResult) {
+    
+            return RankingRepository.save(rankingResult);
 
     }
 

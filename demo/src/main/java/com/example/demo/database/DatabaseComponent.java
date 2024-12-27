@@ -2,6 +2,9 @@ package com.example.demo.database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.example.demo.database.ranking.RankingResult;
+import com.example.demo.database.ranking.RankingService;
 import com.example.demo.database.reasearcher.ResearcherResult;
 import com.example.demo.database.reasearcher.ResearcherService;
 import com.example.demo.database.user.Users;
@@ -63,19 +66,38 @@ public class DatabaseComponent implements CommandLineRunner {
         usersService.saveUsers(user4);
 
 
-        ResearcherResult rr1 = new ResearcherResult();
-        rr1.setResume("resume cv");
-        ResearcherResult rr2 = new ResearcherResult();
-        rr2.setResume("resume cv2");
-        ResearcherResult rr3 = new ResearcherResult();
-        rr3.setResume("resume cv3");
-        ResearcherResult rr4 = new ResearcherResult();
-        rr4.setResume("resume cv4");
+        ResearcherResult re_r1 = new ResearcherResult();
+        re_r1.setResume("resume cv");
+        ResearcherResult re_r2 = new ResearcherResult();
+        re_r2.setResume("resume cv2");
+        ResearcherResult re_r3 = new ResearcherResult();
+        re_r3.setResume("resume cv3");
+        ResearcherResult re_r4 = new ResearcherResult();
+        re_r4.setResume("resume cv4");
 
-        researcerService.saveResearcherResult(rr1);
-        researcerService.saveResearcherResult(rr2);
-        researcerService.saveResearcherResult(rr3);
-        researcerService.saveResearcherResult(rr4);
+        researcerService.saveResearcherResult(re_r1);
+        researcerService.saveResearcherResult(re_r2);
+        researcerService.saveResearcherResult(re_r3);
+        researcerService.saveResearcherResult(re_r4);
+
+        RankingResult ra_r1 = new RankingResult();
+        ra_r1.setResume("resume cv1");
+        ra_r1.setSummaryResume("summary resume1");
+        RankingResult ra_r2 = new RankingResult();
+        ra_r2.setResume("resume cv2");
+        ra_r2.setSummaryResume("summary resume2");
+        RankingResult ra_r3 = new RankingResult();
+        ra_r3.setResume("resume cv3");
+        ra_r3.setSummaryResume("summary resume3");
+        RankingResult ra_r4 = new RankingResult();
+        ra_r4.setResume("resume cv4");
+        ra_r4.setSummaryResume("summary resume4");
+
+        RankingService.saveRankingResult(ra_r1);
+        RankingService.saveRankingResult(ra_r2);
+        RankingService.saveRankingResult(ra_r3);
+        RankingService.saveRankingResult(ra_r4);
+
 
     }
     
