@@ -29,8 +29,9 @@ public class RankingResult {
     public RankingResult() {
     }
 
-    public RankingResult(String resume) {
+    public RankingResult(String resume, String summaryOfResume) {
         this.resume = resume;
+        this.summaryOfResume = summaryOfResume;
         
         
     }
