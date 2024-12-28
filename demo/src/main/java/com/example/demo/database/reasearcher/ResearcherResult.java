@@ -14,10 +14,16 @@ public class ResearcherResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_researcher;
+
+   
     private String resume;
 
-    public ResearcherResult(){
+    public ResearcherResult(String resume){
         this.resume = resume;
+    }
+
+    public ResearcherResult() {
+        //TODO Auto-generated constructor stub
     }
 
     // Getters and Setters
