@@ -64,8 +64,7 @@ public class OpenAiService {
     @Autowired
     ResearcherService researcherService;
 
-    @Autowired
-    ResearcherResult researcherResult;
+
 
     // this method is called from controller class after the for submit
     @Async
@@ -108,6 +107,7 @@ public class OpenAiService {
             if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
                 extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, reviewerResponse);
             }
+            ResearcherResult researcherResult = new ResearcherResult();
             researcherResult.setResume(extractorResearcherResponse.get());
             researcherResult.setFileName(file.getOriginalFilename());
             researcherService.saveResearcherResult(researcherResult);
