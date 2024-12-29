@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import java.io.File;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.files.FileStorageService;
-import com.example.demo.files.Files;
-import com.example.demo.files.FilesStorageRepository;
-import com.example.demo.model.User;
+import com.example.demo.database.reasearcher.ResearcherService;
+import com.example.demo.database.user.Users;
+import com.example.demo.database.user.UsersService;
+import com.example.demo.openai.service.OpenAiService;
 
 import ch.qos.logback.core.model.Model;
 
@@ -22,30 +22,35 @@ import ch.qos.logback.core.model.Model;
 public class RegistrationFormController {
 
     @Autowired
-    FilesStorageRepository filesStorageService;
+    UsersService usersService;
+
+    @Autowired
+    ResearcherService researcerService;
+
+    @Autowired
+    OpenAiService openAiService;
 
     @GetMapping("/hireandgo/home/registrationform")
     public String registrationControl() {
         return "registrationform";
     }
 
-    @PostMapping("/registrationform") 
-    public String handleRegistration(@RequestParam("file") List <MultipartFile> file, @ModelAttribute User user ,Model model) {
-        System.out.println("Name:" + user.getName());
-        System.out.println("Field:" + user.getField());
-        System.out.println("Email:" + user.getEmail());
-        System.out.println("Hard Skills:" + user.getHardSkills());
-        System.out.println("Soft Skills:" + user.getSoftSkills());
-        System.out.println("Other Traits:" + user.getOtherTraits());
+    @PostMapping("/registrationform")
+    public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute Users user,
+            Model model) {
 
-        try{
-            filesStorageService.save(file);
-            System.out.println(",,");
-           file.forEach(f-> System.out.println(f.getOriginalFilename()));
+        try {
+            CompletableFuture<Void> save = usersService.saveUsers(user);
+            CompletableFuture.allOf(save).join();
+
+            CompletableFuture<Void> openai = openAiService.startRankingProcess(files, user);
+            CompletableFuture.allOf(openai).join();
+
         } catch (Exception e) {
-            System.err.println("the upload of file is not possible");
+            System.err.println(e.toString());
+            System.err.println("Unable to save user");
         }
-        //to look how to print all the getting files
+
         return "success";
     }
 }

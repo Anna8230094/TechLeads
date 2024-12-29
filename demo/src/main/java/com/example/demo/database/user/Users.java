@@ -1,6 +1,7 @@
 package com.example.demo.database.user;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,14 +16,13 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String first_name;
-    private String last_name;
-    private String typeOfIndustry;
+   
+    private String name;
+    private String field;
     private String email;
     private String hardSkills;
     private String softSkills;
     private String otherTraits;
-
 
     // Getters and Setters
     public Long getId() {
@@ -33,36 +33,28 @@ public class Users {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return first_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+    public String getName() {
+        return name;
     }
 
-    public String getLastName() {
-        return last_name;
+    public void setField(String field) {
+        this.field = field;
     }
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getEmail() {
-        return email;
+    public String getField() {
+        return field;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getIndustry() {
-        return typeOfIndustry;
-    }
-
-    public void setIndustry(String typeOfIndustry) {
-        this.typeOfIndustry = typeOfIndustry;
+    public String getEmail() {
+        return email;
     }
 
     public void setHardSkills(String hardSkills) {
@@ -88,5 +80,6 @@ public class Users {
     public String getOtherTraits() {
         return otherTraits;
     }
+   
 
 }

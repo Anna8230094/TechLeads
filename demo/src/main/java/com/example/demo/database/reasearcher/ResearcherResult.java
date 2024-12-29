@@ -16,6 +16,7 @@ public class ResearcherResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String resume;
+    private String fileName;
 
     // Getters and Setters
     public Long getId() {
@@ -35,4 +36,11 @@ public class ResearcherResult {
     }
 
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 }
