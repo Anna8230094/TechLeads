@@ -16,7 +16,7 @@ public class ResearcherResult {
     private Long id_researcher;
     private String resume;
 
-    public ResearcherResult(){
+    public ResearcherResult(String resume){
         this.resume = resume;
     }
 
