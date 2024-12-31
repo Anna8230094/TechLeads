@@ -12,7 +12,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id_users;
+    private Long idUsers;
     @Column(name= "name", nullable=false, length = 100)
     private String name;
     @Column(name= "email", nullable=false, unique= true, length = 100)
@@ -27,7 +27,6 @@ public class Users {
     private String otherTraits;
 
     public Users() {
-
     }
 
     public Users(String name, String email, String field, String hardSkills, String softSkills, String otherTraits) {
@@ -45,11 +44,11 @@ public class Users {
 
     public Long getIdUsers() {
 
-        return id_users;
+        return idUsers;
     }
 
-    public void setIdUsers(Long id_users) {
-        this.id_users = id_users;
+    public void setIdUsers(Long idUsers) {
+        this.idUsers = idUsers;
     }
 
     public String getName() {
@@ -106,5 +105,19 @@ public class Users {
         this.otherTraits = otherTraits;
 
     }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "idUsers=" + idUsers +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", field='" + field + '\'' +
+                ", hardSkills='" + hardSkills + '\'' +
+                ", softSkills='" + softSkills + '\'' +
+                ", otherTraits='" + otherTraits + '\'' +
+                '}';
+    }
+
 
 }

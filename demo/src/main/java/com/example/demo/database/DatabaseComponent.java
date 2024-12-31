@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.database.ranking.RankingResult;
 import com.example.demo.database.ranking.RankingService;
-import com.example.demo.database.reasearcher.ResearcherResult;
-import com.example.demo.database.reasearcher.ResearcherService;
+import com.example.demo.database.researcher.ResearcherResult;
+import com.example.demo.database.researcher.ResearcherService;
 import com.example.demo.database.user.Users;
 import com.example.demo.database.user.UsersService;
 
@@ -15,7 +15,9 @@ public class DatabaseComponent implements CommandLineRunner {
     @Autowired
     UsersService usersService;
     @Autowired
-    ResearcherService researcerService;
+    ResearcherService researcherService;
+    @Autowired
+    RankingService rankingService;
     @Override
 
     public void run(String... args) {
@@ -75,10 +77,10 @@ public class DatabaseComponent implements CommandLineRunner {
         ResearcherResult re_r4 = new ResearcherResult();
         re_r4.setResume("resume cv4");
 
-        researcerService.saveResearcherResult(re_r1);
-        researcerService.saveResearcherResult(re_r2);
-        researcerService.saveResearcherResult(re_r3);
-        researcerService.saveResearcherResult(re_r4);
+        researcherService.saveResearcherResult(re_r1);
+        researcherService.saveResearcherResult(re_r2);
+        researcherService.saveResearcherResult(re_r3);
+        researcherService.saveResearcherResult(re_r4);
 
         RankingResult ra_r1 = new RankingResult();
         ra_r1.setResume("resume cv1");
@@ -93,10 +95,12 @@ public class DatabaseComponent implements CommandLineRunner {
         ra_r4.setResume("resume cv4");
         ra_r4.setSummaryResume("summary resume4");
 
-        RankingService.saveRankingResult(ra_r1);
-        RankingService.saveRankingResult(ra_r2);
-        RankingService.saveRankingResult(ra_r3);
-        RankingService.saveRankingResult(ra_r4);
+        rankingService.saveRankingResult(ra_r1);
+        rankingService.saveRankingResult(ra_r2);
+        rankingService.saveRankingResult(ra_r3);
+        rankingService.saveRankingResult(ra_r4);
+
+       
 
 
     }

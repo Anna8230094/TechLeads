@@ -1,7 +1,7 @@
 
 package com.example.demo.database.ranking;
 
-import com.example.demo.database.reasearcher.ResearcherResult;
+import com.example.demo.database.researcher.ResearcherResult;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
