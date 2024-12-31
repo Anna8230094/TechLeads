@@ -1,3 +1,4 @@
+
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
@@ -11,6 +12,19 @@
             "database": "postgres",
             "username": "postgres",
             "password": "mysecretpassword"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "some-postgres",
+            "database": "postgres",
+            "username": "postgres"
         }
     ]
 }
+
+
+
