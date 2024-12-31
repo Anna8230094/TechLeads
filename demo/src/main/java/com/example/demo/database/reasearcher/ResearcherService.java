@@ -7,7 +7,7 @@ public class ResearcherService {
     @Autowired
     private ResearcherRepository researcherRepository;
 
-    public ResearcherResult saveResearcherResult(ResearcherResult researcherResult) {
-        return researcherRepository.save(researcherResult);
+    public void  saveResearcherResult(ResearcherResult researcherResult) {
+         researcherRepository.save(researcherResult);
     }
 }

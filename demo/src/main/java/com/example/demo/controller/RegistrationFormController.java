@@ -43,8 +43,17 @@ public class RegistrationFormController {
             CompletableFuture<Void> save = usersService.saveUsers(user);
             CompletableFuture.allOf(save).join();
 
-            CompletableFuture<Void> openai = openAiService.startRankingProcess(files, user);
-            CompletableFuture.allOf(openai).join();
+            new Thread(new Runnable() {
+
+                public void run() {
+                    try {
+                        openAiService.startRankingProcess(files, user);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }).start();
 
         } catch (Exception e) {
             System.err.println(e.toString());
