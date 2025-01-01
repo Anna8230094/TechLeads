@@ -26,6 +26,7 @@ public class Users {
     @Column(name= "other_traits",columnDefinition = "TEXT")
     private String otherTraits;
 
+    /* 
     public Users() {
     }
 
@@ -38,7 +39,7 @@ public class Users {
         this.softSkills = softSkills;
         this.otherTraits = otherTraits;
 
-    }
+    } */
 
     // Getters and Setters
 

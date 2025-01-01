@@ -26,6 +26,8 @@ public class RankingResult {
     private String resume;
     private String summaryOfResume;
 
+    
+    /* 
     public RankingResult() {
     }
 
@@ -34,7 +36,7 @@ public class RankingResult {
         this.summaryOfResume = summaryOfResume;
         
         
-    }
+    } */
 
     // Getters and Setters
 

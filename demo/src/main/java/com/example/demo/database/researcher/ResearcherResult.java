@@ -1,8 +1,8 @@
 package com.example.demo.database.researcher;
 
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "researcher_result")
+@Table(name = "ResearcherResult")
 public class ResearcherResult {
 
 
@@ -22,13 +22,13 @@ public class ResearcherResult {
     @Column(name = "resume", nullable = false)
     private String resume;
 
-    public ResearcherResult() {
+    /*public ResearcherResult() {
         
     }
 
     public ResearcherResult(String resume){
         this.resume = resume;
-    }
+    }*/
 
     
     // Getters and Setters
