@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
-import java.nio.file.Files;
+import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public class User {
     private String name;
@@ -9,7 +10,7 @@ public class User {
     private String hardSkills;
     private String softSkills;
     private String otherTraits;
-    private Files files;
+    private List<MultipartFile>files;
     public void setName(String name) {
         this.name = name;
     }
@@ -58,11 +59,11 @@ public class User {
         return otherTraits;
     }
 
-    public void setFiles(Files files) {
+    public void setFiles(List<MultipartFile> files) {
         this.files = files;
     }
 
-    public Files getFiles() {
+    public List<MultipartFile> getFiles() {
         return files;
     }
 }

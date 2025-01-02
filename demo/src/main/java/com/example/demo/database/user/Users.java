@@ -1,6 +1,5 @@
 package com.example.demo.database.user;
 
-import java.nio.file.Files;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +21,6 @@ public class Users {
     private String hardSkills;
     private String softSkills;
     private String otherTraits;
-    private Files files;
 
     // Getters and Setters
     public Long getId() {
@@ -87,13 +85,5 @@ public class Users {
 
     public String getOtherTraits() {
         return otherTraits;
-    }
-
-    public void setFiles(Files files) {
-        this.files = files;
-    }
-
-    public Files getFiles() {
-        return files;
     }
 }
