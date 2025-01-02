@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.mail.MessagingException;
 
+/**
+ * This class represents my class in Java.
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 @RestController
 public class EmailController {
      

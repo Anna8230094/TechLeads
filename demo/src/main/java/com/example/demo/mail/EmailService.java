@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+
+/**
+ * This class represents my class in Java.
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 @Service
 public class EmailService {
 

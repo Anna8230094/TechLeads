@@ -1,6 +1,5 @@
 package com.example.demo.openai.threads;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -22,20 +22,8 @@ public class ExtractorThread extends OpenAiThread {
 
     private String fileId = "";
 
-    /*
-     * public String getFile() {
-     * File file = new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf");
-     * if (file.exists()) {
-     * System.out.println("I got the file");
-     * return file;
-     * } else {
-     * return null;
-     * }
-     * }
-     */
-
-    public CompletableFuture<String> uploadFile() throws IOException {
-
+    public CompletableFuture<String> uploadFile(MultipartFile multipartFile) throws IOException {
+        
         OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS).build();
@@ -43,10 +31,11 @@ public class ExtractorThread extends OpenAiThread {
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file", System.getProperty("user.dir") + "/TechLeads/demo/src/main/resources/static/CV - Anna Megalou.pdf",
-                        RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File(System.getProperty("user.dir") + "/TechLeads/demo/src/main/resources/static/CV - Anna Megalou.pdf")))
+                .addFormDataPart("file",
+                        multipartFile.getOriginalFilename(),
+                        RequestBody.create(MediaType.parse("application/octet-stream"), multipartFile.getBytes()))
                 .build();
+
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/files")
                 .post(body)
