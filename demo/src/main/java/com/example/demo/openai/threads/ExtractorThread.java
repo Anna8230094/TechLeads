@@ -17,22 +17,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * This class represents my class in Java.
+ * @author Anna Maria Megalou
+ * @version 1.0
+ */
+
 @Service("ExtractorThread")
 public class ExtractorThread extends OpenAiThread {
 
     private String fileId = "";
 
-    /*
-     * public String getFile() {
-     * File file = new File("/C:/Users/user/Downloads/CV - Anna Megalou.pdf");
-     * if (file.exists()) {
-     * System.out.println("I got the file");
-     * return file;
-     * } else {
-     * return null;
-     * }
-     * }
-     */
 
     public CompletableFuture<String> uploadFile() throws IOException {
 

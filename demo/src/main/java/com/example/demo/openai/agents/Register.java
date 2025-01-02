@@ -2,6 +2,11 @@ package com.example.demo.openai.agents;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * This class represents my class in Java.
+ * @author Anna Maria Megalou
+ * @version 1.0
+ */
 @Service
 public class Register extends OpenAiAssistant {
 
