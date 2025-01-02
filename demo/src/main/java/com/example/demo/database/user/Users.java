@@ -26,21 +26,6 @@ public class Users {
     @Column(name= "other_traits",columnDefinition = "TEXT")
     private String otherTraits;
 
-    /* 
-    public Users() {
-    }
-
-    public Users(String name, String email, String field, String hardSkills, String softSkills, String otherTraits) {
-
-        this.name = name;
-        this.email = email;
-        this.field = field;
-        this.hardSkills = hardSkills;
-        this.softSkills = softSkills;
-        this.otherTraits = otherTraits;
-
-    } */
-
     // Getters and Setters
 
     public Long getIdUsers() {

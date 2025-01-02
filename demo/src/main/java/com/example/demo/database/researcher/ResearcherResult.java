@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "ResearcherResult")
+@Table(name = "researcher_result")
 public class ResearcherResult {
 
 
@@ -21,14 +21,6 @@ public class ResearcherResult {
 
     @Column(name = "resume", nullable = false)
     private String resume;
-
-    /*public ResearcherResult() {
-        
-    }
-
-    public ResearcherResult(String resume){
-        this.resume = resume;
-    }*/
 
     
     // Getters and Setters
