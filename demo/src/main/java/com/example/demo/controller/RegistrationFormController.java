@@ -18,6 +18,9 @@ import com.example.demo.openai.service.OpenAiService;
 
 import ch.qos.logback.core.model.Model;
 
+/**
+ * @author Maria Spachou
+ */
 @Controller
 public class RegistrationFormController {
 
@@ -46,7 +49,7 @@ public class RegistrationFormController {
             System.out.println("Hard Skills:" + user.getHardSkills());
             System.out.println("Soft Skills:" + user.getSoftSkills());
             System.out.println("Other Traits:" + user.getOtherTraits());
-            
+
             new Thread(new Runnable() {
 
                 public void run() {

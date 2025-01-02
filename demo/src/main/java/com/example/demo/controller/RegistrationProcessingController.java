@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.database.user.Users;
 import com.example.demo.model.User;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class RegistrationProcessingController {
 
     @PostMapping("/registrationform")
-    public String handleRegistration(@ModelAttribute User user,@RequestParam List<MultipartFile> files, Model model) {
+    public String handleRegistration(@ModelAttribute Users user,@RequestParam List<MultipartFile> files, Model model) {
         System.out.println("Name:" + user.getName());
         System.out.println("Field:" + user.getField());
         System.out.println("Email:" + user.getEmail());
