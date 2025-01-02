@@ -7,16 +7,6 @@
             "previewLimit": 50,
             "server": "localhost",
             "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "HireAndGo",
-            "database": "postgres",
-            "username": "postgres",
-            "password": "mysecretpassword"
-        },
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
             "askForPassword": true,
             "driver": "PostgreSQL",
             "name": "some-postgres",

@@ -1,6 +1,5 @@
 package com.example.demo.openai.threads;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -19,6 +19,7 @@ import okhttp3.Response;
 
 /**
  * This class represents my class in Java.
+ * 
  * @author Anna Maria Megalou
  * @version 1.0
  */
@@ -28,8 +29,7 @@ public class ExtractorThread extends OpenAiThread {
 
     private String fileId = "";
 
-
-    public CompletableFuture<String> uploadFile() throws IOException {
+    public CompletableFuture<String> uploadFile(MultipartFile multipartFile) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -38,9 +38,9 @@ public class ExtractorThread extends OpenAiThread {
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
-                .addFormDataPart("file", System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf",
-                        RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File(System.getProperty("user.dir") + "/demo/src/main/resources/static/CV - Anna Megalou.pdf")))
+                .addFormDataPart("file",
+                        multipartFile.getOriginalFilename(),
+                        RequestBody.create(MediaType.parse("application/octet-stream"), multipartFile.getBytes()))
                 .build();
 
         Request request = new Request.Builder()
@@ -58,10 +58,10 @@ public class ExtractorThread extends OpenAiThread {
 
     @Override
     @Async
-    public CompletableFuture<String> addMessage() throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message) throws IOException {
         JSONObject jsonObject = new JSONObject()
                 .put("role", "user")
-                .put("content", getMessage())
+                .put("content", message)
                 .put("attachments",
                         new JSONArray().put(new JSONObject().put("file_id", getFileId()).put("tools",
                                 new JSONArray().put(new JSONObject().put("type", "file_search")))));

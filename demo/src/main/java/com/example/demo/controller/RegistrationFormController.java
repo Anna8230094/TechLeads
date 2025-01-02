@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.database.reasearcher.ResearcherService;
+import com.example.demo.database.researcher.ResearcherService;
 import com.example.demo.database.user.Users;
 import com.example.demo.database.user.UsersService;
 import com.example.demo.openai.service.OpenAiService;
@@ -32,7 +32,7 @@ public class RegistrationFormController {
 
     @Autowired
     OpenAiService openAiService;
-    
+
     // display of registrationform page
     @GetMapping("/hireandgo/home/registrationform")
     public String registrationControl() {
@@ -41,7 +41,8 @@ public class RegistrationFormController {
 
     // storing user's data and displaying them
     @PostMapping("/registrationform")
-    public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute Users user, Model model) {
+    public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute Users user,
+            Model model) {
         try {
             CompletableFuture<Void> save = usersService.saveUsers(user);
             CompletableFuture.allOf(save).join();
@@ -53,12 +54,12 @@ public class RegistrationFormController {
             System.out.println("Other Traits:" + user.getOtherTraits());
 
             new Thread(new Runnable() {
-                
+
                 // handling exceptions that may occur when calling startRankingProcessing method
                 public void run() {
                     try {
                         openAiService.startRankingProcessing(files, user);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

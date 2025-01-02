@@ -2,11 +2,29 @@ package com.example.demo.mail;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Component;
 
+
+/**
+ * This class represents my class in Java.
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
+@Component
 public class EmailSender {
+    
+      @Value("${spring.mail.host}")
+    private String host;
+
+     @Value("${spring.mail.username}")
+    private String username;
+
+    @Value("${spring.mail.password}")
+    private String password;
    
     @Bean
     public JavaMailSender getJavaMailSender() {

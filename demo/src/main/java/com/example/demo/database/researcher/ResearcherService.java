@@ -12,16 +12,14 @@ package com.example.demo.database.researcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-
+@Service 
 public class ResearcherService {
 
     @Autowired
-    private ResearcherRepository ResearcherRepository;
+    private ResearcherRepository researcherRepository;
 
-    public ResearcherResult saveResearcherResult(ResearcherResult researcherResult) {
-
-        return ResearcherRepository.save(researcherResult);
+    public void saveResearcherResult(ResearcherResult researcherResult) {
+        researcherRepository.save(researcherResult);
 
     }
 

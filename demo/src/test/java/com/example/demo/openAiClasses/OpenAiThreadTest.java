@@ -37,7 +37,7 @@ public class OpenAiThreadTest {
 
     @Test
     void buildThreadTest() throws IOException {
-        assertNotNull(openAiThread.createThread( "Tell me hi in german", "You are a german translator", assistantId), "Thread ID should not be null after creation.");
+        assertNotNull(openAiThread.createThread( "You are a german translator", assistantId), "Thread ID should not be null after creation.");
         System.out.println("Thread created successfully. ID: " + openAiThread.getThreadId());
     }
 
@@ -46,7 +46,7 @@ public class OpenAiThreadTest {
         openAiThread.getThreadId();
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiThread.addMessage();
+        openAiThread.addMessage("user", "Tell me hi in german");
         System.out.println("Message added successfully to thread ID: " + openAiThread.getThreadId());
     }
 
@@ -56,7 +56,7 @@ public class OpenAiThreadTest {
         assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiThread.addMessage();
+        openAiThread.addMessage("user", "Tell me hi in german");
 
         openAiThread.run();
         System.out.println("Run method executed successfully for thread ID: " + openAiThread.getThreadId());
@@ -68,7 +68,7 @@ public class OpenAiThreadTest {
         assertNotNull(openAiAssistant.getAssistantId());
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
-        openAiThread.addMessage();
+        openAiThread.addMessage("user", "Tell me hi in german");
         openAiThread.run();
 
         openAiThread.getRequest();

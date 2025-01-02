@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This class represents my class in Java.
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 @RestController
 public class EmailController {
 
