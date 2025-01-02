@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.openAiClasses;
 
 import static org.junit.jupiter.api.Assertions.*;
 
