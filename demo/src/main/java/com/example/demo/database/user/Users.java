@@ -7,7 +7,9 @@
  * @author Konstantia Stergiou
  * @version 1.0
  */
+
 package com.example.demo.database.user;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,21 +20,22 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class Users {
+   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long idUsers;
-    @Column(name= "name", nullable=false, length = 100)
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
-    @Column(name= "email", nullable=false, unique= true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
-    @Column(name= "field", length = 100)
+    @Column(name = "field", length = 100)
     private String field;
-    @Column(name= "hard_skills",columnDefinition = "TEXT")
+    @Column(name = "hard_skills", columnDefinition = "TEXT")
     private String hardSkills;
-    @Column(name= "soft_skills",columnDefinition = "TEXT")
+    @Column(name = "soft_skills", columnDefinition = "TEXT")
     private String softSkills;
-    @Column(name= "other_traits",columnDefinition = "TEXT")
+    @Column(name = "other_traits", columnDefinition = "TEXT")
     private String otherTraits;
 
     // Getters and Setters
@@ -96,7 +99,6 @@ public class Users {
     }
 
     public void setOtherTraits(String otherTraits) {
-
         this.otherTraits = otherTraits;
 
     }
@@ -113,6 +115,5 @@ public class Users {
                 ", otherTraits='" + otherTraits + '\'' +
                 '}';
     }
-
 
 }
