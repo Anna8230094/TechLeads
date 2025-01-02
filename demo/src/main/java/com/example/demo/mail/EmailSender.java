@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Component;
 
-@Component
+
 public class EmailSender {
     
     @Value("${spring.mail.host}")
     private String host;
 
-     @Value("${spring.mail.username}")
+    @Value("${spring.mail.username}")
     private String username;
 
     @Value("${spring.mail.password}")

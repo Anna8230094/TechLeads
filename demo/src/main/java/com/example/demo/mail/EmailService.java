@@ -3,7 +3,6 @@ package com.example.demo.mail;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -11,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.MimeMessage;
 
-
 /**
  * This class represents my class in Java.
+ * 
  * @author Aggeliki Despoina Megalou
  * @version 1.0
  */
@@ -22,18 +21,19 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    @Value("${website.url}")
-    private String websiteLink;
+    private String websiteLink = " http://localhost:8081/hireandgo/home/";
 
     @Autowired
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
-   /* public void sendEmail(String to, String subject, String text) throws MessagingException {*/ 
+    /*
+     * public void sendEmail(String to, String subject, String text) throws
+     * MessagingException {
+     */
     @Async
     public CompletableFuture<String> sendEmail(String to, String subject, String text) {
-    
 
         try {
             // Input validation
@@ -52,7 +52,6 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            
 
             String htmlContent = "<p>Hello ,</p>" +
                     "<p>Thank you for using HireandGo. Please click the link below to view your confirmation:</p>" +
@@ -64,11 +63,9 @@ public class EmailService {
             emailSender.send(message);
             return CompletableFuture.completedFuture("Email sent successfully!");
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             return CompletableFuture.failedFuture(e);
         }
-           
-        
 
     }
 }
