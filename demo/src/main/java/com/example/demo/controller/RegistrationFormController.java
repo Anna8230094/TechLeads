@@ -32,12 +32,14 @@ public class RegistrationFormController {
 
     @Autowired
     OpenAiService openAiService;
-
+    
+    // display of registrationform page
     @GetMapping("/hireandgo/home/registrationform")
     public String registrationControl() {
         return "registrationform";
     }
 
+    // storing user's data and displaying them
     @PostMapping("/registrationform")
     public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute Users user, Model model) {
         try {
@@ -51,7 +53,8 @@ public class RegistrationFormController {
             System.out.println("Other Traits:" + user.getOtherTraits());
 
             new Thread(new Runnable() {
-
+                
+                // handling exceptions that may occur when calling startRankingProcessing method
                 public void run() {
                     try {
                         openAiService.startRankingProcessing(files, user);
