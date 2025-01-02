@@ -8,28 +8,58 @@
   <body>
     <h1>Hire&Go</h1>
 
-    <form method="post">
+    <form th:action="@{/register}" th:object="${Users}" method="post" enctype="multipart/form-data">
 
         <fieldset>
             <p>Company's Information</p>
-            <label for="companys-name">Company's Name<input id="companys-name" name="companys-name" type="text" required /></label>
-            <label for="companys-field">Company's Field<input id="companys-field" name="companys-field" type="text" required /></label>
+            <label for="name">Company's name<input id="name" name="name" type="text" required /></label>
+            <label for="field">Company's Field<input id="field" name="field" type="text" required /></label>
             <label for="email">User's Email<input id="email" name="email" type="email" required /></label>
         </fieldset>
 
         <fieldset>
             <p>Job Position's Requirements</p>
-            <label for="hard-skills">Hard Skills<input id="hard-skills" name="hard-skills" type="text" required/></label>
-            <label for="soft-skills">Soft Skills<input id="soft-skills" name="soft-skills" type="text" required/></label>
-            <label for="other-traits">Other Traits<input id="other-traits" name="other-traits" type="text"/></label>
+            <label for="hardSkills">Hard Skills</label>
+            <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" required></textarea>
+              
+            <label for="softSkills">Soft Skills</label>
+            <textarea id="softSkills" name="softSkills" rows="4" cols="50" required></textarea>
+            
+            <label for="otherTraits">Other Traits</label>
+            <textarea id="otherTraits" name="otherTraits" rows="4" cols="50"></textarea>
         </fieldset>
 
         <fieldset>
-            <p>Upload all CVs here!</p>
-            <label for="cv-upload">Upload CVs:<input id="cv-upload" name="cv-upload[]" type="file" multiple required /></label>
-        </fieldset>
-        
-        <input type="submit" value="Submit"/>
+          <p>Upload all CVs here!</p>
+          <label for="file">Upload CVs:</label>
+          <input id="file" name="file" type="file" multiple required />
+          <ul id="file-list"></ul>
+      </fieldset>
+      
+      <script>
+          const fileInput = document.getElementById('file');
+          const fileList = document.getElementById('file-list');
+          let filesArray = [];
+      
+          // Όταν επιλέγονται αρχεία
+          fileInput.addEventListener('change', (event) => {
+              // Προσθέτουμε τα νέα αρχεία στη λίστα
+              Array.from(event.target.files).forEach((file) => {
+                  if (!filesArray.some(existingFile.name === file.name && existingFile.size === file.size)) {
+                  filesArray.push(file);
+                  const listItem = document.createElement('li');
+                  listItem.textContent = file.name;
+                  fileList.appendChild(listItem);
+                  } else {
+                    console.log("not the same file");
+                  }
+              });
+              fileInput = filesArray;
+            });
+
+      </script>      
+      <input type="submit" value="Submit"/>
+
     </form>
   </body>
 </html>
