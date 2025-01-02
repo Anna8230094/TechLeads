@@ -46,6 +46,7 @@ public class RegistrationFormController {
             System.out.println("Hard Skills:" + user.getHardSkills());
             System.out.println("Soft Skills:" + user.getSoftSkills());
             System.out.println("Other Traits:" + user.getOtherTraits());
+            
             new Thread(new Runnable() {
 
                 public void run() {
