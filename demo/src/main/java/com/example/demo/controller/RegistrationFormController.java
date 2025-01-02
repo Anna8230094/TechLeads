@@ -58,7 +58,7 @@ public class RegistrationFormController {
                 // handling exceptions that may occur when calling startRankingProcessing method
                 public void run() {
                     try {
-                        openAiService.startRankingProcessing(files, user);
+                        openAiService.startRankingProcess(files, user);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

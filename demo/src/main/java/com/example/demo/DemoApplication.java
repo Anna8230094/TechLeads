@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.demo.mail.EmailService;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplication implements CommandLineRunner{
+
 
 	@Autowired
 	public EmailService emailService;
@@ -20,7 +21,7 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
+		
 		// Send Email Async
 		String to = "aggmegalou@gmail.com";
 		String subject = " Results Ready!";
@@ -39,4 +40,5 @@ public class DemoApplication implements CommandLineRunner {
 
 	}
 
+	
 }

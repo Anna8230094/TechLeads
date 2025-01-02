@@ -8,16 +8,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
-
-/**
- * This class represents my class in Java.
- * @author Aggeliki Despoina Megalou
- * @version 1.0
- */
 @Component
 public class EmailSender {
     
-      @Value("${spring.mail.host}")
+    @Value("${spring.mail.host}")
     private String host;
 
      @Value("${spring.mail.username}")

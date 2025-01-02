@@ -14,23 +14,25 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "researcher_result")
 public class ResearcherResult {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idResearcher")
     private Long idResearcher;
 
-    @Column(name = "resume", nullable = false)
+    @Column(name = "resume", nullable = false, columnDefinition = "TEXT")
+    @Lob
     private String resume;
 
-    
+    @Column(name = "fileName", nullable = false)
+    private String fileName;
+
     // Getters and Setters
     public Long getIdResearcher() {
         return idResearcher;
@@ -46,5 +48,13 @@ public class ResearcherResult {
 
     public void setResume(String resume) {
         this.resume = resume;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
