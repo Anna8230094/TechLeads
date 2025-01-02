@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/hireandgo/home")
 public class RankingController {
 
+    // display of ranking page
     @GetMapping("/ranking")
     public String rankingControl(Model model) {
         model.addAttribute("message", "Please enter your email");
