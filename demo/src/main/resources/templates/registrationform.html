@@ -8,31 +8,31 @@
   <body>
     <h1>Hire&Go</h1>
 
-    <form method="post">
+    <form th:action="@{/register}" th:object="${user}" method="post">
 
         <fieldset>
             <p>Company's Information</p>
-            <label for="companys-name">Company's Name<input id="companys-name" name="companys-name" type="text" required /></label>
-            <label for="companys-field">Company's Field<input id="companys-field" name="companys-field" type="text" required /></label>
+            <label for="name">Company's Name<input id="name" name="name" type="text" required /></label>
+            <label for="field">Company's Field<input id="field" name="field" type="text" required /></label>
             <label for="email">User's Email<input id="email" name="email" type="email" required /></label>
         </fieldset>
 
         <fieldset>
             <p>Job Position's Requirements</p>
-            <label for="hard-skills">Hard Skills</label>
-            <textarea id="hard-skills" name="hard-skills" rows="4" cols="50" required></textarea>
+            <label for="hardSkills">Hard Skills</label>
+            <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" required></textarea>
               
-            <label for="soft-skills">Soft Skills</label>
-            <textarea id="soft-skills" name="soft-skills" rows="4" cols="50" required></textarea>
+            <label for="softSkills">Soft Skills</label>
+            <textarea id="softSkills" name="softSkills" rows="4" cols="50" required></textarea>
             
-            <label for="other-traits">Other Traits</label>
-            <textarea id="other-traits" name="other-traits" rows="4" cols="50"></textarea>
+            <label for="otherTraits">Other Traits</label>
+            <textarea id="otherTraits" name="otherTraits" rows="4" cols="50"></textarea>
         </fieldset>
 
         <fieldset>
           <p>Upload all CVs here!</p>
-          <label for="cv-upload">Upload CVs:</label>
-          <input id="cv-upload" name="cv-upload[]" type="file" multiple required />
+          <label for="files">Upload CVs:</label>
+          <input id="file" name="file" type="file" multiple required />
       
           <ul id="file-list"></ul>
       </fieldset>
