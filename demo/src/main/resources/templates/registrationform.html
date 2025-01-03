@@ -33,7 +33,7 @@
 
     <fieldset>
       <p>Upload all CVs here!</p>
-      <label for="file">Upload CVs:</label>
+      <label for="files">Upload CVs:</label>
       <input id="file" name="file" type="file" multiple required/>
       <ul id="file-list"></ul>
     </fieldset>
@@ -42,16 +42,15 @@
       const fileInput = document.getElementById('file');
       const fileList = document.getElementById('file-list');
       let filesArray = [];
-      
+      // Όταν επιλέγονται αρχεία
       fileInput.addEventListener('change', (event) => {
-
+        // Προσθέτουμε τα νέα αρχεία στη λίστα
         Array.from(event.target.files).forEach((file) => {
           if (!filesArray.some(existingFile => existingFile.name === file.name && existingFile.size === file.size)) {
             filesArray.push(file);
             const listItem = document.createElement('li');
             listItem.textContent = file.name;
             fileList.appendChild(listItem);
-
           } else {
             console.log("not the same file");
           }
