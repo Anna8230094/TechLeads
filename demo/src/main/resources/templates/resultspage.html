@@ -1,12 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"></html> 
     <head>
         <meta charset="UTF-8">
     <title>Candidate Ranking Results</title>
     </head>
     <body>
-    <h1><strong></strong>Candidate Ranking Results</h1> <strong> </h1>
-<p>Here you can find all applicants from most suitable to least suitable for the position based on your prefered skills and abilities.</p>
+        <h1 class="center-text"><strong></strong>Candidate Ranking Results</h1> <strong> </h1>
+            <style>
+             .center-text {
+                    text-align: center;
+                    color: navy;
+             }
+            </style>
+<p>Here you can find all applicants from most suitable to least suitable for the position created based on your prefered skills and abilities.</p>
+<style>
+    h1 {
+        margin-bottom: 50px; 
+    }
+</style>
+<style>
+    p {
+        margin-bottom: 50px; 
+    }
+</style>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,11 +44,13 @@
         caption {
             font-size: 1.5em;
             margin-bottom: 10px;
+            color: teal; 
+
         }
     </style>
 <body>
     <table>
-        <caption></caption>
+        <caption>Ranking Results</caption>
         <thead>
             <tr>
                 <th>File</th>
