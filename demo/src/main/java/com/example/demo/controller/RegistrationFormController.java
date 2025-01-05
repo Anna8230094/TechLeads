@@ -53,21 +53,23 @@ public class RegistrationFormController {
             System.out.println("Soft Skills:" + user.getSoftSkills());
             System.out.println("Other Traits:" + user.getOtherTraits());
 
-            new Thread(new Runnable() {
+            /*new Thread(new Runnable() {
 
                 // handling exceptions that may occur when calling startRankingProcessing method
-                public void run() {
+                /*public void run() {
                     try {
                         openAiService.startRankingProcess(files, user);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            }).start();*/
         } catch (Exception e) {
             System.err.println(e.toString());
             System.err.println("Unable to save user");
         }
+        
+        
 
         return "success";
     }

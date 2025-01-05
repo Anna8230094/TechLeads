@@ -25,6 +25,7 @@ import com.example.demo.openai.threads.OpenAiThread;
 
 /**
  * This class represents my class in Java.
+ * 
  * @author Aggeliki Despoina Megalou
  * @version 1.0
  */
@@ -69,8 +70,6 @@ public class OpenAiService {
 
     @Autowired
     ResearcherService researcherService;
-
-
 
     // this method is called from controller class after the for submit
     @Async
@@ -120,7 +119,7 @@ public class OpenAiService {
         }
 
         // step 5:create ranking
-        String messageRanking = " The resume from the database are:"; // database whene is ready
+        String messageRanking = " The resume from the database are:"; // database when is ready
         CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
         CompletableFuture.allOf(rankingResponse).join();
 
@@ -288,6 +287,34 @@ public class OpenAiService {
         } while (count < 5 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
         return CompletableFuture.completedFuture(finalResponse);
 
+    }
+
+    @Async
+    public CompletableFuture<Void> startRankingProcess(List<MultipartFile> files, Users user, Long researcherId)
+            throws Exception {
+
+        // Step 1: Fetch researcher results from the database
+        List<ResearcherResult> researcherResults = researcherService.getResearcherResultsByResearcherId(researcherId);
+
+        // Step 2: Create the message containing the resumes
+        StringBuilder resumesMessage = new StringBuilder("The resumes from the database are:\n");
+
+        for (ResearcherResult result : researcherResults) {
+            // Simply append the resume content (no formatting)
+            resumesMessage.append(result.getResume()).append("\n");
+        }
+
+        // Step 3: Send the resumes directly to the Ranking Agent
+        CompletableFuture<String> rankingResponse = rankingAgentResponse(resumesMessage.toString());
+        CompletableFuture.allOf(rankingResponse).join();
+        System.out.println("Ranking Response: " + rankingResponse.get());
+
+        // Step 4: Send the ranking agent response to the Reviewer Ranking Agent
+        String messageReviewerRanking = "The response of RankingAgent is: " + rankingResponse.get();
+        CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
+        CompletableFuture.allOf(reviewerRankingResponse).join();
+
+        return CompletableFuture.completedFuture(null);
     }
 
 }

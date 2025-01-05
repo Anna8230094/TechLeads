@@ -9,7 +9,12 @@
  */
 package com.example.demo.database.researcher;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ResearcherRepository extends JpaRepository<ResearcherResult, Long> {
+    
+        // This method will automatically generate a query to fetch results by researcher ID
+        List<ResearcherResult> findByIdResearcher(Long researcherId);
 }

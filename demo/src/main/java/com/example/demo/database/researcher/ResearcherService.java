@@ -9,6 +9,8 @@
  */
 package com.example.demo.database.researcher;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,11 @@ public class ResearcherService {
 
     @Autowired
     private ResearcherRepository researcherRepository;
+
+    // Method to fetch researcher results by researcher ID
+    public List<ResearcherResult> getResearcherResultsByResearcherId(Long researcherId) {
+        return researcherRepository.findByIdResearcher(researcherId);
+    }
 
     public void saveResearcherResult(ResearcherResult researcherResult) {
         researcherRepository.save(researcherResult);
