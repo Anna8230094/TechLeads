@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/hireandgo/home/registrationform/")
 public class SuccesControler {
 
-    @GetMapping("/success")
-    public String handleSucces(Model model, @RequestParam String username, @PathVariable Long id) {
+    @GetMapping("/success/{id}")
+    public String handleSucces(Model model, @RequestParam String username, @PathVariable(value = "id") Long id) {
         return "success";
     }
 
