@@ -61,8 +61,6 @@ public class ExtractorThread extends OpenAiThread {
 
         String jsonRequest = jsonObject.toString();
 
-        System.out.println(jsonRequest);
-
         Response response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + getThreadId() + "/messages");
 
