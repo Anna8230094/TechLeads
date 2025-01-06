@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,40 +56,18 @@ public class RegistrationFormController {
                 System.out.println("File Size: " + file.getBytes());
             }
 
-            promise = usersService.saveUsers(user);
-            usersService.saveUsers(user).join();
+            //key=fileName / valou= byte of file
+            HashMap<String, byte[]> example = new HashMap<String, byte[]>();
 
-           promise = asyncStartRankingProcess(files, user);
-
-            /*
-             * CompletableFuture.runAsync(() -> {
-             * try {
-             * System.out.print("MMMMMMMMMMMMMMMMMM"+files.get(0).getBytes());
-             * openAiService.startRankingProcess(files, user);
-             * } catch (Exception e) {
-             * System.err.println("Error during ranking process: " + e.getMessage());
-             * }
-             * });
-             */
-            
+            for (MultipartFile file : files) {
+                example.put(file.getOriginalFilename(), file.getBytes());
+            }
+            usersService.saveUsers(user);
+            openAiService.startRankingProcess(example, user);
 
         } catch (CancellationException e) {
-            System.err.println(e.toString());
             System.err.println("Unable to save user");
         }
-
         return "success";
-    }
-
-
-    @Async
-    public CompletableFuture<Void> asyncStartRankingProcess(List<MultipartFile> files, Users user) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                openAiService.startRankingProcess(files, user);
-            } catch (Exception e) {
-                System.err.println("Error during ranking process: " + e.getMessage());
-            }
-        });
     }
 }

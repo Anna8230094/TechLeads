@@ -1,7 +1,5 @@
 package com.example.demo.openai.threads;
 
-import static org.mockito.ArgumentMatchers.notNull;
-
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -10,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -25,25 +22,18 @@ public class ExtractorThread extends OpenAiThread {
     private String fileId = "";
 
     @Async
-    public CompletableFuture<String> uploadFile(MultipartFile multipartFile) throws IOException {
-        
+    public CompletableFuture<String> uploadFile(String filename, byte[] file) throws IOException {
+
         OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS).build();
 
-                System.out.println("Here is upload file");
-                if (multipartFile.getBytes()==notNull()) {
-                     System.out.println("Here is upload file"+ multipartFile.getBytes());
-                } else {
-                    System.out.println("Here is upload file unable"); 
-                }
-               
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")
                 .addFormDataPart("file",
-                        multipartFile.getOriginalFilename(),
-                        RequestBody.create(MediaType.parse("application/octet-stream"), multipartFile.getBytes()))
+                        filename,
+                        RequestBody.create(MediaType.parse("application/octet-stream"), file))
                 .build();
 
         Request request = new Request.Builder()
@@ -63,13 +53,15 @@ public class ExtractorThread extends OpenAiThread {
     @Async
     public CompletableFuture<String> addMessage(String role, String message) throws IOException {
         JSONObject jsonObject = new JSONObject()
-                .put("role", "user")
+                .put("role", role)
                 .put("content", message)
                 .put("attachments",
                         new JSONArray().put(new JSONObject().put("file_id", getFileId()).put("tools",
                                 new JSONArray().put(new JSONObject().put("type", "file_search")))));
 
         String jsonRequest = jsonObject.toString();
+
+        System.out.println(jsonRequest);
 
         Response response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + getThreadId() + "/messages");

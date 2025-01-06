@@ -1,14 +1,12 @@
 
 package com.example.demo.openai.service;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.example.demo.database.researcher.ResearcherResult;
 import com.example.demo.database.researcher.ResearcherService;
 import com.example.demo.database.user.Users;
@@ -25,6 +23,7 @@ import com.example.demo.openai.threads.OpenAiThread;
 
 /**
  * This class represents my class in Java.
+ * 
  * @author Aggeliki Despoina Megalou
  * @version 1.0
  */
@@ -70,11 +69,9 @@ public class OpenAiService {
     @Autowired
     ResearcherService researcherService;
 
-
-
     // this method is called from controller class after the for submit
     @Async
-    public CompletableFuture<Void> startRankingProcess(List<MultipartFile> files, Users user) throws Exception {
+    public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user) throws Exception {
 
         // Step 1:create register
         String messageRegiser = "Here are the details provided by the user:\nfield:" + user.getField() +
@@ -86,11 +83,11 @@ public class OpenAiService {
         System.out.println("Register Response: " + registerResponse.get());
         CompletableFuture.allOf(registerResponse).join();
 
-        for (MultipartFile file : files) {
+        for (String file : files.keySet()) {
 
             // step 2:create extractor
             String messageExtractor = "The cv that i want you to extract informations is the following: ";
-            CompletableFuture<String> extractorResponse = extractorResponse(messageExtractor, file);
+            CompletableFuture<String> extractorResponse = extractorResponse(messageExtractor, file, files.get(file));
             CompletableFuture.allOf(extractorResponse).join();
             System.out.println("Extractor Response: " + extractorResponse.get());
 
@@ -115,12 +112,12 @@ public class OpenAiService {
             }
             ResearcherResult researcherResult = new ResearcherResult();
             researcherResult.setResume(extractorResearcherResponse.get());
-            researcherResult.setFileName(file.getOriginalFilename());
+            researcherResult.setFileName("file");
             researcherService.saveResearcherResult(researcherResult);
         }
 
         // step 5:create ranking
-        String messageRanking = " The resume from the database are:"; // database whene is ready
+        String messageRanking = " The resume from the database are:"; // database whene is rea%dy
         CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
         CompletableFuture.allOf(rankingResponse).join();
 
@@ -144,7 +141,7 @@ public class OpenAiService {
     // response
     @Async
     public CompletableFuture<String> processRequest(String message, String instructions, OpenAiAssistant assistant,
-            OpenAiThread thread, boolean uploadFile, MultipartFile file) throws Exception {
+            OpenAiThread thread, boolean uploadFile, String filename, byte[] file) throws Exception {
 
         // Step 1: Create AI Assistant
         CompletableFuture<String> createAssistant = assistant.createAiAssistant();
@@ -157,10 +154,8 @@ public class OpenAiService {
         // Step 3: Optional File Upload
         // the upload file must have an argument with the cv path or file
         if (uploadFile) {
-            System.out.println("mmmm");
-            CompletableFuture<String> fileUpload = extractorOpenAiThread.uploadFile(file);
+            CompletableFuture<String> fileUpload = extractorOpenAiThread.uploadFile(filename, file);
             CompletableFuture.allOf(fileUpload).join();
-            System.out.println("Upload file is completed");
         }
 
         // Step 4: Add Message
@@ -170,7 +165,6 @@ public class OpenAiService {
         // Step 5: Run Thread
         CompletableFuture<String> runThread = thread.run();
         CompletableFuture.allOf(runThread).join();
-        // System.out.println(runThread.get());
 
         // Step 6: Get Response
         String response = thread.getRequest();
@@ -179,38 +173,41 @@ public class OpenAiService {
 
     @Async
     public CompletableFuture<String> registerResponse(String messageRegister) throws Exception {
-        return processRequest(messageRegister, Register.INSTRUCTIONS, register, registerOpenAiThread, false, null);
+        return processRequest(messageRegister, Register.INSTRUCTIONS, register, registerOpenAiThread, false, null,
+                null);
     }
 
     @Async
-    public CompletableFuture<String> extractorResponse(String messageExtractor, MultipartFile file) throws Exception {
-        return processRequest(messageExtractor, Extractor.INSTRUCTIONS, extractor, extractorOpenAiThread, true, file);
+    public CompletableFuture<String> extractorResponse(String messageExtractor, String filename, byte[] file)
+            throws Exception {
+        return processRequest(messageExtractor, Extractor.INSTRUCTIONS, extractor, extractorOpenAiThread, true,
+                filename, file);
     }
 
     @Async
     public CompletableFuture<String> extractorResearcherResponse(String researcherExtractor) throws Exception {
         return processRequest(researcherExtractor, ExtractorResearcher.INSTRUCTIONS, extractorResearcher,
-                extractorResearcherOpenAiThread, false, null);
+                extractorResearcherOpenAiThread, false, null, null);
     }
 
     @Async
     public CompletableFuture<String> reviewerExtractorResponse(String reviewerMessage) throws Exception {
         return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher,
-                reviewerResearcherThread, false, null);
+                reviewerResearcherThread, false, null, null);
     }
 
     @Async
     public CompletableFuture<String> reviewerRankingResponse(String reviewerRankingmessage) throws Exception {
         return processRequest(reviewerRankingmessage, ReviewerRanking.INSTRUCTIONS, reviewerRanking,
                 reviewerRankingThread,
-                false, null);
+                false, null, null);
 
     }
 
     @Async
     public CompletableFuture<String> rankingAgentResponse(String rankingAgentmessage) throws Exception {
         return processRequest(rankingAgentmessage, RankingAgent.INSTRUCTIONS, rankingAgent, rankingAgentThread,
-                false, null);
+                false, null, null);
 
     }
 
