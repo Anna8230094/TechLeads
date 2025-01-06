@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import com.example.demo.mail.EmailService;
 
 @SpringBootApplication
-@EnableAsync
+//@EnableAsync
 public class DemoApplication implements CommandLineRunner{
 
 
