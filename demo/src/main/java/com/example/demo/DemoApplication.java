@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.example.demo.mail.EmailService;
 
 @SpringBootApplication
+@EnableAsync
 public class DemoApplication implements CommandLineRunner{
 
 

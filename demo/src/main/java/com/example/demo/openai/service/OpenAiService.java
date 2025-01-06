@@ -160,6 +160,7 @@ public class OpenAiService {
             System.out.println("mmmm");
             CompletableFuture<String> fileUpload = extractorOpenAiThread.uploadFile(file);
             CompletableFuture.allOf(fileUpload).join();
+            System.out.println("Upload file is completed");
         }
 
         // Step 4: Add Message

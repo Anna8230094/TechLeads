@@ -1,5 +1,7 @@
 package com.example.demo.openai.threads;
 
+import static org.mockito.ArgumentMatchers.notNull;
+
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -22,12 +24,20 @@ public class ExtractorThread extends OpenAiThread {
 
     private String fileId = "";
 
+    @Async
     public CompletableFuture<String> uploadFile(MultipartFile multipartFile) throws IOException {
         
         OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS).build();
 
+                System.out.println("Here is upload file");
+                if (multipartFile.getBytes()==notNull()) {
+                     System.out.println("Here is upload file"+ multipartFile.getBytes());
+                } else {
+                    System.out.println("Here is upload file unable"); 
+                }
+               
         @SuppressWarnings("deprecation")
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("purpose", "assistants")

@@ -25,4 +25,5 @@ public class UsersService {
         userRepository.save(users);
         return CompletableFuture.completedFuture(null);
     }
+
 }
