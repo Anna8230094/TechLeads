@@ -12,18 +12,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 
-@WebMvcTest(HomeController.class)
-public class HomeControllerTest {
+@WebMvcTest(SuccessController.class)
+public class SuccessControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private HomeController homeController;
+    private SuccessController successController;
 
     @Test
-    public String testHomeControl() throws Exception {
-        when(homeController.homeControl()).thenReturn(testHomeControl());
+    public String testSuccessControl() throws Exception {
+        when(successController.handleSuccess(null, null, null)).thenReturn(testSuccessControl());
         // Εδώ εκτελούμε το αίτημα και ελέγχουμε την κατάσταση της απόκρισης και το view
         mockMvc.perform(get("/hireandgo/home/"))
                .andExpect(status().isOk())  // Ελέγχουμε ότι η κατάσταση της απόκρισης είναι 200 OK
@@ -31,4 +31,3 @@ public class HomeControllerTest {
                        return null;
     }
 }
-

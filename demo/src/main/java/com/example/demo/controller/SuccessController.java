@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/hireandgo/home/registrationform/")
-public class SuccesControler {
+public class SuccessController {
 
     @GetMapping("/success/{id}")
-    public String handleSucces(Model model, @RequestParam String username, @PathVariable(value = "id") Long id) {
+    public String handleSuccess(Model model, @RequestParam String username, @PathVariable(value = "id") Long id) {
         return "success";
     }
 

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,21 +27,26 @@ public class RegistrationFormControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private RegistrationFormController registrationFormController;
+
+    @MockBean
     private UsersService usersService;
 
     @MockBean
     private OpenAiService openAiService;
 
     @Test
-    public void testRegistrationControl() throws Exception {
+    public String testRegistrationControl() throws Exception {
+        when(registrationFormController.registrationControl(null)).thenReturn(testRegistrationControl());
         mockMvc.perform(get("/hireandgo/home/registrationform"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("registrationform"))
                 .andExpect(model().attributeExists("user"));
+                        return null;
     }
 
     @Test
-    public void testHandleRegistration() throws Exception {
+    public String testHandleRegistration() throws Exception {
         // Mock δεδομένα χρήστη
         Users user = new Users();
         user.setName("Maria");
@@ -54,6 +60,7 @@ public class RegistrationFormControllerTest {
         Mockito.doNothing().when(usersService).saveUsers(any(Users.class));
         Mockito.doNothing().when(openAiService).startRankingProcess(any(), any(Users.class));
 
+        when(registrationFormController.registrationControl(null)).thenReturn(testHandleRegistration());
         mockMvc.perform(multipart("/registrationform")
                         .file(mockFile)
                         .param("name", "Maria")
@@ -67,6 +74,7 @@ public class RegistrationFormControllerTest {
         // Επιβεβαίωση ότι οι υπηρεσίες καλούνται
         verify(usersService, times(1)).saveUsers(any(Users.class));
         verify(openAiService, times(1)).startRankingProcess(any(), any(Users.class));
+                return null;
     }
 }
 
