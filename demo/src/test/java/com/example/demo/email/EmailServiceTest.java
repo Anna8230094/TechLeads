@@ -13,6 +13,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.concurrent.CompletionException;
+
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -63,10 +66,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            emailService.sendEmail(invalidEmail, subject, text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(invalidEmail, subject, text).join();
         });
-        assertEquals("Invalid email address: invalid-email", exception.getMessage());
+        assertEquals("java.lang.IllegalArgumentException: Invalid email address: invalid-email", exception.getMessage());
     }
 
     // Test: Null Email
@@ -75,10 +78,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            emailService.sendEmail(null, subject, text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(null, subject, text).join();
         });
-        assertEquals("Invalid email address: null", exception.getMessage());
+        assertEquals("java.lang.IllegalArgumentException: Invalid email address: null", exception.getMessage());
     }
 
     // Test: Empty Subject
@@ -87,10 +90,10 @@ class EmailServiceTest {
         String to = "test@example.com";
         String text = "Test Body";
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            emailService.sendEmail(to, "", text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(to, "", text).join();
         });
-        assertEquals("Subject cannot be null or empty", exception.getMessage());
+        assertEquals("java.lang.IllegalArgumentException: Subject cannot be null or empty", exception.getMessage());
     }
 
     // Test: Null Text
@@ -99,10 +102,10 @@ class EmailServiceTest {
         String to = "test@example.com";
         String subject = "Test Subject";
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            emailService.sendEmail(to, subject, null);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(to, subject, null).join();
         });
-        assertEquals("Text cannot be null or empty", exception.getMessage());
+        assertEquals("java.lang.IllegalArgumentException: Text cannot be null or empty", exception.getMessage());
     }
 
     // Test: Authentication Failure
@@ -120,11 +123,11 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            emailService.sendEmail(to, subject, text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(to, subject, text).join();
         });
 
-        assertTrue(exception.getMessage().contains("Email authentication failed"));
+        assertEquals("org.springframework.mail.MailAuthenticationException: Invalid credentials", exception.getMessage());
         assertTrue(exception.getCause() instanceof MailAuthenticationException);
     }
 
@@ -143,11 +146,11 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            emailService.sendEmail(to, subject, text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(to, subject, text).join();
         });
 
-        assertTrue(exception.getMessage().contains("Unable to send email"));
+        assertEquals("org.springframework.mail.MailSendException: SMTP server not reachable", exception.getMessage());
         assertTrue(exception.getCause() instanceof MailSendException);
     }
 
@@ -166,11 +169,11 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            emailService.sendEmail(to, subject, text);
+        Exception exception = assertThrows(CompletionException.class, () -> {
+            emailService.sendEmail(to, subject, text).join();
         });
 
-        assertTrue(exception.getMessage().contains("Email content error"));
+        assertEquals("org.springframework.mail.MailParseException: Invalid email content", exception.getMessage());
         assertTrue(exception.getCause() instanceof MailParseException);
     }
 }
