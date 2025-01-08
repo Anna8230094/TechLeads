@@ -19,9 +19,9 @@ public class RankingService {
     @Autowired
     private RankingRepository rankingRepository;
 
-    public void saveRankingResult(RankingResult rankingResult) {
-
-        rankingRepository.save(rankingResult);
+    public RankingResult saveRankingResult(RankingResult rankingResult) {
+        return rankingRepository.save(rankingResult); // Return the saved object
+      
 
     }
 

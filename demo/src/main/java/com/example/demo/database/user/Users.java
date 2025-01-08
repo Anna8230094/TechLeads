@@ -7,7 +7,6 @@
  * @author Konstantia Stergiou
  * @version 1.0
  */
-
 package com.example.demo.database.user;
 
 import jakarta.persistence.Column;
@@ -20,11 +19,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class Users {
-   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsers;
 
+    private Long idUsers;
     @Column(name = "name", nullable = false, length = 100)
     private String name;
     @Column(name = "email", nullable = false, unique = true, length = 100)
@@ -38,10 +36,24 @@ public class Users {
     @Column(name = "other_traits", columnDefinition = "TEXT")
     private String otherTraits;
 
+    // CONSTRUCTORS
+
+    public Users() {
+
+    }
+
+  public Users(String name, String email, String field, String hardSkills,String softSkills, String otherTraits) {
+    this.name = name;
+     this.email = email;
+     this.field = field;
+     this.hardSkills = hardSkills;
+     this.softSkills = softSkills;
+     this.otherTraits = otherTraits;
+  }
+
     // Getters and Setters
 
     public Long getIdUsers() {
-
         return idUsers;
     }
 
@@ -99,6 +111,7 @@ public class Users {
     }
 
     public void setOtherTraits(String otherTraits) {
+
         this.otherTraits = otherTraits;
 
     }

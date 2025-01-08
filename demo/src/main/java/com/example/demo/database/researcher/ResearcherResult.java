@@ -14,7 +14,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,12 +25,18 @@ public class ResearcherResult {
     @Column(name = "idResearcher")
     private Long idResearcher;
 
-    @Column(name = "resume", nullable = false, columnDefinition = "TEXT")
-    @Lob
+    @Column(name = "resume", nullable = false)
     private String resume;
 
-    @Column(name = "fileName", nullable = false)
-    private String fileName;
+    public ResearcherResult() {
+
+    }
+
+    public ResearcherResult(String resume) {
+
+        this.resume = resume;
+
+    }
 
     // Getters and Setters
     public Long getIdResearcher() {
@@ -48,13 +53,5 @@ public class ResearcherResult {
 
     public void setResume(String resume) {
         this.resume = resume;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 }
