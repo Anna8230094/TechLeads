@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 public class RankingResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ranking;
+    private Long idRanking;
 
     @ManyToOne
     @JoinColumn(name = "IdResearcher", nullable = false)
@@ -35,14 +35,26 @@ public class RankingResult {
     private String resume;
     private String summaryOfResume;
 
+    protected RankingResult() {
+
+    }
+
+    public RankingResult(String resume, String summaryOfResume,ResearcherResult researcherResult) {
+
+        this.resume = resume;
+        this.summaryOfResume = summaryOfResume;
+        this.researcherResult = researcherResult;
+
+    }
+
     // Getters and Setters
 
     public Long getIdRanking() {
-        return id_ranking;
+        return idRanking;
     }
 
-    public void setIdRanking(Long id_ranking) {
-        this.id_ranking= id_ranking;
+    public void setIdRanking(Long idRanking) {
+        this.idRanking= idRanking;
     }
     
 

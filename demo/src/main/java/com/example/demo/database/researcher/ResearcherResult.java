@@ -16,11 +16,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "researcher_result")
 public class ResearcherResult {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +28,16 @@ public class ResearcherResult {
     @Column(name = "resume", nullable = false)
     private String resume;
 
-    
+    protected ResearcherResult() {
+
+    }
+
+    public ResearcherResult(String resume) {
+
+        this.resume = resume;
+
+    }
+
     // Getters and Setters
     public Long getIdResearcher() {
         return idResearcher;

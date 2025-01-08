@@ -8,6 +8,7 @@
  * @version 1.0
  */
 package com.example.demo.database.user;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,23 +23,37 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long idUsers;
-    @Column(name= "name", nullable=false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
-    @Column(name= "email", nullable=false, unique= true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
-    @Column(name= "field", length = 100)
+    @Column(name = "field", length = 100)
     private String field;
-    @Column(name= "hard_skills",columnDefinition = "TEXT")
+    @Column(name = "hard_skills", columnDefinition = "TEXT")
     private String hardSkills;
-    @Column(name= "soft_skills",columnDefinition = "TEXT")
+    @Column(name = "soft_skills", columnDefinition = "TEXT")
     private String softSkills;
-    @Column(name= "other_traits",columnDefinition = "TEXT")
+    @Column(name = "other_traits", columnDefinition = "TEXT")
     private String otherTraits;
+
+    // CONSTRUCTORS
+
+    protected Users() {
+
+    }
+
+  public Users(String name, String email, String field, String hardSkills,String softSkills, String otherTraits) {
+    this.name = name;
+     this.email = email;
+     this.field = field;
+     this.hardSkills = hardSkills;
+     this.softSkills = softSkills;
+     this.otherTraits = otherTraits;
+  }
 
     // Getters and Setters
 
     public Long getIdUsers() {
-
         return idUsers;
     }
 
@@ -113,6 +128,5 @@ public class Users {
                 ", otherTraits='" + otherTraits + '\'' +
                 '}';
     }
-
 
 }
