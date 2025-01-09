@@ -9,10 +9,13 @@
  */
 package com.example.demo.database.researcher;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service 
+@Service
 public class ResearcherService {
 
     @Autowired
@@ -23,4 +26,9 @@ public class ResearcherService {
 
     }
 
+    public List<Map<Long, String>> getResearcherResumesById(ResearcherResult researcherResult) {
+        return researcherRepository.findMapResume(researcherResult.getIdResearcher());
+    }
+
+    
 }

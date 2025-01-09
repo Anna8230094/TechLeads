@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.ui.Model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -16,7 +17,6 @@ import com.example.demo.database.user.Users;
 import com.example.demo.database.user.UsersService;
 import com.example.demo.openai.service.OpenAiService;
 
-import ch.qos.logback.core.model.Model;
 
 /**
  * @author Maria Spachou
@@ -34,13 +34,14 @@ public class RegistrationFormController {
 
     // display of registrationform page
     @GetMapping("/hireandgo/home/registrationform")
-    public String registrationControl() {
+    public String registrationControl(Model model) {
+        model.addAttribute("user", new Users());
         return "registrationform";
     }
 
     // storing user's data and displaying them
     @PostMapping("/registrationform")
-    public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute Users user,
+    public String handleRegistration(@RequestParam("file") List<MultipartFile> files, @ModelAttribute ("user") Users user,
             Model model) throws Exception {
 
         try {
@@ -64,10 +65,11 @@ public class RegistrationFormController {
             }
             usersService.saveUsers(user);
             openAiService.startRankingProcess(example, user);
-
+            model.addAttribute("username", user.getName());
         } catch (CancellationException e) {
             System.err.println("Unable to save user");
         }
+       
         return "success";
     }
 }

@@ -10,24 +10,24 @@
 <body>
   <h1>Hire&Go</h1>
 
-  <form th:action="@{/registrationform}" method="post" th:object="${Users}" enctype="multipart/form-data">
+  <form action="#" th:action="@{/registrationform}" method="post" th:object="${user}" enctype="multipart/form-data">
 
     <fieldset>
       <p>Company's Information</p>
-      <label for="name">Company's Name<input id="name" name="name" type="text" required /></label>
-      <label for="field">Company's Field<input id="field" name="field" type="text" required /></label>
-      <label for="email">User's Email<input id="email" name="email" type="email" required /></label>
+      <label th:field="*{name}" for="name">Company's Name<input id="name" name="name" type="text" required /></label>
+      <label th:field="*{field}"for="field">Company's Field<input id="field" name="field" type="text" required /></label>
+      <label th:field="*{email}" for="email">User's Email<input id="email" name="email" type="email" required /></label>
     </fieldset>
 
     <fieldset>
       <p>Job Position's Requirements</p>
-      <label for="hardSkills">Hard Skills</label>
+      <label th:field="*{hardSkills}" for="hardSkills">Hard Skills</label>
       <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" required></textarea>
 
-      <label for="softSkills">Soft Skills</label>
+      <label th:field="*{softSkills}" for="softSkills">Soft Skills</label>
       <textarea id="softSkills" name="softSkills" rows="4" cols="50" required></textarea>
 
-      <label for="otherTraits">Other Traits</label>
+      <label th:field="*{otherTraits}" for="otherTraits">Other Traits</label>
       <textarea id="otherTraits" name="otherTraits" rows="4" cols="50"></textarea>
     </fieldset>
 
@@ -60,7 +60,9 @@
       });
 
     </script>
+   
     <input type="submit" value="Submit" />
+  
   </form>
 </body>
 

@@ -33,6 +33,8 @@ public class ResearcherResult {
     @Column(name = "fileName", nullable = false)
     private String fileName;
 
+    
+
     // Getters and Setters
     public Long getIdResearcher() {
         return idResearcher;
