@@ -1,12 +1,18 @@
 package com.example.demo.openAiClasses;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,9 +22,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.example.demo.openai.agents.OpenAiAssistant;
 import com.example.demo.openai.agents.Register;
 
 import okhttp3.MediaType;
@@ -27,22 +36,21 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpenAiAssistantTest {
 
     @InjectMocks
-    private Register openAiAssistant;
+    private static Register openAiAssistant;
 
     @Mock
     private okhttp3.Response mockResponse;;
 
     @BeforeAll
-    void setUp() throws IOException {
-        MockitoAnnotations.openMocks(this);
+    static void setUp() throws IOException {
+        // MockitoAnnotations.openMocks(this);
         openAiAssistant = new Register();
-        ReflectionTestUtils.setField(openAiAssistant, "key", "test-api-key"); // Set the API key
-
         // ReflectionTestUtils.setField(openAiAssistant, "instructions", instructions);
         // ReflectionTestUtils.setField(openAiAssistant, "name", name);
     }
@@ -73,22 +81,20 @@ public class OpenAiAssistantTest {
     // assertEquals("assistant-id-123", future.join());
     // }
 
-    // @Test  anna
-    // void testCreateAiAssistant() throws IOException {
-    //     // Simulate successful response
-    //     when(mockResponse.isSuccessful()).thenReturn(true);
-    //     String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-    //     MediaType mediaType = MediaType.parse("application/json");
-    //     ResponseBody responseBody = ResponseBody.create(mockResponseBody, mediaType);
-    //     when(mockResponse.body()).thenReturn(responseBody);
+    @Test
+    void testCreateAiAssistant() throws IOException {
+        // Simulate successful response
+        when(mockResponse.isSuccessful()).thenReturn(true);
+        String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
+        MediaType mediaType = MediaType.parse("application/json");
+        ResponseBody responseBody = ResponseBody.create(mockResponseBody, mediaType);
+        when(mockResponse.body()).thenReturn(responseBody);
 
-    //     OpenAiAssistant spyOpenAiAssistant = spy(openAiAssistant);
-    //     doReturn(mockResponse).when(spyOpenAiAssistant).sendRequest(anyString(), anyString());
-
-    //     assertEquals(openAiAssistant.getName(), "Register");
-    //     CompletableFuture<String> response = openAiAssistant.createAiAssistant();
-    //     assertEquals("assistant-id-123", response.join());
-    // }
+        assertEquals(openAiAssistant.loadKey(), "${OPENAI_API_KEY}");
+        assertEquals(openAiAssistant.getName(), "Register");
+        CompletableFuture<String> response = openAiAssistant.createAiAssistant();
+        assertEquals("assistant-id-123", response.join());
+    }
 
     @Test
     void loadKeyTest() {
