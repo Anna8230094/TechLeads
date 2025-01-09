@@ -119,10 +119,15 @@ public class OpenAiService {
         }
 
         // step 5:create ranking
-        String messageRanking = " The resume from the database are:"; // database when is ready
+        String messageRanking = " The resume from the database are:" + resumesFromDatabase(); // Get the database query
+                                                                                            // here with the csv of
+                                                                                            // researcherResult
+        // And tell to the agent to rank the cvs by the id of every cv which is located
+        // in researcherResult
         CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
         CompletableFuture.allOf(rankingResponse).join();
 
+        // You give the result to ranking
         // step 6: Create reviewer ranking
         String messageReviewerRanking = "The response of RankingAgent is:" + rankingResponse.get();
         CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
@@ -134,6 +139,8 @@ public class OpenAiService {
             rankingResponse = checkRankingReviewerResult(messageReviewerRanking, responseOfReviewerRanking);
 
         }
+        // Here you must get the response of assistant a insert the suitable data in
+        // database (ranking)
         // insert data into researcher :extractorResearcherResponse in DB researcher
         // the ranking gets data from researcher database
         return CompletableFuture.completedFuture(null);
@@ -289,32 +296,21 @@ public class OpenAiService {
 
     }
 
-    @Async
-    public CompletableFuture<Void> startRankingProcess(List<MultipartFile> files, Users user, Long researcherId)
+    // Be carful with the names of methods
+    public String resumesFromDatabase()
             throws Exception {
 
         // Step 1: Fetch researcher results from the database
-        List<ResearcherResult> researcherResults = researcherService.getResearcherResultsByResearcherId(researcherId);
+        List<ResearcherResult> researcherResults = researcherService.getResearcherResultsByResearcherId();
 
         // Step 2: Create the message containing the resumes
         StringBuilder resumesMessage = new StringBuilder("The resumes from the database are:\n");
 
         for (ResearcherResult result : researcherResults) {
             // Simply append the resume content (no formatting)
-            resumesMessage.append(result.getResume()).append("\n");
+            resumesMessage.append(result.getResume() + "  id = " + result.getIdResearcher()).append("\n");
         }
-
-        // Step 3: Send the resumes directly to the Ranking Agent
-        CompletableFuture<String> rankingResponse = rankingAgentResponse(resumesMessage.toString());
-        CompletableFuture.allOf(rankingResponse).join();
-        System.out.println("Ranking Response: " + rankingResponse.get());
-
-        // Step 4: Send the ranking agent response to the Reviewer Ranking Agent
-        String messageReviewerRanking = "The response of RankingAgent is: " + rankingResponse.get();
-        CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
-        CompletableFuture.allOf(reviewerRankingResponse).join();
-
-        return CompletableFuture.completedFuture(null);
+        return resumesMessage.toString();
     }
 
 }

@@ -10,11 +10,16 @@
 package com.example.demo.database.researcher;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ResearcherRepository extends JpaRepository<ResearcherResult, Long> {
     
         // This method will automatically generate a query to fetch results by researcher ID
         List<ResearcherResult> findByIdResearcher(Long researcherId);
+
+        @Query("select idResearcher, fileName from ResearcherResult")
+        List<Map<Long, String>> findMapResume();
 }
