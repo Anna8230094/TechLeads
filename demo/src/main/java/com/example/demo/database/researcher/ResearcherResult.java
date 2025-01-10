@@ -32,6 +32,18 @@ public class ResearcherResult {
 
     @Column(name = "fileName", nullable = false)
     private String fileName;
+    //Constructors
+
+    public ResearcherResult() {
+
+    }
+
+    public ResearcherResult(String resume, String fileName) {
+
+        this.resume = resume;
+        this.fileName = fileName;
+
+    }
 
     // Getters and Setters
     public Long getIdResearcher() {
@@ -57,4 +69,14 @@ public class ResearcherResult {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+public String toString() {
+    return "ResearcherResult {\n" +
+           "    idResearcher = " + getIdResearcher() + ",\n" +
+           "    resume = '" + getResume() + "',\n" +
+           "    fileName = '" + getFileName() + "'\n" +
+           '}';
+}
+
 }
