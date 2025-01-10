@@ -59,4 +59,9 @@ public class ResearcherResult {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+    public String toString() {
+        return "id: " +getIdResearcher()+"\nfileName: " + getFileName() + "\nresume: " +getResume();
+    }
 }

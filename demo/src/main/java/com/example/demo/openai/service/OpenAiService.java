@@ -3,7 +3,6 @@ package com.example.demo.openai.service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,15 +65,14 @@ public class OpenAiService {
     public OpenAiThread rankingAgentThread;
 
     @Autowired
-    UsersService usersService;
+    public static final UsersService usersService = new UsersService();
 
     @Autowired
-    ResearcherService researcherService;
+    static final ResearcherService researcherService = new ResearcherService();
 
     // this method is called from controller class after the for submit
     @Async
     public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user) throws Exception {
-        ResearcherResult researcherResult = new ResearcherResult();
         // Step 1:create register
         String messageRegiser = "Here are the details provided by the user:\nfield:" + user.getField() +
                 "\nhard skills:" + user.getHardSkills() +
@@ -112,18 +110,24 @@ public class OpenAiService {
             if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
                 extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, reviewerResponse);
             }
+            ResearcherResult researcherResult = new ResearcherResult();//I must find how to save one by one without deleting the previoue one
             researcherResult.setResume(extractorResearcherResponse.get());
             researcherResult.setFileName(file);
             researcherService.saveResearcherResult(researcherResult);
         }
 
+        // get the columns content from database
+        List<ResearcherResult> databaseData = researcherService.getAllresearcher();
+        System.out.println(databaseData);
+
+        String messageRanking = " The resume and the id of every resume from the database are:" +
+                databaseData +
+                "I want to ranking the resumes based on that job position csv: " +
+                registerResponse.get() +
+                "I WANT TO RETURN ME IN A CSV THE ID'S FROM DATABASE SORTING. THAT MEANS IN THE FIRST POSITION OF CSV MUST BE THE BEST RESUME AND IN THE LAST THE WORST ";
+        ;
+
         // step 5:create ranking
-        String messageRanking = " The resume and the id of every resume from the database are:"
-                + resumesFromDatabase(researcherResult) +
-                ". I want to return to me the id's of ranking cvs order by ranking id."; // database
-                                                                                         // whene
-                                                                                         // is
-                                                                                         // rea%dy
         CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
         CompletableFuture.allOf(rankingResponse).join();
 
@@ -263,7 +267,7 @@ public class OpenAiService {
             finalResponse = extarctorResearcherCorrections.get();
             count++;
             System.out.println(reviewerResponse.toString());
-        } while (count < 2 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
 
         return CompletableFuture.completedFuture(finalResponse);
     }
@@ -292,17 +296,6 @@ public class OpenAiService {
         } while (count < 5 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
         return CompletableFuture.completedFuture(finalResponse);
 
-    }
-
-    public String resumesFromDatabase(ResearcherResult resurResearcherResult)
-            throws Exception {
-        System.out.println("mmmmmmmmmm");
-        List<Map<Long, String>> resumes = researcherService.getResearcherResumesById(resurResearcherResult);
-        StringBuilder result = new StringBuilder();
-        resumes.forEach(map -> map.forEach((id, resume) -> result.append("ID: ").append(id).append(", File context: ")
-                .append(resume).append("\n")));
-        System.out.println(resumes.toString());
-        return resumes.toString();
     }
 
 }

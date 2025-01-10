@@ -9,13 +9,10 @@
  */
 package com.example.demo.database.researcher;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ResearcherRepository extends JpaRepository<ResearcherResult, Long> {
-    @Query("select idResearcher, fileName from ResearcherResult")
-    List<Map<Long, String>> findMapResume(Long id);
+   
 }
