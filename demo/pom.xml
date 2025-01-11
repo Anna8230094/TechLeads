@@ -75,6 +75,16 @@
             	<role>Front-End Developer</role>
         	</roles>
         </developer>
+
+		<developer>
+        	<id>t8230136</id>
+        	<name>Μαρία Σπάχου</name>
+        	<email>t8230136@aueb.gr</email>
+        	<url>https://github.com/t8230136</url>
+        	<roles>
+            	<role>Back-End Developer</role>
+        	</roles>
+        </developer>
 	</developers>
 
 	<scm>
