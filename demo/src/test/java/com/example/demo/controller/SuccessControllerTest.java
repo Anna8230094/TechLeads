@@ -23,6 +23,6 @@ public class SuccessControllerTest {
         // Εδώ εκτελούμε το αίτημα και ελέγχουμε την κατάσταση της απόκρισης και το view
         mockMvc.perform(get("/hireandgo/home/registrationform/success/1111"))
                .andExpect(status().isOk())  // Ελέγχουμε ότι η κατάσταση της απόκρισης είναι 200 OK
-               .andExpect(view().name("success"));  // Ελέγχουμε ότι το όνομα του view είναι "home"
+               .andExpect(view().name("success"));  // Ελέγχουμε ότι το όνομα του view είναι "success"
     }
 }
