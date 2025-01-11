@@ -98,9 +98,9 @@
 	</developers>
 
 	<scm>
-		<connection />
-		<developerConnection />
-		<tag />
+		<connection>scm:git:https://github.com/Anna8230094/TechLeads.git</connection>
+		<developerConnection>scm:git:git@github.com:Anna8230094/TechLeads.git</developerConnection>
+		<tag> </tag>
 		<url />
 	</scm>
 	<properties>
