@@ -10,22 +10,23 @@
 package com.example.demo.database.researcher;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ResearcherService {
-
+   
     @Autowired
-    private ResearcherRepository researcherRepository;
+    private  ResearcherRepository researcherRepository ;
 
-    @Transactional
-    public void saveResearcherResult(ResearcherResult researcherResult) {
+    @Async
+    public CompletableFuture<Void> saveResearcherResult(ResearcherResult researcherResult) {
         researcherRepository.save(researcherResult);
-
+        System.out.println("The cv context is saved");
+        return CompletableFuture.completedFuture(null);
     }
 
     public List<ResearcherResult> getAllresearcher() {

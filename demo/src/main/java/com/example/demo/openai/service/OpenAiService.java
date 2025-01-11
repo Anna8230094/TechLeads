@@ -1,13 +1,18 @@
 
 package com.example.demo.openai.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.database.ranking.RankingResult;
+import com.example.demo.database.ranking.RankingService;
 import com.example.demo.database.researcher.ResearcherResult;
 import com.example.demo.database.researcher.ResearcherService;
 import com.example.demo.database.user.Users;
@@ -65,14 +70,28 @@ public class OpenAiService {
     public OpenAiThread rankingAgentThread;
 
     @Autowired
-    public static final UsersService usersService = new UsersService();
+    UsersService usersService;
 
     @Autowired
-    static final ResearcherService researcherService = new ResearcherService();
+    ResearcherService researcherService;
+
+    @Autowired
+    RankingService rankingService;
+
+    ResearcherResult researcherResult;
+
+    RankingResult rankingResult;
+
+    HashMap<String, String> researcherHashMap;
+    HashMap<String, String> rankingHashMap;
 
     // this method is called from controller class after the for submit
     @Async
     public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user) throws Exception {
+
+        researcherHashMap = new HashMap<String, String>();
+        rankingHashMap = new HashMap<String, String>();
+
         // Step 1:create register
         String messageRegiser = "Here are the details provided by the user:\nfield:" + user.getField() +
                 "\nhard skills:" + user.getHardSkills() +
@@ -104,18 +123,23 @@ public class OpenAiService {
                     + extractorResearcherResponse.get();
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(messageResearcherReviewer);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
+            String extractirResoinse = extractorResearcherResponse.get();
 
             // check if the extractorresearcher gave the willing results
             String reviewerResponse = reviewerExtractorResponse.get();
             if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
                 extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, reviewerResponse);
             }
-            ResearcherResult researcherResult = new ResearcherResult();//I must find how to save one by one without deleting the previoue one
-            researcherResult.setResume(extractorResearcherResponse.get());
+            researcherResult = new ResearcherResult();// I must find how to save one by one without deleting the
+                                                      // previoue one
+            researcherResult.setResume(extractirResoinse);
             researcherResult.setFileName(file);
             researcherService.saveResearcherResult(researcherResult);
+            // file name, extractor response
+            researcherHashMap.put(file, extractirResoinse);
         }
 
+        System.out.println(researcherHashMap);
         // get the columns content from database
         List<ResearcherResult> databaseData = researcherService.getAllresearcher();
         System.out.println(databaseData);
@@ -124,26 +148,54 @@ public class OpenAiService {
                 databaseData +
                 "I want to ranking the resumes based on that job position csv: " +
                 registerResponse.get() +
-                "I WANT TO RETURN ME IN A CSV THE ID'S FROM DATABASE SORTING. THAT MEANS IN THE FIRST POSITION OF CSV MUST BE THE BEST RESUME AND IN THE LAST THE WORST ";
+                "I WANT TO RETURN ME A CSV of fileNames(ONLY THE file names) FROM DATABASE SORTING. THAT MEANS IN THE FIRST POSITION OF CSV MUST BE THE file name of BEST RESUME AND IN THE LAST THE file name of  WORST resume . I want to return me only the csv and the csv to split the filename with , ";
         ;
 
         // step 5:create ranking
         CompletableFuture<String> rankingResponse = rankingAgentResponse(messageRanking);
         CompletableFuture.allOf(rankingResponse).join();
+        String rankingresponse = rankingResponse.get();
+        System.out.println("The response of ranking is: " + rankingResponse.get());
 
+        System.out.println(rankingresponse);
         // step 6: Create reviewer ranking
         String messageReviewerRanking = "The response of RankingAgent is:" + rankingResponse.get();
         CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
         CompletableFuture.allOf(reviewerRankingResponse).join();
+        System.out.println("The response of ranking is: " + reviewerRankingResponse.get());
+        System.out.println(",,,,,,");
 
         // Check if the ReviewerRanking gave the willing results
-        String responseOfReviewerRanking = reviewerRankingResponse.get();
-        if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-            rankingResponse = checkRankingReviewerResult(messageReviewerRanking, responseOfReviewerRanking);
+        // String responseOfReviewerRanking = reviewerRankingResponse.get();
+        // if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS
+        // GOOD ----")) {
+        // rankingResponse = checkRankingReviewerResult(messageReviewerRanking,
+        // responseOfReviewerRanking);
 
+        // }
+
+        StringTokenizer tokenizeRankingResponse = new StringTokenizer(
+                rankingresponse, ",");
+
+        List<String> tokens = new ArrayList<>();
+        while (tokenizeRankingResponse.hasMoreTokens()) {
+            tokens.add(tokenizeRankingResponse.nextToken());
         }
-        // insert data into researcher :extractorResearcherResponse in DB researcher
-        // the ranking gets data from researcher database
+
+        tokens.forEach((token) -> {
+            researcherHashMap.keySet().forEach((fileName) -> {
+                if (token.contains(fileName)) {
+                    rankingHashMap.put(fileName, researcherHashMap.get(fileName));
+                    rankingResult = new RankingResult();
+                    rankingResult.setResume(fileName);
+                    rankingResult.setSummaryResume(researcherHashMap.get(fileName));
+                }
+            });
+
+        });
+
+        System.out.println(rankingHashMap);
+
         return CompletableFuture.completedFuture(null);
     }
 
@@ -293,7 +345,7 @@ public class OpenAiService {
             count++;
             System.out.println(reviewerResponse.toString());
 
-        } while (count < 5 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
         return CompletableFuture.completedFuture(finalResponse);
 
     }
