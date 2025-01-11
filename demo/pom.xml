@@ -38,7 +38,7 @@
 	<developers>
     	<developer>
         	<id>Anna8230094</id>
-        	<name>Άννα Μεγάλου</name>
+        	<name>Άννα Μαρία Μεγάλου</name>
         	<email>t8230094@aueb.gr</email>
         	<url>https://github.com/Anna8230094</url>
         	<roles>
@@ -48,7 +48,7 @@
 
 		<developer>
         	<id>aggmegalou</id>
-        	<name>Αγγελική Μεγάλου</name>
+        	<name>Αγγελική Δέσποινα Μεγάλου</name>
         	<email>t8230093@aueb.gr</email>
         	<url>https://github.com/aggmegalou</url>
         	<roles>
@@ -58,7 +58,7 @@
 
 		<developer>
         	<id>t8230144</id>
-        	<name>Κωνσταντία Στεργίου</name>
+        	<name>Κωνσταντία Νικολέτα Στεργίου</name>
         	<email>t8230144@aueb.gr</email>
         	<url>https://github.com/t8230144</url>
         	<roles>
@@ -83,6 +83,16 @@
         	<url>https://github.com/t8230136</url>
         	<roles>
             	<role>Back-End Developer</role>
+        	</roles>
+        </developer>
+
+		<developer>
+        	<id>Nellyandr</id>
+        	<name>Νεκταρία Ευαγγελία Ανδρουλάκη</name>
+        	<email>t8230227@aueb.gr</email>
+        	<url>https://github.com/Nellyandr6</url>
+        	<roles>
+            	<role>Front-End Developer</role>
         	</roles>
         </developer>
 	</developers>
