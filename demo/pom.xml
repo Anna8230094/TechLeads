@@ -55,6 +55,16 @@
             	<role>Project Manager</role>
         	</roles>
         </developer>
+
+		<developer>
+        	<id>τ8230144</id>
+        	<name>Κωνσταντία Στεργίου</name>
+        	<email>t8230093@aueb.gr</email>
+        	<url>https://github.com/aggmegalou</url>
+        	<roles>
+            	<role>Project Manager</role>
+        	</roles>
+        </developer>
 	</developers>
 
 	<scm>
