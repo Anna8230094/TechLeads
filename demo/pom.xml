@@ -100,8 +100,8 @@
 	<scm>
 		<connection>scm:git:https://github.com/Anna8230094/TechLeads.git</connection>
 		<developerConnection>scm:git:git@github.com:Anna8230094/TechLeads.git</developerConnection>
-		<tag> </tag>
-		<url />
+		<tag>HEAD</tag>
+		<url>https://github.com/Anna8230094/TechLeads</url>
 	</scm>
 	<properties>
 		<java.version>21</java.version>
