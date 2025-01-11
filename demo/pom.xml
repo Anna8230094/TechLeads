@@ -16,11 +16,47 @@
 	<description>HiringAndGO applictaion with spring boot</description>
 	<url />
 	<licenses>
-		<license />
+    	<license>
+        	<name>Apache License 2.0</name>
+        	<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        	<distribution>repo</distribution>
+    	</license>
+
+    	<license>
+        	<name>MIT License</name>
+        	<url>https://opensource.org/licenses/MIT</url>
+        	<distribution>repo</distribution>
+    	</license>
+
+    	<license>
+        	<name>Eclipse Public License 2.0</name>
+        	<url>https://www.eclipse.org/legal/epl-2.0/</url>
+        	<distribution>repo</distribution>
+    	</license>
 	</licenses>
+
 	<developers>
-		<developer />
+    	<developer>
+        	<id>Anna8230094</id>
+        	<name>Άννα Μεγάλου</name>
+        	<email>t8230094@aueb.gr</email>
+        	<url>https://github.com/Anna8230094</url>
+        	<roles>
+            	<role>Project Manager</role>
+        	</roles>
+        </developer>
+
+		<developer>
+        	<id>aggmegalou</id>
+        	<name>Αγγελική Μεγάλου</name>
+        	<email>t8230093@aueb.gr</email>
+        	<url>https://github.com/aggmegalou</url>
+        	<roles>
+            	<role>Project Manager</role>
+        	</roles>
+        </developer>
 	</developers>
+
 	<scm>
 		<connection />
 		<developerConnection />
@@ -147,6 +183,7 @@
 
 		</plugins>
 	</build>
+
 
 
 </project>

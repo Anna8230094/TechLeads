@@ -13,7 +13,8 @@
             "database": "postgres",
             "username": "postgres"
         }
-    ]
+    ],
+    "maven.view": "flat"
 }
 
 
