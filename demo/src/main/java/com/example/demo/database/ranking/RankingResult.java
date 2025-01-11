@@ -15,12 +15,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ranking_result")
-
 public class RankingResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,8 @@ public class RankingResult {
     @Column(name = "fileName", nullable = false)
     private String resumeName;
 
-    @Column(name = "resume", nullable = false)
+    @Column(name = "resume", nullable = false,  columnDefinition = "TEXT")
+    @Lob
     private String summaryOfResume;
 
     // Getters and Setters
