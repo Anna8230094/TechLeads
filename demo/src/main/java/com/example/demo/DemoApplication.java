@@ -14,14 +14,14 @@ import com.example.demo.mail.EmailService;
 @EnableAsync
 public class DemoApplication implements CommandLineRunner{
 
-
+/* 
 	@Autowired
 	public EmailService emailService;
-
+*/
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
-
+/* 
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -43,5 +43,5 @@ public class DemoApplication implements CommandLineRunner{
 
 	}
 
-	
+	*/
 }

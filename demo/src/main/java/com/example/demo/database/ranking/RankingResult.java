@@ -10,29 +10,36 @@
 
  package com.example.demo.database.ranking;
 
- import com.example.demo.database.researcher.ResearcherResult;
- 
- import jakarta.persistence.Entity;
- import jakarta.persistence.GeneratedValue;
- import jakarta.persistence.GenerationType;
- import jakarta.persistence.Id;
- import jakarta.persistence.JoinColumn;
- import jakarta.persistence.ManyToOne;
- import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
  @Entity
  @Table(name = "ranking_result")
  
  public class RankingResult {
      @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
+     @PrimaryKeyJoinColumn
      private Long idRanking;
  
      @ManyToOne
      @JoinColumn(name = "IdResearcher", nullable = false)
-     private ResearcherResult researcherResult;
+     private Long researcherResultId;
  
- 
-     private String resume;
+    @Column(name = "fileName", nullable = false, columnDefinition = "TEXT")
+    @Lob
+     private String resumeName;
+
+     @Column(name = "summary", nullable = false, columnDefinition = "TEXT")
+     @Lob
      private String summaryOfResume;
  
      //Constructors
@@ -40,11 +47,11 @@
  
      }
  
-     public RankingResult(String resume, String summaryOfResume,ResearcherResult researcherResult) {
+     public RankingResult(String resumeName, String summaryOfResume,Long researcherResultId) {
  
-         this.resume = resume;
+         this.resumeName = resumeName;
          this.summaryOfResume = summaryOfResume;
-         this.researcherResult = researcherResult;
+         this.researcherResultId = researcherResultId;
  
      }
  
@@ -59,19 +66,19 @@
      }
      
  
-     public ResearcherResult getResearcherResult() {
-         return researcherResult;
+     public Long getResearcherResultId() {
+         return researcherResultId;
      }
  
-     public void setRes(ResearcherResult researcherResult) {
-         this.researcherResult = researcherResult;
+     public void setResearcherResultId(Long researcherResultId) {
+         this.researcherResultId = researcherResultId;
      }
      public String getResume() {
-         return resume;
+         return resumeName;
      }
  
-     public void setResume (String resume) {
-         this.resume = resume;
+     public void setResume(String resumeName) {
+         this.resumeName = resumeName;
      }
  
  
@@ -88,8 +95,8 @@
 public String toString() {
     return "RankingResult {\n" +
            "    idRanking = " + getIdRanking() + ",\n" +
-           "    researcherResult = " + (getResearcherResult() != null ? getResearcherResult().toString() : "null") + ",\n" +
-           "    resume = '" + getResume() + "',\n" +
+           "    researcherResultId = " + getResearcherResultId() + ",\n" +
+           "    resumeName = '" + getResume() + "',\n" +
            "    summaryOfResume = '" + getResumeSummary() + "'\n" +
            '}';
 }

@@ -61,7 +61,15 @@ public class UsersTest {
         user.setSoftSkills("Analytical thinking, Attention to detail, Risk management mindset");
         user.setOtherTraits("Integrity, Curiosity, Resilience, Discipline");
 
-        String expected = "Users{idUsers=1, name='Finovatech Solutions', email='oly.meg@finovatech.com', field='Finance', hardSkills='Financial analysis and modeling', softSkills='Analytical thinking, Attention to detail, Risk management mindset', otherTraits='Integrity, Curiosity, Resilience, Discipline'}";
+        String expected = "Users {\n" +
+        "    idUsers = 1,\n" +
+        "    name = 'Finovatech Solutions',\n" +
+        "    email = 'oly.meg@finovatech.com',\n" +
+        "    field = 'Finance',\n" +
+        "    hardSkills = 'Financial analysis and modeling',\n" +
+        "    softSkills = 'Analytical thinking, Attention to detail, Risk management mindset',\n" +
+        "    otherTraits = 'Integrity, Curiosity, Resilience, Discipline'\n" +
+        "}";
         assertEquals(expected, user.toString());
     }
 

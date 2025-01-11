@@ -28,7 +28,7 @@ class RankingResultTest {
         assertEquals("summary resume example", rankingResult.getResumeSummary());
 
         ResearcherResult researcherResult = new ResearcherResult();
-        rankingResult.setRes(researcherResult);
+        rankingResult.setResearcherResult(researcherResult);
         assertEquals(researcherResult, rankingResult.getResearcherResult());
     }
 
@@ -54,7 +54,7 @@ class RankingResultTest {
         rankingResult.setResumeSummary(null);
         assertNull(rankingResult.getResumeSummary());
 
-        rankingResult.setRes(null);
+        rankingResult.setResearcherResult(null);
         assertNull(rankingResult.getResearcherResult());
     }
 

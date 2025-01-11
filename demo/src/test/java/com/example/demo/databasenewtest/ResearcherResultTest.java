@@ -3,6 +3,8 @@ package com.example.demo.databasenewtest;
 
 
 import com.example.demo.database.researcher.ResearcherResult;
+
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,6 +54,24 @@ class ResearcherResultTest {
         assertEquals("", researcherResult.getResume());
         researcherResult.setFileName("");
         assertEquals("", researcherResult.getFileName());
+    }
+    @Test
+    void testToString() {
+        ResearcherResult researcherResult = new ResearcherResult();
+        researcherResult.setIdResearcher(1L);
+        researcherResult.setResume("resume example");
+        researcherResult.setFileName("cv.pdf");
+
+
+        String expected = "ResearcherResult {\n" +
+            "    idResearcher = 1,\n" +
+            "    resumeName = 'resume example',\n" +  
+            "    fileName = 'cv.pdf',\n" + 
+            "}";
+
+        assertEquals(expected, researcherResult.toString());
+
+        
     }
 }
 

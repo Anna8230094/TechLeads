@@ -11,7 +11,9 @@ import com.example.demo.database.researcher.ResearcherResult;
 import com.example.demo.database.researcher.ResearcherService;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.concurrent.CompletableFuture;
+
 
 class ResearcherServiceTest {
 
@@ -36,15 +38,14 @@ class ResearcherServiceTest {
         // Mock the repository's save method to return the same object
         when(researcherRepository.save(researcherResult)).thenReturn(researcherResult);
 
-        // Call the service method
-        ResearcherResult savedResearcherResult = researcherService.saveResearcherResult(researcherResult);
+        // Call the service method asynchronously
+        CompletableFuture<Void> result = researcherService.saveResearcherResult(researcherResult);
 
-        // Verify and assert results
-        assertNotNull(savedResearcherResult); // Ensure the result is not null
-        assertEquals("resume example 1", savedResearcherResult.getResume()); // Verify the value of 'resume'
-        assertEquals("cv.pdf", savedResearcherResult.getFileName()); // Verify the value of 'resume'
+        // Wait for the result to complete without throwing an exception
+        result.join();  // join() blocks until the async operation completes
 
         // Verify that the repository's save method was called exactly once
         verify(researcherRepository, times(1)).save(researcherResult);
     }
+
 }

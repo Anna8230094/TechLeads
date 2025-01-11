@@ -15,6 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +24,7 @@ public class Users {
    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @PrimaryKeyJoinColumn
     private Long idUsers;
 
     @Column(name = "name", nullable = false, length = 100)
@@ -118,18 +120,18 @@ public class Users {
 
     }
 
-    @Override
+
+@Override
 public String toString() {
-    return "Users {\n" +
-           "    idUsers = " + getIdUsers() + ",\n" +
-           "    name = '" + getName() + "',\n" +
-           "    email = '" + getEmail() + "',\n" +
-           "    field = '" + getField() + "',\n" +
-           "    hardSkills = '" + getHardSkills() + "',\n" +
-           "    softSkills = '" + getSoftSkills() + "',\n" +
-           "    otherTraits = '" + getOtherTraits() + "'\n" +
-           '}';
+    return "Users{idUsers=" + getIdUsers() +
+           ", name='" + getName() + "'" +
+           ", email='" + getEmail() + "'" +
+           ", field='" + getField() + "'" +
+           ", hardSkills='" + getHardSkills() + "'" +
+           ", softSkills='" + getSoftSkills() + "'" +
+           ", otherTraits='" + getOtherTraits() + "'}";
 }
+
 
 
 }
