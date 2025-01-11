@@ -65,6 +65,16 @@
             	<role>Database Developer</role>
         	</roles>
         </developer>
+
+		<developer>
+        	<id>Valeria8230135</id>
+        	<name>Βαλέρια Σουμελίδη</name>
+        	<email>t8230135@aueb.gr</email>
+        	<url>https://github.com/valeria8230135</url>
+        	<roles>
+            	<role>Front-End Developer</role>
+        	</roles>
+        </developer>
 	</developers>
 
 	<scm>
