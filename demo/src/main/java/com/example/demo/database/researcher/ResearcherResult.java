@@ -26,14 +26,24 @@ public class ResearcherResult {
     @Column(name = "idResearcher")
     private Long idResearcher;
 
-    @Column(name = "resume", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "resumeName", nullable = false, columnDefinition = "TEXT")
     @Lob
-    private String resume;
+    private String resumeName;
 
     @Column(name = "fileName", nullable = false)
     private String fileName;
+    // Constructors
 
-    
+    public ResearcherResult() {
+
+    }
+
+    public ResearcherResult(String resumeName, String fileName) {
+
+        this.resumeName = resumeName;
+        this.fileName = fileName;
+
+    }
 
     // Getters and Setters
     public Long getIdResearcher() {
@@ -45,11 +55,11 @@ public class ResearcherResult {
     }
 
     public String getResume() {
-        return resume;
+        return resumeName;
     }
 
-    public void setResume(String resume) {
-        this.resume = resume;
+    public void setResume(String resumeName) {
+        this.resumeName = resumeName;
     }
 
     public String getFileName() {
@@ -62,6 +72,11 @@ public class ResearcherResult {
 
     @Override
     public String toString() {
-        return "id: " +getIdResearcher()+"\nfileName: " + getFileName() + "\nresume: " +getResume();
+        return "ResearcherResult {\n" +
+                "    idResearcher = " + getIdResearcher() + ",\n" +
+                "    resumeName = '" + getResume() + "',\n" +
+                "    fileName = '" + getFileName() + "'\n" +
+                '}';
     }
+
 }

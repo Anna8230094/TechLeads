@@ -18,19 +18,33 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ResearcherService {
-   
+
     @Autowired
-    private  ResearcherRepository researcherRepository ;
+    private ResearcherRepository researcherRepository;
 
     @Async
     public CompletableFuture<Void> saveResearcherResult(ResearcherResult researcherResult) {
         researcherRepository.save(researcherResult);
-        System.out.println("The cv context is saved");
+        System.out.println("Researcher result is saved");
         return CompletableFuture.completedFuture(null);
     }
 
     public List<ResearcherResult> getAllresearcher() {
         return researcherRepository.findAll();
+    }
+
+    public void deleteResearcherResult(Long id) {
+        // Find the researcher result from the primary key id
+        ResearcherResult researcherResult = researcherRepository.findById(id).orElse(null);
+
+        if (researcherResult != null) {
+            // Set resume , fileName null so the researcher will be deleted
+            researcherResult.setResume(null);
+            researcherResult.setFileName(null);
+
+            // Save the updated changes
+            researcherRepository.save(researcherResult);
+        }
     }
 
 }

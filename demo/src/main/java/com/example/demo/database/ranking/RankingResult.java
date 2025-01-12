@@ -12,6 +12,7 @@ package com.example.demo.database.ranking;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,26 +22,41 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ranking_result")
+
 public class RankingResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @PrimaryKeyJoinColumn
-    private Long id_ranking;
+    private Long idRanking;
 
-    // @ManyToOne
-    // @JoinColumn(name = "IdResearcher", nullable = false)
-    // private Long researcherResultId;
-
-    @Column(name = "fileName", nullable = false)
+    @Column(name = "fileName", nullable = false, columnDefinition = "TEXT")
+    @Lob
     private String resumeName;
 
-    @Column(name = "resume", nullable = false,  columnDefinition = "TEXT")
+    @Column(name = "summary", nullable = false, columnDefinition = "TEXT")
     @Lob
     private String summaryOfResume;
 
+    // Constructors
+    public RankingResult() {
+
+    }
+
+    public RankingResult(String resumeName, String summaryOfResume) {
+
+        this.resumeName = resumeName;
+        this.summaryOfResume = summaryOfResume;
+
+    }
+
     // Getters and Setters
+
     public Long getIdRanking() {
-        return id_ranking;
+        return idRanking;
+    }
+
+    public void setIdRanking(Long idRanking) {
+        this.idRanking = idRanking;
     }
 
     public String getResume() {
@@ -55,16 +71,17 @@ public class RankingResult {
         return summaryOfResume;
     }
 
-    public void setSummaryResume(String summaryOfResume) {
+    public void setResumeSummary(String summaryOfResume) {
         this.summaryOfResume = summaryOfResume;
     }
 
-    // public Long getResearcherResultId() {
-    //     return researcherResultId;
-    // }
-
-    // public void setResearcherResultId(Long researcherResultId) {
-    //     this.researcherResultId = researcherResultId;
-    // }
+    @Override
+    public String toString() {
+        return "RankingResult {\n" +
+                "    idRanking = " + getIdRanking() + ",\n" +
+                "    resumeName = '" + getResume() + "',\n" +
+                "    summaryOfResume = '" + getResumeSummary() + "'\n" +
+                '}';
+    }
 
 }
