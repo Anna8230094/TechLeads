@@ -30,7 +30,8 @@ import com.example.demo.openai.threads.OpenAiThread;
 /**
  * This class represents my class in Java.
  * 
- * @author Aggeliki Despoina Megalou
+ * @author Aggeliki Despoina Megalou,
+ * @author Anna Maria Megalou
  * @version 1.0
  */
 
@@ -85,9 +86,11 @@ public class OpenAiService {
     HashMap<String, String> researcherHashMap;
     HashMap<String, String> rankingHashMap;
 
-    // this method is called from controller class after the for submit
+    // this method is called from controller class after the submit
+    // It is execute all the ranking proccess
     @Async
-    public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user) throws Exception {
+    public CompletableFuture<HashMap<String, String>> startRankingProcess(HashMap<String, byte[]> files, Users user)
+            throws Exception {
 
         researcherHashMap = new HashMap<String, String>();
         rankingHashMap = new HashMap<String, String>();
@@ -117,26 +120,27 @@ public class OpenAiService {
                     extractorResearcherMessage);
             CompletableFuture.allOf(extractorResearcherResponse).join();
             System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
+            String extractorResearcher = extractorResearcherResponse.get();
 
             // step 4:Create reviewer reasearcher
             String messageResearcherReviewer = "The response of extraxtorReasearcher is: "
                     + extractorResearcherResponse.get();
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(messageResearcherReviewer);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
-            String extractirResoinse = extractorResearcherResponse.get();
+            String reviewerResponse = reviewerExtractorResponse.get();
 
             // check if the extractorresearcher gave the willing results
-            String reviewerResponse = reviewerExtractorResponse.get();
             if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-                extractorResearcherResponse = checkRewierReasearcherResult(messageResearcherReviewer, reviewerResponse);
+                extractorResearcherResponse = checkReviewerResearcherResult(extractorResearcher,
+                        reviewerResponse);
             }
-            researcherResult = new ResearcherResult();// I must find how to save one by one without deleting the
-                                                      // previoue one
-            researcherResult.setResume(extractirResoinse);
+            researcherResult = new ResearcherResult();
+            researcherResult.setResume(reviewerResponse);
             researcherResult.setFileName(file);
             researcherService.saveResearcherResult(researcherResult);
+
             // file name, extractor response
-            researcherHashMap.put(file, extractirResoinse);
+            researcherHashMap.put(file, reviewerResponse);
         }
 
         System.out.println(researcherHashMap);
@@ -157,31 +161,36 @@ public class OpenAiService {
         String rankingresponse = rankingResponse.get();
         System.out.println("The response of ranking is: " + rankingResponse.get());
 
-        System.out.println(rankingresponse);
+        String messageReviewerRanking = "The response of RankingAgent is:" + rankingResponse.get()
+                + "Based on the following csv job position: " + registerResponse.get()
+                + " And the following csv's of applicants cv's : " + databaseData
+                + "I want to review the result of Ranking agent and return me what i have tell you in your instrucrions.";
+
         // step 6: Create reviewer ranking
-        String messageReviewerRanking = "The response of RankingAgent is:" + rankingResponse.get();
         CompletableFuture<String> reviewerRankingResponse = reviewerRankingResponse(messageReviewerRanking);
         CompletableFuture.allOf(reviewerRankingResponse).join();
         System.out.println("The response of ranking is: " + reviewerRankingResponse.get());
-        System.out.println(",,,,,,");
+        String responseOfReviewerRanking = reviewerRankingResponse.get();
 
         // Check if the ReviewerRanking gave the willing results
-        // String responseOfReviewerRanking = reviewerRankingResponse.get();
-        // if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS
-        // GOOD ----")) {
-        // rankingResponse = checkRankingReviewerResult(messageReviewerRanking,
-        // responseOfReviewerRanking);
+        if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+            rankingResponse = checkRankingReviewerResult(rankingresponse,
+                    responseOfReviewerRanking);
 
-        // }
+        }
 
+        // We split the answer of ranking in tokens
         StringTokenizer tokenizeRankingResponse = new StringTokenizer(
                 rankingresponse, ",");
 
+        // The tokens are saved in a list
         List<String> tokens = new ArrayList<>();
         while (tokenizeRankingResponse.hasMoreTokens()) {
             tokens.add(tokenizeRankingResponse.nextToken());
         }
 
+        // Check which file name match in every token
+        // save every match in database and hashmap
         tokens.forEach((token) -> {
             researcherHashMap.keySet().forEach((fileName) -> {
                 if (token.contains(fileName)) {
@@ -197,11 +206,13 @@ public class OpenAiService {
 
         System.out.println(rankingHashMap);
 
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture(rankingHashMap);
     }
 
-    // executing the procedure of creating an assistant until getting assistants
-    // response
+    /*
+     * executing the procedure of creating an assistant until getting assistant
+     * response
+     */
     @Async
     public CompletableFuture<String> processRequest(String message, String instructions, OpenAiAssistant assistant,
             OpenAiThread thread, boolean uploadFile, String filename, byte[] file) throws Exception {
@@ -280,16 +291,20 @@ public class OpenAiService {
     public CompletableFuture<String> correctExtracrorResearcherResponse(String extractorResearcherMessage)
             throws Exception {
         // we keep the same thread id
+        extractorResearcherMessage = "The reviewer suggest corrections" + extractorResearcherMessage;
         extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage);
         extractorResearcherOpenAiThread.run();
         String response = extractorResearcherOpenAiThread.getRequest();
         return CompletableFuture.completedFuture(response);
     }
 
+    // We need the assistant to give instruction to another assistant in order to
+    // get a more efficient response
     @Async
     public CompletableFuture<String> correctRankingAgentResponse(String rankingAgentMessage)
             throws Exception {
         // we keep the same thread id
+        rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
         reviewerRankingThread.addMessage("assistant", rankingAgentMessage);
         reviewerRankingThread.run();
         String response = reviewerRankingThread.getRequest();
@@ -299,11 +314,11 @@ public class OpenAiService {
 
     // Check if the result of Extractor Reasearcher is the willing
     @Async
-    public CompletableFuture<String> checkRewierReasearcherResult(String extractorReasercherResult,
+    public CompletableFuture<String> checkReviewerResearcherResult(String extractorReasercherResult,
             String reviewerResponse) throws Exception {
 
         // executing check max 5 times else accept the last answer
-        String finalResponse = null;
+        String finalResponse = extractorReasercherResult;
         int count = 0;
         do {
             System.out.println("THE REVIEWER SUGGEST CORRECTIONS");
@@ -320,16 +335,17 @@ public class OpenAiService {
             finalResponse = extarctorResearcherCorrections.get();
             count++;
             System.out.println(reviewerResponse.toString());
-        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 3 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
 
         return CompletableFuture.completedFuture(finalResponse);
     }
 
+    // Check if the result of Ranking Reasearcher is the willing
     @Async
     public CompletableFuture<String> checkRankingReviewerResult(String rankingAgentResult,
             String reviewerResponse) throws Exception {
         // executing check max 5 times else accept the last answer
-        String finalResponse = null;
+        String finalResponse = rankingAgentResult;
         int count = 0;
         do {
             System.out.println("THE REVIEWERRANKING SUGGEST CORRECTIONS");
@@ -346,7 +362,7 @@ public class OpenAiService {
             count++;
             System.out.println(reviewerResponse.toString());
 
-        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 3 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
         return CompletableFuture.completedFuture(finalResponse);
 
     }

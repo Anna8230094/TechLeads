@@ -4,6 +4,7 @@
     <title>Ranking - Hire&Go</title>
 </head>
 <body>
-    <h1 th:text="${message}">Please enter your email</h1>
+    <h1 th:text="'Hi ' +${user}+ '. Here are your results'">Hi user here are your results</h1>
+    <p th:text="${results}"></p>
 </body>
 </html>
