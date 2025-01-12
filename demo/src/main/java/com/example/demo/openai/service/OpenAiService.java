@@ -197,7 +197,7 @@ public class OpenAiService {
                     rankingHashMap.put(fileName, researcherHashMap.get(fileName));
                     rankingResult = new RankingResult();
                     rankingResult.setResume(fileName);
-                    rankingResult.setSummaryResume(researcherHashMap.get(fileName));
+                    rankingResult.setResumeSummary(researcherHashMap.get(fileName));
                     rankingService.saveRankingResult(rankingResult);
                 }
             });
