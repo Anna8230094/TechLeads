@@ -44,6 +44,9 @@
         	<roles>
             	<role>Project Manager</role>
         	</roles>
+			<roles>
+            	<role>Back-End Developer</role>
+        	</roles>
         </developer>
 
 		<developer>
@@ -54,6 +57,9 @@
         	<roles>
             	<role>Back-End Deverloper</role>
         	</roles>
+			<roles>
+            	<role>Presentation Designer</role>
+        	</roles>
         </developer>
 
 		<developer>
@@ -63,6 +69,9 @@
         	<url>https://github.com/t8230144</url>
         	<roles>
             	<role>Database Developer</role>
+        	</roles>
+			<roles>
+            	<role>Back-End Developer</role>
         	</roles>
         </developer>
 
@@ -103,6 +112,9 @@
         	<url>https://github.com/ellisavetpothitou</url>
         	<roles>
             	<role>Presentation Designer</role>
+        	</roles>
+			<roles>
+            	<role>Front-End Developer</role>
         	</roles>
         </developer>
 	</developers>
