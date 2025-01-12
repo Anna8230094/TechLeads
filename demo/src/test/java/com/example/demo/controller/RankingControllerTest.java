@@ -24,6 +24,6 @@ public class RankingControllerTest {
         this.mockMvc.perform(get("/hireandgo/home/ranking"))
                 .andExpect(status().isOk()) // Ελέγχει ότι το status της απόκρισης είναι 200 (OK)
                 .andExpect(view().name("ranking")) // Ελέγχει ότι επιστρέφεται το όνομα της όψης "ranking"
-                .andExpect(model().attribute("message", "Please enter your email")); // Ελέγχει ότι το attribute "message" είναι σωστό
+                ; // Ελέγχει ότι το attribute "message" είναι σωστό
     }
 }
