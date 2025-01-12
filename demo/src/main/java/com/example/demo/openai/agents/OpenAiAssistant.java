@@ -48,7 +48,7 @@ public class OpenAiAssistant {
             return CompletableFuture.completedFuture(assistantId);
         } else {
             System.out.println("The creation of assistant is unable");
-            throw new IOException();
+            throw new IOException(loadKey());
         }
     }
 
@@ -117,5 +117,11 @@ public class OpenAiAssistant {
 
     public String getModel() {
         return model;
+    }
+    public void setKey(String key) {
+        this.key = key;
+    }
+    public String getKey() {
+        return key;
     }
 }

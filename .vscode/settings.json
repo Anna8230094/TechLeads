@@ -14,7 +14,8 @@
             "username": "postgres"
         }
     ],
-    "maven.view": "flat"
+    "maven.view": "flat",
+    "vmArgs": "-XX:+EnableDynamicAgentLoading"
 }
 
 

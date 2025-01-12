@@ -21,7 +21,7 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    private String websiteLink = " http://localhost:8081/hireandgo/home/";
+    private String websiteLink = " http://localhost:8081/hireandgo/ranking/";
 
     @Autowired
     public EmailService(JavaMailSender emailSender) {
@@ -33,7 +33,7 @@ public class EmailService {
      * MessagingException {
      */
     @Async
-    public CompletableFuture<String> sendEmail(String to, String subject, String text) {
+    public CompletableFuture<String> sendEmail(String to, String subject, String text, String user) {
 
         try {
             // Input validation
@@ -53,7 +53,7 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
 
-            String htmlContent = "<p>Hello ,</p>" +
+            String htmlContent = "<p>Hello " + user + ",</p>" +
                     "<p>Thank you for using HireandGo. Please click the link below to view your confirmation:</p>" +
                     "<p><a href=\"" + websiteLink + "\">View Confirmation</a></p>" +
                     "<p>Best regards,<br>HireandGo Team</p>";

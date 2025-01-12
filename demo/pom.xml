@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
 	<description>HiringAndGO applictaion with spring boot</description>
-	<url />
+	
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
