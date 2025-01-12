@@ -89,10 +89,20 @@
 		<developer>
         	<id>Nellyandr</id>
         	<name>Νεκταρία Ευαγγελία Ανδρουλάκη</name>
-        	<email>t8230227@aueb.gr</email>
+        	<email>t8230007@aueb.gr</email>
         	<url>https://github.com/Nellyandr6</url>
         	<roles>
             	<role>Front-End Developer</role>
+        	</roles>
+        </developer>
+
+		<developer>
+        	<id>ellisavetpothitou</id>
+        	<name>Ελλισάβετ Αλεξία Ποθητού</name>
+        	<email>t8230227@aueb.gr</email>
+        	<url>https://github.com/ellisavetpothitou</url>
+        	<roles>
+            	<role>Presentation Designer</role>
         	</roles>
         </developer>
 	</developers>
