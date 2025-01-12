@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/hireandgo/home/registrationform/")
-public class SuccesControler {
+public class SuccessController {
 
     @GetMapping("/success")
     public String handleSucces() {

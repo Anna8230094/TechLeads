@@ -16,16 +16,106 @@
 	<description>HiringAndGO applictaion with spring boot</description>
 	<url />
 	<licenses>
-		<license />
+		<license>
+			<name>Apache License 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+
+		<license>
+			<name>Eclipse Public License 2.0</name>
+			<url>https://www.eclipse.org/legal/epl-2.0/</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
+
 	<developers>
-		<developer />
+		<developer>
+			<id>Anna8230094</id>
+			<name>Άννα Μαρία Μεγάλου</name>
+			<email>t8230094@aueb.gr</email>
+			<url>https://github.com/Anna8230094</url>
+			<roles>
+				<role>Project Manager</role>
+				<role>Back-End Developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>aggmegalou</id>
+			<name>Αγγελική Δέσποινα Μεγάλου</name>
+			<email>t8230093@aueb.gr</email>
+			<url>https://github.com/aggmegalou</url>
+			<roles>
+				<role>Back-End Deverloper</role>
+				<role>Presentation Designer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>t8230144</id>
+			<name>Κωνσταντία Νικολέτα Στεργίου</name>
+			<email>t8230144@aueb.gr</email>
+			<url>https://github.com/t8230144</url>
+			<roles>
+				<role>Database Developer</role>
+				<role>Back-End Developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>Valeria8230135</id>
+			<name>Βαλέρια Σουμελίδη</name>
+			<email>t8230135@aueb.gr</email>
+			<url>https://github.com/valeria8230135</url>
+			<roles>
+				<role>Front-End Developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>t8230136</id>
+			<name>Μαρία Σπάχου</name>
+			<email>t8230136@aueb.gr</email>
+			<url>https://github.com/t8230136</url>
+			<roles>
+				<role>Back-End Developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>Nellyandr</id>
+			<name>Νεκταρία Ευαγγελία Ανδρουλάκη</name>
+			<email>t8230007@aueb.gr</email>
+			<url>https://github.com/Nellyandr6</url>
+			<roles>
+				<role>Front-End Developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<id>ellisavetpothitou</id>
+			<name>Ελλισάβετ Αλεξία Ποθητού</name>
+			<email>t8230227@aueb.gr</email>
+			<url>https://github.com/ellisavetpothitou</url>
+			<roles>
+				<role>Presentation Designer</role>
+				<role>Front-End Developer</role>
+			</roles>
+		</developer>
 	</developers>
+
 	<scm>
-		<connection />
-		<developerConnection />
-		<tag />
-		<url />
+		<connection>scm:git:https://github.com/Anna8230094/TechLeads.git</connection>
+		<developerConnection>scm:git:git@github.com:Anna8230094/TechLeads.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/Anna8230094/TechLeads</url>
 	</scm>
 	<properties>
 		<java.version>21</java.version>
@@ -51,6 +141,10 @@
 			<version>19.11</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -143,6 +237,7 @@
 
 		</plugins>
 	</build>
+
 
 
 </project>
