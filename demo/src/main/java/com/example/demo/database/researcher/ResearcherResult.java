@@ -26,9 +26,9 @@ public class ResearcherResult {
     @Column(name = "idResearcher")
     private Long idResearcher;
 
-    @Column(name = "resumeName", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "resumeName", nullable = false,columnDefinition = "TEXT" )
     @Lob
-    private String resumeName;
+    private String resume;
 
     @Column(name = "fileName", nullable = false)
     private String fileName;
@@ -38,9 +38,9 @@ public class ResearcherResult {
 
     }
 
-    public ResearcherResult(String resumeName, String fileName) {
+    public ResearcherResult(String resume, String fileName) {
 
-        this.resumeName = resumeName;
+        this.resume = resume;
         this.fileName = fileName;
 
     }
@@ -55,11 +55,11 @@ public class ResearcherResult {
     }
 
     public String getResume() {
-        return resumeName;
+        return resume;
     }
 
-    public void setResume(String resumeName) {
-        this.resumeName = resumeName;
+    public void setResume(String resume) {
+        this.resume = resume;
     }
 
     public String getFileName() {

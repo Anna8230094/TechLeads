@@ -28,8 +28,7 @@ public class RankingResult {
     @PrimaryKeyJoinColumn
     private Long idRanking;
 
-    @Column(name = "fileName", nullable = false, columnDefinition = "TEXT")
-    @Lob
+    @Column(name = "fileName", nullable = false)
     private String resumeName;
 
     @Column(name = "summary", nullable = false, columnDefinition = "TEXT")
