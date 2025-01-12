@@ -32,7 +32,7 @@ public class RegistrationFormController {
     OpenAiService openAiService;
 
     @Autowired
-    static EmailService emailService;
+    EmailService emailService;
 
     // display of registrationform page
     @GetMapping("/hireandgo/home/registrationform")
@@ -67,16 +67,31 @@ public class RegistrationFormController {
                 example.put(file.getOriginalFilename(), file.getBytes());
             }
             usersService.saveUsers(user);
-            // openAiService.startRankingProcess(example, user)
-            // .thenCompose((result) -> handleResultPage(user.getName(), result, model))
-            // .thenRunAsync(() -> sendEmail(user.getName(), user.getEmail()));
-            openAiService.startRankingProcess(example, user)
-                    .thenRunAsync(() -> sendEmail(user.getName(), user.getEmail()));
+            startRankingProcess(example, user, user.getName(), user.getEmail());
+
             model.addAttribute("username", user.getName());
         } catch (CancellationException e) {
             System.err.println("Unable to save user");
         }
         return "success";
+    }
+
+    @Async
+    public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user, String name,
+            String email){
+
+        new Thread(() -> {
+            try {
+                openAiService.startRankingProcess(files, user).join();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            sendEmail(name, email);
+
+        }).start();
+
+        return CompletableFuture.completedFuture(null);
+
     }
 
     @Async
@@ -97,7 +112,6 @@ public class RegistrationFormController {
         CompletableFuture.allOf(emailResponse).join();
         return CompletableFuture.completedFuture(null);
     }
-
     // @Async
     // @GetMapping("/hireandgo/home/ranking")
     // public CompletableFuture<String> handleResultPage(String user,
