@@ -1,6 +1,5 @@
 package com.example.demo.databasenewtest;
 
-
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.database.user.Users;
@@ -11,9 +10,9 @@ public class UsersTest {
 
     @Test
     void testParameterizedConstructor() {
-        Users user = new Users("Finovatech Solutions", "oly.meg@finovatech.com", "Finance", 
-                               "Financial analysis and modeling", "Analytical thinking, Attention to detail, Risk management mindset", 
-                               "Integrity, Curiosity, Resilience, Discipline");
+        Users user = new Users("Finovatech Solutions", "oly.meg@finovatech.com", "Finance",
+                "Financial analysis and modeling", "Analytical thinking, Attention to detail, Risk management mindset",
+                "Integrity, Curiosity, Resilience, Discipline");
 
         assertNull(user.getIdUsers()); // ID should remain null as it is generated
         assertEquals("Finovatech Solutions", user.getName());
@@ -61,22 +60,15 @@ public class UsersTest {
         user.setSoftSkills("Analytical thinking, Attention to detail, Risk management mindset");
         user.setOtherTraits("Integrity, Curiosity, Resilience, Discipline");
 
-        String expected = "Users {\n" +
-        "    idUsers = 1,\n" +
-        "    name = 'Finovatech Solutions',\n" +
-        "    email = 'oly.meg@finovatech.com',\n" +
-        "    field = 'Finance',\n" +
-        "    hardSkills = 'Financial analysis and modeling',\n" +
-        "    softSkills = 'Analytical thinking, Attention to detail, Risk management mindset',\n" +
-        "    otherTraits = 'Integrity, Curiosity, Resilience, Discipline'\n" +
-        "}";
-        assertEquals(expected, user.toString());
+        String expected = """
+                Users{idUsers=1, name='Finovatech Solutions', email='oly.meg@finovatech.com', field='Finance', hardSkills='Financial analysis and modeling', softSkills='Analytical thinking, Attention to detail, Risk management mindset', otherTraits='Integrity, Curiosity, Resilience, Discipline'}""";
+                assertEquals(expected, user.toString());
     }
 
     @Test
     void testNullValues() {
         Users user = new Users();
-        
+
         user.setName(null);
         assertNull(user.getName());
 

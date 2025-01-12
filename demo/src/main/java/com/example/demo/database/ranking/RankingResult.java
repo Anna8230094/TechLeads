@@ -22,7 +22,6 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ranking_result")
-
 public class RankingResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

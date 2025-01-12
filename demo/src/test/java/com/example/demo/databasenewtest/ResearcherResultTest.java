@@ -66,7 +66,7 @@ class ResearcherResultTest {
         String expected = "ResearcherResult {\n" +
             "    idResearcher = 1,\n" +
             "    resumeName = 'resume example',\n" +  
-            "    fileName = 'cv.pdf',\n" + 
+            "    fileName = 'cv.pdf'\n" + 
             "}";
 
         assertEquals(expected, researcherResult.toString());

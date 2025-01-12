@@ -114,4 +114,5 @@ public class RegistrationFormController {
         CompletableFuture.allOf(emailResponse).join();
         return CompletableFuture.completedFuture(null);
     }
+
 }
