@@ -10,6 +10,8 @@ import com.example.demo.database.researcher.ResearcherRepository;
 import com.example.demo.database.researcher.ResearcherResult;
 import com.example.demo.database.researcher.ResearcherService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -43,6 +45,14 @@ class ResearcherServiceTest {
 
         // Wait for the result to complete without throwing an exception
         result.join();  // join() blocks until the async operation completes
+
+        // Verify and assert results
+        assertNotNull(researcherResult); // Ensure the result is not null
+        assertEquals("resume example 1", researcherResult.getResume()); // Verify the value of 'resume'
+        assertEquals("cv.pdf", researcherResult.getFileName()); // Verify the value of 'resume summary'
+
+
+
 
         // Verify that the repository's save method was called exactly once
         verify(researcherRepository, times(1)).save(researcherResult);

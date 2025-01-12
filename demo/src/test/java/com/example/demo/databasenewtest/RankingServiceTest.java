@@ -12,6 +12,9 @@ import com.example.demo.database.ranking.RankingResult;
 import com.example.demo.database.ranking.RankingService;
 
 import static org.mockito.Mockito.*;
+
+import java.util.concurrent.CompletableFuture;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RankingServiceTest {
@@ -37,13 +40,17 @@ class RankingServiceTest {
         // Mock the repository's save method to return the same object
         when(rankingRepository.save(rankingResult)).thenReturn(rankingResult);
 
-        // Call the service method
-        RankingResult savedRankingResult = rankingService.saveRankingResult(rankingResult);
+        // Call the service method asynchronously
+        CompletableFuture<Void> result = rankingService.saveRankingResult(rankingResult);
 
+        // Wait for the result to complete without throwing an exception
+        result.join();  // join() blocks until the async operation completes
+
+        
         // Verify and assert results
-        assertNotNull(savedRankingResult); // Ensure the result is not null
-        assertEquals("resume example 1", savedRankingResult.getResume()); // Verify the value of 'resume'
-        assertEquals("summary example", savedRankingResult.getResumeSummary()); // Verify the value of 'resume summary'
+        assertNotNull(rankingResult); // Ensure the result is not null
+        assertEquals("resume example 1", rankingResult.getResume()); // Verify the value of 'resume'
+        assertEquals("summary example", rankingResult.getResumeSummary()); // Verify the value of 'resume summary'
 
         // Verify that the repository's save method was called exactly once
         verify(rankingRepository, times(1)).save(rankingResult);

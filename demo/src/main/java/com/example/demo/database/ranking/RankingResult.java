@@ -16,9 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
  @Entity
@@ -30,9 +28,6 @@ import jakarta.persistence.Table;
      @PrimaryKeyJoinColumn
      private Long idRanking;
  
-     @ManyToOne
-     @JoinColumn(name = "IdResearcher", nullable = false)
-     private Long researcherResultId;
  
     @Column(name = "fileName", nullable = false, columnDefinition = "TEXT")
     @Lob
@@ -47,12 +42,11 @@ import jakarta.persistence.Table;
  
      }
  
-     public RankingResult(String resumeName, String summaryOfResume,Long researcherResultId) {
+     public RankingResult(String resumeName, String summaryOfResume) {
  
          this.resumeName = resumeName;
          this.summaryOfResume = summaryOfResume;
-         this.researcherResultId = researcherResultId;
- 
+         
      }
  
      // Getters and Setters
@@ -65,14 +59,6 @@ import jakarta.persistence.Table;
          this.idRanking= idRanking;
      }
      
- 
-     public Long getResearcherResultId() {
-         return researcherResultId;
-     }
- 
-     public void setResearcherResultId(Long researcherResultId) {
-         this.researcherResultId = researcherResultId;
-     }
      public String getResume() {
          return resumeName;
      }
@@ -95,7 +81,6 @@ import jakarta.persistence.Table;
 public String toString() {
     return "RankingResult {\n" +
            "    idRanking = " + getIdRanking() + ",\n" +
-           "    researcherResultId = " + getResearcherResultId() + ",\n" +
            "    resumeName = '" + getResume() + "',\n" +
            "    summaryOfResume = '" + getResumeSummary() + "'\n" +
            '}';
