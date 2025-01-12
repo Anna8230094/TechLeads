@@ -21,7 +21,7 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
 
-    private String websiteLink = " http://localhost:8081/hireandgo/ranking/";
+    private String websiteLink = " http://localhost:8081/hireandgo/home/ranking";
 
     @Autowired
     public EmailService(JavaMailSender emailSender) {

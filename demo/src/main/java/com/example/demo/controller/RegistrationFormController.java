@@ -114,12 +114,4 @@ public class RegistrationFormController {
         CompletableFuture.allOf(emailResponse).join();
         return CompletableFuture.completedFuture(null);
     }
-    // @Async
-    // @GetMapping("/hireandgo/home/ranking")
-    // public CompletableFuture<String> handleResultPage(String user,
-    // HashMap<String, String> results, Model model) {
-    // model.addAttribute("user", user);
-    // model.addAttribute("results", results);
-    // return CompletableFuture.completedFuture("ranking");
-    // }
 }
