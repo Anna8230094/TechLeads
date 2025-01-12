@@ -20,7 +20,9 @@ import com.example.demo.mail.EmailService;
 import com.example.demo.openai.service.OpenAiService;
 
 /**
- * @author Maria Spachou
+ * @author Maria Spachou,
+ * @author Anna Maria Megalou
+ * 
  */
 @Controller
 public class RegistrationFormController {
