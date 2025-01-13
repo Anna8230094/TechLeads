@@ -28,19 +28,11 @@ public class RankingResult {
     @PrimaryKeyJoinColumn
     private Long idRanking;
 
-    @Column(name = "sessionId", nullable = false)
-    private String sessionId;
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
     @Column(name = "fileName", nullable = false)
     private String resumeName;
+
+    @Column(name = "sessionId", nullable = false)
+    private String sessionId;
 
     @Column(name = "summary", nullable = false, columnDefinition = "TEXT")
     @Lob
@@ -55,7 +47,6 @@ public class RankingResult {
 
         this.resumeName = resumeName;
         this.summaryOfResume = summaryOfResume;
-
     }
 
     // Getters and Setters
@@ -74,6 +65,14 @@ public class RankingResult {
 
     public void setResume(String resumeName) {
         this.resumeName = resumeName;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getResumeSummary() {

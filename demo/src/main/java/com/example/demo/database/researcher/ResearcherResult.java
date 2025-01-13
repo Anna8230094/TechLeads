@@ -26,33 +26,26 @@ public class ResearcherResult {
     @Column(name = "idResearcher")
     private Long idResearcher;
 
-    @Column(name = "resumeName", nullable = false,columnDefinition = "TEXT" )
+    @Column(name = "fileName", nullable = false)
+    private String fileName;
+
+    @Column(name = "resumeName", nullable = false, columnDefinition = "TEXT")
     @Lob
     private String resume;
 
     @Column(name = "sessionId", nullable = false)
     private String sessionId;
 
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    @Column(name = "fileName", nullable = false)
-    private String fileName;
     // Constructors
 
     public ResearcherResult() {
 
     }
 
-    public ResearcherResult(String resume, String fileName) {
+    public ResearcherResult(String fileName, String resume) {
 
-        this.resume = resume;
         this.fileName = fileName;
+        this.resume = resume;
 
     }
 
@@ -65,14 +58,6 @@ public class ResearcherResult {
         this.idResearcher = idResearcher;
     }
 
-    public String getResume() {
-        return resume;
-    }
-
-    public void setResume(String resume) {
-        this.resume = resume;
-    }
-
     public String getFileName() {
         return fileName;
     }
@@ -81,13 +66,30 @@ public class ResearcherResult {
         this.fileName = fileName;
     }
 
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resumeName) {
+        this.resume = resumeName;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Override
     public String toString() {
         return "ResearcherResult {\n" +
                 "    idResearcher = " + getIdResearcher() + ",\n" +
+                "    fileName = '" + getFileName() + "'\n" +
                 "    resumeName = '" + getResume() + "',\n" +
                 "    sessionId = '" + getSessionId() + "',\n" +
-                "    fileName = '" + getFileName() + "'\n" +
+
                 '}';
     }
 
