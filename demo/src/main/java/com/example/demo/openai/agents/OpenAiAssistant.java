@@ -38,7 +38,7 @@ public class OpenAiAssistant {
 
     // creatAssistant
     @Async
-    public  CompletableFuture <String> createAiAssistant() throws IOException {
+    public CompletableFuture <String> createAiAssistant() throws IOException {
         String jsonRequest = buildJsonForAssistant();
         Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
@@ -48,7 +48,7 @@ public class OpenAiAssistant {
             return CompletableFuture.completedFuture(assistantId);
         } else {
             System.out.println("The creation of assistant is unable");
-            throw new IOException(loadKey());
+            throw new IOException();
         }
     }
 
