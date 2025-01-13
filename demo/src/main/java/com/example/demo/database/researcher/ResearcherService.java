@@ -22,15 +22,13 @@ public class ResearcherService {
     @Autowired
     private ResearcherRepository researcherRepository;
 
-    @Async
-    public CompletableFuture<Void> saveResearcherResult(ResearcherResult researcherResult) {
+    public void saveResearcherResult(ResearcherResult researcherResult) {
         researcherRepository.save(researcherResult);
         System.out.println("Researcher result is saved");
-        return CompletableFuture.completedFuture(null);
     }
 
-    public List<ResearcherResult> getAllresearcher() {
-        return researcherRepository.findAll();
+    public List<ResearcherResult> getAllresearcher(String sessionId) {
+        return researcherRepository.findBySessionId(sessionId);
     }
 
     public void deleteResearcherResult(Long id) {

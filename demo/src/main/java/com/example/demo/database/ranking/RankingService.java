@@ -23,16 +23,9 @@ public class RankingService {
     @Autowired
     private RankingRepository rankingRepository;
 
-    @Async
-    public CompletableFuture<Void> saveRankingResult(RankingResult rankingResult) {
+    public void saveRankingResult(RankingResult rankingResult) {
         rankingRepository.save(rankingResult);
         System.out.println("The ranking cv context is saved");
-        return CompletableFuture.completedFuture(null);
-
-    }
-
-    public List<RankingResult> getAllranking(RankingResult rankingResult) {
-        return rankingRepository.findAll();
     }
 
     public List<RankingResult> getAllresearcher() {

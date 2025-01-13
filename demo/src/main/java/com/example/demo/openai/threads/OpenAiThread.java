@@ -120,7 +120,7 @@ public class OpenAiThread {
             System.out.println("Message sent successfully to user.");
             return CompletableFuture.completedFuture(response.body().string());
         } else {
-            System.out.println("Failed to get response ");
+            System.out.println("Failed to get response " + response.body().string());
             throw new IOException();
         }
 

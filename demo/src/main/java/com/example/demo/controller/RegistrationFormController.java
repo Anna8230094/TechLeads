@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
 import org.springframework.ui.Model;
+
+import static org.mockito.ArgumentMatchers.matches;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -69,7 +72,7 @@ public class RegistrationFormController {
                 example.put(file.getOriginalFilename(), file.getBytes());
             }
             usersService.saveUsers(user);
-            startRankingProcess(example, user, user.getName(), user.getEmail());
+            startRankingProcess(example, user, user.getName(), user.getEmail(), model);
 
             model.addAttribute("username", user.getName());
         } catch (CancellationException e) {
@@ -79,30 +82,33 @@ public class RegistrationFormController {
     }
 
     @Async
-    public CompletableFuture<Void> startRankingProcess(HashMap<String, byte[]> files, Users user, String name,
-            String email){
+    public CompletableFuture<String> startRankingProcess(HashMap<String, byte[]> files, Users user,
+            String name,
+            String email, Model model) {
 
         new Thread(() -> {
             try {
-                openAiService.startRankingProcess(files, user).join();
+                CompletableFuture<String> result;
+                result = openAiService.startRankingProcess(files, user);
+                result.join();
+                sendResultEmail(name, email, result.get());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            sendEmail(name, email);
 
         }).start();
 
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture("ranking");
 
     }
 
     @Async
-    public CompletableFuture<Void> sendEmail(String name, String email) {
+    public CompletableFuture<Void> sendResultEmail(String name, String email, String sessionId) {
 
         String subject = " Results Ready!";
         String body = "Your processed data and results are ready. Please check provided link for further detailss.";
 
-        CompletableFuture<String> emailResponse = emailService.sendEmail(email, subject, body, name);
+        CompletableFuture<String> emailResponse = emailService.sendResultEmail(email, subject, body, name, sessionId);
 
         emailResponse.thenAccept(response -> {
             System.out.println("Email sent successfully: " + response);

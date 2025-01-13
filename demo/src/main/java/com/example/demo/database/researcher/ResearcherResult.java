@@ -30,6 +30,17 @@ public class ResearcherResult {
     @Lob
     private String resume;
 
+    @Column(name = "sessionId", nullable = false)
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Column(name = "fileName", nullable = false)
     private String fileName;
     // Constructors
@@ -75,6 +86,7 @@ public class ResearcherResult {
         return "ResearcherResult {\n" +
                 "    idResearcher = " + getIdResearcher() + ",\n" +
                 "    resumeName = '" + getResume() + "',\n" +
+                "    sessionId = '" + getSessionId() + "',\n" +
                 "    fileName = '" + getFileName() + "'\n" +
                 '}';
     }
