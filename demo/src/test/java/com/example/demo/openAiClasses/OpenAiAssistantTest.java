@@ -2,6 +2,7 @@ package com.example.demo.openAiClasses;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
@@ -9,20 +10,23 @@ import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import com.example.demo.openai.agents.Register;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import com.example.demo.openai.agents.OpenAiAssistant;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -32,54 +36,52 @@ import okhttp3.ResponseBody;
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpenAiAssistantTest {
 
-    @InjectMocks
-    private static Register openAiAssistant;
+    public static final String INSTRUCTIONS = "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)";
+    public static final String MODEL = "gpt-4o-mini";
+    public static final String NAME = "Register";
 
-    @Mock
-    private okhttp3.Response mockResponse;;
+    @Spy
+    @InjectMocks
+    private OpenAiAssistant openAiAssistant;
 
     @BeforeAll
-    static void setUp() throws IOException {
-        // MockitoAnnotations.openMocks(this);
-        openAiAssistant = new Register();
-        // ReflectionTestUtils.setField(openAiAssistant, "instructions", instructions);
-        // ReflectionTestUtils.setField(openAiAssistant, "name", name);
+    void setUp() throws IOException {
+        ReflectionTestUtils.setField(openAiAssistant, "instructions", INSTRUCTIONS);
+        ReflectionTestUtils.setField(openAiAssistant, "name", NAME);
+        ReflectionTestUtils.setField(openAiAssistant, "model", MODEL);
     }
 
-    // @Test
-    // void createAssistantTest() throws IOException {
+    private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                serializedBody,
+                                MediaType.parse("application/json")))
+                .build();
+        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+    }
 
-    // Request mockRequest = new Request.Builder()
-    // .url("https://some-url.com")
-    // .build();
-    // Response res = new Response.Builder()
-    // .request(mockRequest)
-    // .protocol(Protocol.HTTP_2)
-    // .code(200) // status code
-    // .message("")
-    // .body(ResponseBody.create(
-    // "{\"id\":\"assistant-id-123\"}",
-    // MediaType.get("application/json; charset=utf-8")))
-    // .build();
+    @Test
+    void createAssistantTest() throws IOException, InterruptedException, ExecutionException {
 
-    // when(openAiAssistant.sendRequest(anyString(), anyString())).thenReturn(res);
-    // // when(openAiAssistant.extractId()).thenReturn(res);
+        mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
 
-    // // assertEquals(openAiAssistant.getModel(), model);
-    // // assertEquals(openAiAssistant.getInstructions(), instructions);
-    // assertEquals(openAiAssistant.getName(), "Register");
-    // CompletableFuture<String> future = openAiAssistant.createAiAssistant();
-    // assertEquals("assistant-id-123", future.join());
-    // }
+        assertEquals(openAiAssistant.getModel(), MODEL);
+        assertEquals(openAiAssistant.getInstructions(), INSTRUCTIONS);
+        assertEquals(openAiAssistant.getName(), NAME);
+        CompletableFuture<String> future = openAiAssistant.createAiAssistant();
+        future.join();
+        assertEquals("assistant-id-123", future.get());
+    }
 
     @Test
     void testCreateAiAssistant() throws IOException {
         // Simulate successful response
-        when(mockResponse.isSuccessful()).thenReturn(true);
+        // when(mockResponse.isSuccessful()).thenReturn(true);
         String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-        MediaType mediaType = MediaType.parse("application/json");
-        ResponseBody responseBody = ResponseBody.create(mockResponseBody, mediaType);
-        when(mockResponse.body()).thenReturn(responseBody);
+        mockHttpClient(openAiAssistant, mockResponseBody);
 
         assertEquals(openAiAssistant.loadKey(), "${OPENAI_API_KEY}");
         assertEquals(openAiAssistant.getName(), "Register");
@@ -109,7 +111,7 @@ public class OpenAiAssistantTest {
     @Test
     void testSendRequestSuccess() throws IOException {
         // Mocking Response
-        when(mockResponse.isSuccessful()).thenReturn(true);
+        // when(mockResponse.isSuccessful()).thenReturn(true);
 
         // Create a sample JSON request
         String jsonRequest = openAiAssistant.buildJsonForAssistant();
@@ -123,14 +125,16 @@ public class OpenAiAssistantTest {
 
     @Test
     void testExtractId() throws IOException {
-        // Simulate a response body
-        String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-        MediaType mediaType = MediaType.parse("application/json");
-        ResponseBody responseBody = ResponseBody.create(mockResponseBody, mediaType);
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                "{\"id\":\"assistant-id-123\"}",
+                                MediaType.parse("application/json")))
+                .build();
 
-        when(mockResponse.body()).thenReturn(responseBody);
-
-        String id = openAiAssistant.extractId(mockResponse);
+        String id = openAiAssistant.extractId(response);
 
         assertEquals("assistant-id-123", id);
     }

@@ -28,6 +28,17 @@ public class RankingResult {
     @PrimaryKeyJoinColumn
     private Long idRanking;
 
+    @Column(name = "sessionId", nullable = false)
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Column(name = "fileName", nullable = false)
     private String resumeName;
 
@@ -78,6 +89,7 @@ public class RankingResult {
         return "RankingResult {\n" +
                 "    idRanking = " + getIdRanking() + ",\n" +
                 "    resumeName = '" + getResume() + "',\n" +
+                "    sessionId = '" + getSessionId() + "',\n" +
                 "    summaryOfResume = '" + getResumeSummary() + "'\n" +
                 '}';
     }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -89,8 +90,10 @@ public class OpenAiService {
     // this method is called from controller class after the submit
     // It is execute all the ranking proccess
     @Async
-    public CompletableFuture<HashMap<String, String>> startRankingProcess(HashMap<String, byte[]> files, Users user)
+    public CompletableFuture<String> startRankingProcess(HashMap<String, byte[]> files, Users user)
             throws Exception {
+
+        String requestSessionId = UUID.randomUUID().toString();
 
         researcherHashMap = new HashMap<String, String>();
         rankingHashMap = new HashMap<String, String>();
@@ -121,9 +124,12 @@ public class OpenAiService {
             CompletableFuture.allOf(extractorResearcherResponse).join();
             System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
             String extractorResearcher = extractorResearcherResponse.get();
+            
 
             // step 4:Create reviewer reasearcher
-            String messageResearcherReviewer = "The response of extraxtorReasearcher is: "
+            String messageResearcherReviewer = "The requiremnts are:\n" + registerResponse.get()
+                    + "\nThe pdf contentns are:\n " + extractorResponse.get()
+                    + "\nThe response of extractorReasearcher I WANT TO YOU TO REVIEW BASED ON THE PREVIOUS FACTS is: "
                     + extractorResearcherResponse.get();
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(messageResearcherReviewer);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
@@ -135,17 +141,18 @@ public class OpenAiService {
                         reviewerResponse);
             }
             researcherResult = new ResearcherResult();
-            researcherResult.setResume(reviewerResponse);
+            researcherResult.setResume(extractorResearcherResponse.get());
             researcherResult.setFileName(file);
+            researcherResult.setSessionId(requestSessionId);
             researcherService.saveResearcherResult(researcherResult);
 
             // file name, extractor response
-            researcherHashMap.put(file, reviewerResponse);
+            researcherHashMap.put(file, extractorResearcherResponse.get());
         }
 
         System.out.println(researcherHashMap);
         // get the columns content from database
-        List<ResearcherResult> databaseData = researcherService.getAllresearcher();
+        List<ResearcherResult> databaseData = researcherService.getAllresearcher(requestSessionId);
         System.out.println(databaseData);
 
         String messageRanking = " The resume and the id of every resume from the database are:" +
@@ -189,6 +196,8 @@ public class OpenAiService {
             tokens.add(tokenizeRankingResponse.nextToken());
         }
 
+        String sessionId = UUID.randomUUID().toString();
+
         // Check which file name match in every token
         // save every match in database and hashmap
         tokens.forEach((token) -> {
@@ -197,6 +206,7 @@ public class OpenAiService {
                     rankingHashMap.put(fileName, researcherHashMap.get(fileName));
                     rankingResult = new RankingResult();
                     rankingResult.setResume(fileName);
+                    rankingResult.setSessionId(sessionId);
                     rankingResult.setResumeSummary(researcherHashMap.get(fileName));
                     rankingService.saveRankingResult(rankingResult);
                 }
@@ -206,7 +216,7 @@ public class OpenAiService {
 
         System.out.println(rankingHashMap);
 
-        return CompletableFuture.completedFuture(rankingHashMap);
+        return CompletableFuture.completedFuture(sessionId);
     }
 
     /*
@@ -305,7 +315,7 @@ public class OpenAiService {
             throws Exception {
         // we keep the same thread id
         rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
-        reviewerRankingThread.addMessage("assistant", rankingAgentMessage);
+        reviewerRankingThread.addMessage("system", rankingAgentMessage);
         reviewerRankingThread.run();
         String response = reviewerRankingThread.getRequest();
         return CompletableFuture.completedFuture(response);
@@ -326,7 +336,7 @@ public class OpenAiService {
                     reviewerResponse);
             CompletableFuture.allOf(extarctorResearcherCorrections).join();
 
-            extractorReasercherResult = "The response of extraxtorReasearcher after corrections is: "
+            extractorReasercherResult = "The response of extractorReasearcher after corrections is: "
                     + extarctorResearcherCorrections.get();
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(extractorReasercherResult);
             CompletableFuture.allOf(reviewerExtractorResponse).join();

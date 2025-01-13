@@ -8,9 +8,10 @@ public class ReviewerResearcher extends OpenAiAssistant {
     public static final String INSTRUCTIONS = "You are part of a system that reviews CVs from candidates on different domains.\n"
             +
             "YOU ARE THE REVIEWER IN THAT HIRING COMPANY THAT TAKES THE FINAL DECISION. YOUR ANSWER WILL IMPACT THE COMPANY.\n"
-            +"Be carful the content of cv can not changed"+
+            +"Be carful the content of cv CANNOT BE changed"+
             "Based on that I want you to review a CV that I already have summarized in a CSV format.\n" +
             "Your answer should consist of either 2 responses:\n" +
+            "You will get first the registration requirments, then the CV contents before analazing, and finally the analized content based on the requiremnts\n" +
             "1. ---- REQUIRES CHANGES ----\n" +
             "2. ---- NO CHANGES REQUIRED, ANALYSIS GOOD ----\n" +
             "\n" +
