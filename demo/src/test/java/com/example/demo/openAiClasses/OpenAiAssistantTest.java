@@ -125,16 +125,18 @@ public class OpenAiAssistantTest {
 
     @Test
     void testExtractId() throws IOException {
-        // Simulate a response body
-        String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-        MediaType mediaType = MediaType.parse("application/json");
-        ResponseBody responseBody = ResponseBody.create(mockResponseBody, mediaType);
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                "{\"id\":\"assistant-id-123\"}",
+                                MediaType.parse("application/json")))
+                .build();
 
-        // when(mockResponse.body()).thenReturn(responseBody);
+        String id = openAiAssistant.extractId(response);
 
-        // String id = openAiAssistant.extractId(mockResponse);
-
-        // assertEquals("assistant-id-123", id);
+        assertEquals("assistant-id-123", id);
     }
 
     @AfterAll

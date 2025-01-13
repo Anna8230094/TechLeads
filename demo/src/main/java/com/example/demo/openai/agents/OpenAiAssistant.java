@@ -118,10 +118,4 @@ public class OpenAiAssistant {
     public String getModel() {
         return model;
     }
-    public void setKey(String key) {
-        this.key = key;
-    }
-    public String getKey() {
-        return key;
-    }
 }
