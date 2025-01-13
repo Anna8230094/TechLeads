@@ -1,6 +1,5 @@
 package com.example.demo.databasenewtest;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +12,7 @@ import com.example.demo.database.ranking.RankingService;
 
 import static org.mockito.Mockito.*;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,23 +35,44 @@ class RankingServiceTest {
         RankingResult rankingResult = new RankingResult();
         rankingResult.setResume("resume example 1");
         rankingResult.setResumeSummary("summary example");
+        rankingResult.setSessionId("session123");
 
         // Mock the repository's save method to return the same object
         when(rankingRepository.save(rankingResult)).thenReturn(rankingResult);
 
-        // Call the service method asynchronously
-        CompletableFuture<Void> result = rankingService.saveRankingResult(rankingResult);
-
-        // Wait for the result to complete without throwing an exception
-        result.join();  // join() blocks until the async operation completes
-
-        
-        // Verify and assert results
-        assertNotNull(rankingResult); // Ensure the result is not null
-        assertEquals("resume example 1", rankingResult.getResume()); // Verify the value of 'resume'
-        assertEquals("summary example", rankingResult.getResumeSummary()); // Verify the value of 'resume summary'
+        // Call the service method
+        rankingService.saveRankingResult(rankingResult);
 
         // Verify that the repository's save method was called exactly once
         verify(rankingRepository, times(1)).save(rankingResult);
+    }
+
+    @Test
+    void testGetAllRanking() {
+        // Mock the repository's findAll method
+        when(rankingRepository.findAll()).thenReturn(List.of(
+            new RankingResult("resume1", "session123", "summary1"),
+            new RankingResult("resume2", "session456", "summary2")
+        ));
+
+        // Call the service method
+        List<RankingResult> results = rankingService.getAllranking();
+
+        // Verify and assert results
+        assertNotNull(results); // Ensure the result list is not null
+        assertEquals(2, results.size()); // Verify the number of results
+
+        // Verify details of the first result
+        assertEquals("resume1", results.get(0).getResume());
+        assertEquals("session123", results.get(0).getSessionId());
+        assertEquals("summary1", results.get(0).getResumeSummary());
+
+        // Verify details of the second result
+        assertEquals("resume2", results.get(1).getResume());
+        assertEquals("session456", results.get(1).getSessionId());
+        assertEquals("summary2", results.get(1).getResumeSummary());
+
+        // Verify that the repository's findAll method was called exactly once
+        verify(rankingRepository, times(1)).findAll();
     }
 }

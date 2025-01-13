@@ -26,22 +26,27 @@ public class ResearcherResult {
     @Column(name = "idResearcher")
     private Long idResearcher;
 
+    @Column(name = "fileName", nullable = false)
+    private String fileName;
+
     @Column(name = "resumeName", nullable = false, columnDefinition = "TEXT")
     @Lob
     private String resumeName;
 
-    @Column(name = "fileName", nullable = false)
-    private String fileName;
-    //Constructors
+    @Column(name = "sessionId", nullable = false)
+    private String sessionId;
+
+    // Constructors
 
     public ResearcherResult() {
 
     }
 
-    public ResearcherResult(String resumeName, String fileName) {
+    public ResearcherResult(String fileName, String resumeName, String sessionId) {
 
-        this.resumeName= resumeName;
         this.fileName = fileName;
+        this.resumeName = resumeName;
+        this.sessionId = sessionId;
 
     }
 
@@ -54,14 +59,6 @@ public class ResearcherResult {
         this.idResearcher = idResearcher;
     }
 
-    public String getResume() {
-        return resumeName;
-    }
-
-    public void setResume(String resumeName) {
-        this.resumeName = resumeName;
-    }
-
     public String getFileName() {
         return fileName;
     }
@@ -70,13 +67,31 @@ public class ResearcherResult {
         this.fileName = fileName;
     }
 
+    public String getResume() {
+        return resumeName;
+    }
+
+    public void setResume(String resumeName) {
+        this.resumeName = resumeName;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Override
-public String toString() {
-    return "ResearcherResult {\n" +
-           "    idResearcher = " + getIdResearcher() + ",\n" +
-           "    resumeName = '" + getResume() + "',\n" +
-           "    fileName = '" + getFileName() + "'\n" +
-           '}';
-}
+    public String toString() {
+        return "ResearcherResult {\n" +
+                "    idResearcher = " + getIdResearcher() + ",\n" +
+                "    fileName = '" + getFileName() + "'\n" +
+                "    resumeName = '" + getResume() + "',\n" +
+                "    sessionId = '" + getSessionId() + "',\n" +
+            
+                '}';
+    }
 
 }

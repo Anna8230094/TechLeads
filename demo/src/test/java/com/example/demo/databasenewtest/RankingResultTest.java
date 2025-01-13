@@ -1,7 +1,6 @@
 package com.example.demo.databasenewtest;
 
 import com.example.demo.database.ranking.RankingResult;
-import com.example.demo.database.researcher.ResearcherResult;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,10 +10,11 @@ class RankingResultTest {
     void testGettersAndSetters() {
         RankingResult rankingResult = new RankingResult();
 
-        // Test default state
+        
         assertNull(rankingResult.getIdRanking());
         assertNull(rankingResult.getResume());
         assertNull(rankingResult.getResumeSummary());
+        assertNull(rankingResult.getSessionId());
 
         // Test setters and getters
         rankingResult.setIdRanking(1L);
@@ -26,19 +26,19 @@ class RankingResultTest {
         rankingResult.setResumeSummary("summary resume example");
         assertEquals("summary resume example", rankingResult.getResumeSummary());
 
+        rankingResult.setSessionId("session123");
+        assertEquals("session123", rankingResult.getSessionId());
     }
 
     @Test
     void testParameterizedConstructor() {
-        // Create a mock ResearcherResult object
-        ResearcherResult researcherResult = new ResearcherResult();
+        // Test constructor with parameters 
+        RankingResult rankingResult = new RankingResult("resume example", "session123", "summary resume example");
 
-        // Test parameterized constructor
-        RankingResult rankingResult = new RankingResult("resume example", "summary resume example");
         assertNull(rankingResult.getIdRanking()); // ID should still be null as it's generated
         assertEquals("resume example", rankingResult.getResume());
         assertEquals("summary resume example", rankingResult.getResumeSummary());
-    
+        assertEquals("session123", rankingResult.getSessionId());
     }
 
     @Test
@@ -49,6 +49,9 @@ class RankingResultTest {
 
         rankingResult.setResumeSummary(null);
         assertNull(rankingResult.getResumeSummary());
+
+        rankingResult.setSessionId(null);
+        assertNull(rankingResult.getSessionId());
     }
 
     @Test
@@ -59,5 +62,26 @@ class RankingResultTest {
 
         rankingResult.setResumeSummary("");
         assertEquals("", rankingResult.getResumeSummary());
+
+        rankingResult.setSessionId("");
+        assertEquals("", rankingResult.getSessionId());
+    }
+
+    @Test
+    void testToString() {
+        RankingResult rankingResult = new RankingResult();
+        rankingResult.setIdRanking(1L);
+        rankingResult.setResume("resume example");
+        rankingResult.setSessionId("session123");
+        rankingResult.setResumeSummary("summary resume example");
+
+        String expected = "RankingResult {\n" +
+                "    idRanking = 1,\n" +
+                "    resumeName = 'resume example',\n" +
+                "    sessionId = 'session123',\n" +
+                "    summaryOfResume = 'summary resume example'\n" +
+                '}';
+
+        assertEquals(expected, rankingResult.toString());
     }
 }

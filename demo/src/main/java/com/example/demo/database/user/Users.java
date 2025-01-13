@@ -121,17 +121,17 @@ public class Users {
     }
 
 
-@Override
-public String toString() {
-    return "Users{idUsers=" + getIdUsers() +
-           ", name='" + getName() + "'" +
-           ", email='" + getEmail() + "'" +
-           ", field='" + getField() + "'" +
-           ", hardSkills='" + getHardSkills() + "'" +
-           ", softSkills='" + getSoftSkills() + "'" +
-           ", otherTraits='" + getOtherTraits() + "'}";
-}
-
+    @Override
+    public String toString() {
+        return "Users{idUsers=" + getIdUsers() +
+               ", name='" + getName() + "'" +
+               ", email='" + getEmail() + "'" +
+               ", field='" + getField() + "'" +
+               ", hardSkills='" + getHardSkills() + "'" +
+               ", softSkills='" + getSoftSkills() + "'" +
+               ", otherTraits='" + getOtherTraits() + "'}";
+    }
+    
 
 
 }

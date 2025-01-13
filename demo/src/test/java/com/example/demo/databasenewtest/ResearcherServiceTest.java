@@ -10,52 +10,66 @@ import com.example.demo.database.researcher.ResearcherRepository;
 import com.example.demo.database.researcher.ResearcherResult;
 import com.example.demo.database.researcher.ResearcherService;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
 
 class ResearcherServiceTest {
 
     @Mock
-    private ResearcherRepository researcherRepository; // Mocking the repository
+    private ResearcherRepository researcherRepository; 
 
     @InjectMocks
-    private ResearcherService researcherService; // Injecting the mocked repository into the service
-
+    private ResearcherService researcherService; 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks before each test
+        MockitoAnnotations.openMocks(this); 
     }
 
     @Test
     void testSaveResearcherResult() {
         // Create a new ResearcherResult instance
-        ResearcherResult researcherResult = new ResearcherResult();
-        researcherResult.setResume("resume example 1");
-        researcherResult.setFileName("cv.pdf");
+        ResearcherResult researcherResult = new ResearcherResult("cv.pdf", "resume example 1", "session123");
 
         // Mock the repository's save method to return the same object
         when(researcherRepository.save(researcherResult)).thenReturn(researcherResult);
 
-        // Call the service method asynchronously
-        CompletableFuture<Void> result = researcherService.saveResearcherResult(researcherResult);
-
-        // Wait for the result to complete without throwing an exception
-        result.join();  // join() blocks until the async operation completes
-
-        // Verify and assert results
-        assertNotNull(researcherResult); // Ensure the result is not null
-        assertEquals("resume example 1", researcherResult.getResume()); // Verify the value of 'resume'
-        assertEquals("cv.pdf", researcherResult.getFileName()); // Verify the value of 'resume summary'
-
-
-
+        // Call the service method
+        researcherService.saveResearcherResult(researcherResult);
 
         // Verify that the repository's save method was called exactly once
         verify(researcherRepository, times(1)).save(researcherResult);
+
+        // Assert the variables of ResearcherResult
+        assertNotNull(researcherResult);
+        assertEquals("resume example 1", researcherResult.getResume());
+        assertEquals("cv.pdf", researcherResult.getFileName());
+        assertEquals("session123", researcherResult.getSessionId());
     }
 
+    @Test
+    void testGetAllResearcher() {
+        // Create mock data
+        ResearcherResult researcherResult1 = new ResearcherResult("cv1.pdf", "resume1", "session123");
+        ResearcherResult researcherResult2 = new ResearcherResult("cv2.pdf", "resume2", "session123");
+
+        List<ResearcherResult> mockResults = List.of(researcherResult1, researcherResult2);
+
+        // Mock the repository method
+        when(researcherRepository.findBySessionId("session123")).thenReturn(mockResults);
+
+        // Call the service method
+        List<ResearcherResult> results = researcherService.getAllresearcher("session123");
+
+        // Verify the repository call and assert results
+        verify(researcherRepository, times(1)).findBySessionId("session123");
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertEquals("resume1", results.get(0).getResume());
+        assertEquals("resume2", results.get(1).getResume());
+    }
+
+   
 }
