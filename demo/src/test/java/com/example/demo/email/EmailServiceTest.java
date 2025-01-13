@@ -51,9 +51,11 @@ class EmailServiceTest {
         String subject = "Valid Subject";
         String text = "Valid Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
+
 
         // Act
-        emailService.sendEmail(to, subject, text, user);
+        emailService.sendResultEmail(to, subject, text, user, sessionId);
 
         // Verify
         verify(javaMailSender, times(1)).createMimeMessage();
@@ -67,9 +69,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(invalidEmail, subject, text, user).join();
+            emailService.sendResultEmail(invalidEmail, subject, text, user, sessionId).join();
         });
         assertEquals("java.lang.IllegalArgumentException: Invalid email address: invalid-email", exception.getMessage());
     }
@@ -80,9 +83,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(null, subject, text, user).join();
+            emailService.sendResultEmail(null, subject, text, user, sessionId).join();
         });
         assertEquals("java.lang.IllegalArgumentException: Invalid email address: null", exception.getMessage());
     }
@@ -93,9 +97,11 @@ class EmailServiceTest {
         String to = "test@example.com";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
+
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(to, "", text, user).join();
+            emailService.sendResultEmail(to, "", text, user, sessionId).join();
         });
         assertEquals("java.lang.IllegalArgumentException: Subject cannot be null or empty", exception.getMessage());
     }
@@ -106,9 +112,11 @@ class EmailServiceTest {
         String to = "test@example.com";
         String subject = "Test Subject";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
+
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(to, subject, null, user).join();
+            emailService.sendResultEmail(to, subject, null, user, sessionId).join();
         });
         assertEquals("java.lang.IllegalArgumentException: Text cannot be null or empty", exception.getMessage());
     }
@@ -128,9 +136,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(to, subject, text, user).join();
+            emailService.sendResultEmail(to, subject, text, user, sessionId).join();
         });
 
         assertEquals("org.springframework.mail.MailAuthenticationException: Invalid credentials", exception.getMessage());
@@ -152,9 +161,11 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
+
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(to, subject, text, user).join();
+            emailService.sendResultEmail(to, subject, text, user, sessionId).join();
         });
 
         assertEquals("org.springframework.mail.MailSendException: SMTP server not reachable", exception.getMessage());
@@ -176,9 +187,10 @@ class EmailServiceTest {
         String subject = "Test Subject";
         String text = "Test Body";
         String user ="anna";
+        String sessionId = "bee0d3ee-49e5-4891-92e8-33d65bafe2ac";
 
         Exception exception = assertThrows(CompletionException.class, () -> {
-            emailService.sendEmail(to, subject, text, user).join();
+            emailService.sendResultEmail(to, subject, text, user, sessionId).join();
         });
 
         assertEquals("org.springframework.mail.MailParseException: Invalid email content", exception.getMessage());

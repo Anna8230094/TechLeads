@@ -124,6 +124,7 @@ public class OpenAiService {
             CompletableFuture.allOf(extractorResearcherResponse).join();
             System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
             String extractorResearcher = extractorResearcherResponse.get();
+            
 
             // step 4:Create reviewer reasearcher
             String messageResearcherReviewer = "The requiremnts are:\n" + registerResponse.get()
