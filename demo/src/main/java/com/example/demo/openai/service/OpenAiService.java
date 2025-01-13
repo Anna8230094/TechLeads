@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
@@ -136,7 +137,7 @@ public class OpenAiService {
             String reviewerResponse = reviewerExtractorResponse.get();
 
             // check if the extractorresearcher gave the willing results
-            if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+            if (false && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
                 extractorResearcherResponse = checkReviewerResearcherResult(extractorResearcher,
                         reviewerResponse);
             }
@@ -180,7 +181,7 @@ public class OpenAiService {
         String responseOfReviewerRanking = reviewerRankingResponse.get();
 
         // Check if the ReviewerRanking gave the willing results
-        if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+        if (false && !responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
             rankingResponse = checkRankingReviewerResult(rankingresponse,
                     responseOfReviewerRanking);
 
@@ -302,8 +303,8 @@ public class OpenAiService {
             throws Exception {
         // we keep the same thread id
         extractorResearcherMessage = "The reviewer suggest corrections" + extractorResearcherMessage;
-        extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage);
-        extractorResearcherOpenAiThread.run();
+        extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage).join();
+        extractorResearcherOpenAiThread.run().join();
         String response = extractorResearcherOpenAiThread.getRequest();
         return CompletableFuture.completedFuture(response);
     }
@@ -315,8 +316,8 @@ public class OpenAiService {
             throws Exception {
         // we keep the same thread id
         rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
-        reviewerRankingThread.addMessage("system", rankingAgentMessage);
-        reviewerRankingThread.run();
+        reviewerRankingThread.addMessage("assistant", rankingAgentMessage).join();
+        reviewerRankingThread.run().join();
         String response = reviewerRankingThread.getRequest();
         return CompletableFuture.completedFuture(response);
 

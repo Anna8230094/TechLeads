@@ -101,11 +101,13 @@ public class OpenAiThread {
             return CompletableFuture.completedFuture(response.body().string());
         } else {
             System.err.println("Failed to add message ");
+            System.err.println(response.body().string());
             throw new Error();
         }
 
     }
 
+    @Async
     public CompletableFuture<String> run() throws IOException {
 
         JSONObject jsonObject = new JSONObject()
@@ -156,6 +158,7 @@ public class OpenAiThread {
 
         } else {
             System.out.println("Failed to get the result");
+            System.out.println(response.body().string());
             throw new IOException();
         }
 
