@@ -122,16 +122,18 @@ public class Users {
 
 
     @Override
-    public String toString() {
-        return "Users{idUsers=" + getIdUsers() +
-               ", name='" + getName() + "'" +
-               ", email='" + getEmail() + "'" +
-               ", field='" + getField() + "'" +
-               ", hardSkills='" + getHardSkills() + "'" +
-               ", softSkills='" + getSoftSkills() + "'" +
-               ", otherTraits='" + getOtherTraits() + "'}";
-    }
-    
+public String toString() {
+    return "Users {\n" +
+            "    idUsers = " + idUsers + ",\n" +
+            "    name = '" + name + "',\n" +
+            "    email = '" + email + "',\n" +
+            "    field = '" + field + "',\n" +
+            "    hardSkills = '" + hardSkills + "',\n" +
+            "    softSkills = '" + softSkills + "',\n" +
+            "    otherTraits = '" + otherTraits + "'\n" +
+            "}";
+}
+
 
 
 }
