@@ -274,8 +274,9 @@ public class OpenAiService {
         CompletableFuture.allOf(runThread).join();
 
         // Step 6: Get Response
-        String response = thread.getRequest();
-        return CompletableFuture.completedFuture(response);
+        CompletableFuture<String> response =thread.getRequest();
+        CompletableFuture.allOf(response).join();
+        return CompletableFuture.completedFuture(response.get());
     }
 
     @Async
@@ -327,8 +328,9 @@ public class OpenAiService {
         extractorResearcherMessage = "The reviewer suggest corrections" + extractorResearcherMessage;
         extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage).join();
         extractorResearcherOpenAiThread.run().join();
-        String response = extractorResearcherOpenAiThread.getRequest();
-        return CompletableFuture.completedFuture(response);
+        CompletableFuture<String> response =extractorResearcherOpenAiThread.getRequest();
+        CompletableFuture.allOf(response).join();
+        return CompletableFuture.completedFuture(response.get());
     }
 
     // We need the assistant to give instruction to another assistant in order to
@@ -340,8 +342,9 @@ public class OpenAiService {
         rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
         reviewerRankingThread.addMessage("assistant", rankingAgentMessage).join();
         reviewerRankingThread.run().join();
-        String response = reviewerRankingThread.getRequest();
-        return CompletableFuture.completedFuture(response);
+        CompletableFuture<String> response =rankingAgentThread.getRequest();
+        CompletableFuture.allOf(response).join();
+        return CompletableFuture.completedFuture(response.get());
 
     }
 

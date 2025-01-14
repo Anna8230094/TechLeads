@@ -161,6 +161,8 @@ public class OpenAiAssistantTest {
         assertEquals("assistant-id-123", id);
     }
 
+    
+
     @AfterAll
     void deleteAssistant() throws IOException {
         OkHttpClient client = new OkHttpClient();
@@ -177,5 +179,6 @@ public class OpenAiAssistantTest {
         if (!response.isSuccessful())
             System.out.println("The delete of assistant is unable");
     }
+
 
 }

@@ -41,6 +41,7 @@ import okhttp3.Response;
 
 /**
  * This class represents my class in Java.
+ * 
  * @author Anna Maria Megalou
  * @version 1.0
  */
@@ -55,7 +56,6 @@ public class OpenAiThread {
     private String key;
 
     protected String assistantId;
-    private String runId;
 
     // send request to assistant API
     public Response sendRequest(String jsonRequest, String url) throws IOException {
@@ -89,7 +89,7 @@ public class OpenAiThread {
     }
 
     @Async
-    public  CompletableFuture<String> createThread( String instructions, String assistantId) throws IOException {
+    public CompletableFuture<String> createThread(String instructions, String assistantId) throws IOException {
         this.instructions = instructions;
         this.assistantId = assistantId;
 
@@ -108,7 +108,7 @@ public class OpenAiThread {
 
     // Adding message to the assistant
     @Async
-    public CompletableFuture<String> addMessage(String role, String message ) throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message) throws IOException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("role", role)
@@ -152,7 +152,26 @@ public class OpenAiThread {
     }
 
     // get Answer from assistant
-    public String getRequest() throws IOException {
+    @Async
+    public CompletableFuture<String> getRequest() throws IOException {
+
+        Response response = getrequest();
+        if (response.isSuccessful() && response.body() != null) {
+            String responseBody = response.body().string();
+            JSONObject jsonResponse = new JSONObject(responseBody);
+            String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
+                    .getJSONArray("content").getJSONObject(0).getJSONObject("text")
+                    .getString("value");
+            return CompletableFuture.completedFuture(assistantsResult);
+
+        } else {
+            System.out.println("Failed to get the result");
+            System.err.println(response.body().string());
+            throw new Error();
+        }
+    }
+
+    public Response getrequest() throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -168,23 +187,7 @@ public class OpenAiThread {
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
-        Response response = client.newCall(request).execute();
-
-        if (response.isSuccessful() && response.body() != null) {
-            String responseBody = response.body().string();
-            JSONObject jsonResponse = new JSONObject(responseBody);
-
-            String assistantsResult = jsonResponse.getJSONArray("data").getJSONObject(0)
-                    .getJSONArray("content").getJSONObject(0).getJSONObject("text")
-                    .getString("value");
-            return assistantsResult;
-
-        } else {
-            System.out.println("Failed to get the result");
-            System.out.println(response.body().string());
-            throw new IOException();
-        }
-
+        return client.newCall(request).execute();
     }
 
     // some getters and setters for private fields
@@ -203,14 +206,6 @@ public class OpenAiThread {
 
     public String getKey() {
         return key;
-    }
-
-    public void setRunId(String runId) {
-        this.runId = runId;
-    }
-
-    public String getRunId() {
-        return runId;
     }
 
     public String getAssistantId() {

@@ -1,4 +1,5 @@
 package com.example.demo.openaiclasses;
+
 /*
  * Copyright [2024-2025] [TechLeads]
  *
@@ -22,99 +23,196 @@ package com.example.demo.openaiclasses;
  * See the applicable licenses for the specific language governing permissions and
  * limitations under those licenses.
  */
-// package com.example.demo.openAiClasses;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-// import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
 
-// import java.io.IOException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
-// import org.junit.jupiter.api.AfterAll;
-// import org.junit.jupiter.api.BeforeAll;
-// import org.junit.jupiter.api.Test;
+import com.example.demo.openai.agents.OpenAiAssistant;
+import com.example.demo.openai.threads.OpenAiThread;
 
-// import com.example.demo.openai.agents.OpenAiAssistant;
-// import com.example.demo.openai.threads.OpenAiThread;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
-// import okhttp3.OkHttpClient;
-// import okhttp3.Request;
-// import okhttp3.Response;
+@ExtendWith(SpringExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
+public class OpenAiThreadTest {
 
-// public class OpenAiThreadTest {
+    @Spy
+    @InjectMocks
+    private OpenAiThread openAiThread;
 
-//     private static  OpenAiThread openAiThread;
-//     private static  OpenAiAssistant openAiAssistant;
-//     String assistantId;
+    @Spy
+    @InjectMocks
+    private OpenAiAssistant openAiAssistant;
+
+    public static final String INSTRUCTIONS = "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)";
+    public static final String AssistantId = "assistant-id-123";
+    public static final String MODEL = "gpt-4o-mini";
+    public static final String NAME = "Register";
+   
+
+    @BeforeAll
+    void setUp() throws IOException {
+        ReflectionTestUtils.setField(openAiThread, "instructions", INSTRUCTIONS);
+        ReflectionTestUtils.setField(openAiThread, "assistantId", AssistantId);
+        ReflectionTestUtils.setField(openAiAssistant, "instructions", INSTRUCTIONS);
+        ReflectionTestUtils.setField(openAiAssistant, "name", NAME);
+        ReflectionTestUtils.setField(openAiAssistant, "model", MODEL);
+        ReflectionTestUtils.setField(openAiAssistant, "assistantId","assistant-id-123" );
+        ReflectionTestUtils.setField(openAiThread, "threadId","thread-id-123" );
+
+    }
+
+    private static void mockHttpClient(OpenAiThread runtimeClass, final String serializedBody) throws IOException {
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                serializedBody,
+                                MediaType.parse("application/json")))
+                .build();
+        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+    }
+
+    private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                serializedBody,
+                                MediaType.parse("application/json")))
+                .build();
+        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+    }
+
+    // private static void mockHttpClientget(OpenAiThread runtimeClass, final String serializedBody) throws IOException {
+    //     Response response = new Response.Builder()
+    //             .request(new Request.Builder().url("http://url.com").build())
+    //             .protocol(Protocol.HTTP_1_1)
+    //             .code(200).message("").body(
+    //                     ResponseBody.create(
+    //                             serializedBody,
+    //                             MediaType.parse("application/json")))
+    //             .build();
+    //     doReturn(response).when(runtimeClass).getrequest();
+    // }
+    @Test
+    void loadKeyTest() {
+        assertNotNull(openAiAssistant.loadKey(), "The key must not be null");
+    }
+
+     @Test
+    void testSendRequest_Success() throws IOException {
+        String url = "https://api.openai.com/v1/threads";
+        mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
+        Response response = openAiThread.sendRequest("{\"id\": \"assistant-id-123\"}", url);
+        assertNotNull(response);
+    }
+
+    @Test
+    void buildThreadTest() throws IOException {
+        mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
+
+        assertNotNull(openAiThread.createThread("You are a german translator", "assistant-id-123"),
+                "Thread ID should not be null after creation.");
+        System.out.println("Thread created successfully. ID: " + openAiThread.getThreadId());
+    }
+
+    @Test
+    void testAddMessage() throws IOException {
+        mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
+        openAiThread.getThreadId();
+        assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
+
+        openAiThread.addMessage("user", "Tell me hi in german");
+        System.out.println("Message added successfully to thread ID: " + openAiThread.getThreadId());
+    }
+
+    @Test
+    void testRun() throws IOException {
+
+        mockHttpClient(openAiThread, "{\"id\": \"thread-id-123\"}");
+        mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
+        
+        assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
+        assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
+
+        openAiThread.addMessage("user", "Tell me hi in german");
+
+        openAiThread.run();
+        System.out.println("Run method executed successfully for thread ID: " + openAiThread.getThreadId());
+    }
+
+    @Test
+    void testExtractId() throws IOException {
+        Response response = new Response.Builder()
+                .request(new Request.Builder().url("http://url.com").build())
+                .protocol(Protocol.HTTP_1_1)
+                .code(200).message("").body(
+                        ResponseBody.create(
+                                "{\"id\":\"assistant-id-123\"}",
+                                MediaType.parse("application/json")))
+                .build();
+
+        String id = openAiAssistant.extractId(response);
+
+        assertEquals("assistant-id-123", id);
+    }
+    // @Test
+    // void testGetRequest() throws IOException {
+
+    //     mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
+    //     mockHttpClient(openAiThread, "{\"id\": \"thread-id-123\"}");
+
+    //     assertNotNull(openAiAssistant.getAssistantId());
+    //     assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
 
-//     @BeforeAll
-//     void setUp() throws IOException {
-//         openAiAssistant = new OpenAiAssistant();
-//         assistantId = openAiAssistant.getAssistantId();
-//         openAiThread = new OpenAiThread();
-//     }
+    //     openAiThread.addMessage("user", "Tell me hi in german").join();
+    //     openAiThread.run().join();
+    //     mockHttpClientget(openAiThread, "{\"id\": \"thread-id-123\"}");
 
-//     @Test
-//     void loadKeyTest() {
-//         String apiKey = openAiThread.getKey();
-//         assertNotNull(apiKey, "API Key should be loaded and not null.");
-//     }
+    //     openAiThread.getRequest();
 
-//     @Test
-//     void buildThreadTest() throws IOException {
-//         assertNotNull(openAiThread.createThread( "You are a german translator", assistantId), "Thread ID should not be null after creation.");
-//         System.out.println("Thread created successfully. ID: " + openAiThread.getThreadId());
-//     }
+    // }
 
-//     @Test
-//     void testAddMessage() throws IOException {
-//         openAiThread.getThreadId();
-//         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
+    @AfterAll
+    void deleteAssistants() throws IOException {
+        OkHttpClient client = new OkHttpClient();
 
-//         openAiThread.addMessage("user", "Tell me hi in german");
-//         System.out.println("Message added successfully to thread ID: " + openAiThread.getThreadId());
-//     }
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/assistants/" + openAiAssistant.getAssistantId())
+                .delete()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + openAiAssistant.loadKey())
+                .addHeader("OpenAI-Beta", "assistants=v2")
+                .build();
 
-//     @Test
-//     void testRun() throws IOException {
-    
-//         assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
-//         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful())
+            System.out.println("The delete of assistant is unable");
+    }
 
-//         openAiThread.addMessage("user", "Tell me hi in german");
-
-//         openAiThread.run();
-//         System.out.println("Run method executed successfully for thread ID: " + openAiThread.getThreadId());
-//     }
-
-//     @Test
-//     void testGetRequest() throws IOException {
-    
-//         assertNotNull(openAiAssistant.getAssistantId());
-//         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
-
-//         openAiThread.addMessage("user", "Tell me hi in german");
-//         openAiThread.run();
-
-//         openAiThread.getRequest();
-//         System.out.println("getRequest method executed successfully for thread ID: " + openAiThread.getThreadId());
-
-//     }
-
-//     @AfterAll
-//     static void deleteAssistants() throws IOException{
-//          OkHttpClient client = new OkHttpClient();
-
-//         Request request = new Request.Builder()
-//                 .url("https://api.openai.com/v1/assistants/" + openAiAssistant.getAssistantId())
-//                 .delete()
-//                 .addHeader("Content-Type", "application/json")
-//                 .addHeader("Authorization", "Bearer " + openAiAssistant.loadKey())
-//                 .addHeader("OpenAI-Beta", "assistants=v2")
-//                 .build();
-                
-//         Response response = client.newCall(request).execute();
-//         if (!response.isSuccessful())
-//             System.out.println("The delete of assistant is unable");
-//     }
-
-// }
+}
