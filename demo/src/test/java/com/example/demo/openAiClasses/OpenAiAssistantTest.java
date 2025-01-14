@@ -1,4 +1,4 @@
-package com.example.demo.openAiClasses;
+package com.example.demo.openaiclasses;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
