@@ -1,4 +1,4 @@
-package com.example.demo.databasenewtest;
+package com.example.demo.databasetest.userstest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
