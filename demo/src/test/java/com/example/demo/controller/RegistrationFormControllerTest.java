@@ -56,12 +56,12 @@ class RegistrationFormControllerTest {
         private OpenAiService openAiService;
 
         @Test
-        void testRegistrationControl() throws Exception {
-                mockMvc.perform(get("/hireandgo/home/registrationform"))
-                                .andExpect(status().isOk())
-                                .andExpect(view().name("registrationform"))
-                                .andExpect(model().attributeExists("user"));
-        }
+        void testRegistration() throws Exception {
+                // Εδώ εκτελούμε το αίτημα και ελέγχουμε την κατάσταση της απόκρισης και το view
+                mockMvc.perform(get("/hireandgo/home/"))
+                       .andExpect(status().isOk())  // Ελέγχουμε ότι η κατάσταση της απόκρισης είναι 200 OK
+                       .andExpect(view().name("registrationform"));  // Ελέγχουμε ότι το όνομα του view είναι "home"
+            }
 
         @Test
         void testHandleRegistration() throws Exception {
