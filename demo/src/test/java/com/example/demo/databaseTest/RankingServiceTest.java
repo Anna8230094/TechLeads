@@ -1,4 +1,4 @@
-package com.example.demo.databasenewtest;
+package com.example.demo.databaseTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,10 +50,16 @@ class RankingServiceTest {
     @Test
     void testGetAllRanking() {
         // Mock the repository's findAll method
+        RankingResult rankingResult1 = new RankingResult("resume1",  "summary1");
+        RankingResult rankingResult2 = new RankingResult("resume2","summary2");
+        rankingResult1.setSessionId("session123");
+        rankingResult2.setSessionId("session456");
+
         when(rankingRepository.findAll()).thenReturn(List.of(
-            new RankingResult("resume1",  "summary1"),
-            new RankingResult("resume2","summary2")
+            rankingResult1,rankingResult2
+        
         ));
+
 
         // Call the service method
         List<RankingResult> results = rankingService.getAllranking();
