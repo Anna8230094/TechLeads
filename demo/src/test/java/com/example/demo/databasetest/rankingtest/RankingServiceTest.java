@@ -1,4 +1,4 @@
-package com.example.demo.databaseTest;
+package com.example.demo.databasetest.rankingtest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

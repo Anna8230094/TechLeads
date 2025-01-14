@@ -1,4 +1,4 @@
-package com.example.demo.databaseTest;
+package com.example.demo.databasetest.rankingtest;
 
 import com.example.demo.database.ranking.RankingResult;
 import org.junit.jupiter.api.Test;
