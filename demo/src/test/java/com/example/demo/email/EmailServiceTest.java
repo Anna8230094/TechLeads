@@ -26,6 +26,12 @@ import com.example.demo.mail.EmailService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+/**
+ * This class represents my class in Java.
+ * 
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 
 class EmailServiceTest {
 
