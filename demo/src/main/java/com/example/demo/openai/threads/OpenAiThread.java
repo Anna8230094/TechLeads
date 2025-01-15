@@ -108,7 +108,7 @@ public class OpenAiThread {
 
     // Adding message to the assistant
     @Async
-    public CompletableFuture<String> addMessage(String role, String message) throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message, String thread) throws IOException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("role", role)
@@ -117,7 +117,7 @@ public class OpenAiThread {
         String jsonRequest = jsonObject.toString();
 
         Response response = sendRequest(jsonRequest,
-                "https://api.openai.com/v1/threads/" + getThreadId() + "/messages");
+                "https://api.openai.com/v1/threads/" + thread + "/messages");
 
         if (response.isSuccessful() && response.body() != null) {
             System.out.println("Message add message successfully.");

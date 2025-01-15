@@ -107,6 +107,9 @@ public class OpenAiService {
 
     RankingResult rankingResult;
 
+    String extractorResearcherThread = "";
+    String rankingThread = "";
+
     HashMap<String, String> researcherHashMap;
     HashMap<String, String> rankingHashMap;
 
@@ -147,7 +150,6 @@ public class OpenAiService {
             CompletableFuture.allOf(extractorResearcherResponse).join();
             System.out.println("ExtractorResearcher response is :" + extractorResearcherResponse.get());
             String extractorResearcher = extractorResearcherResponse.get();
-            
 
             // step 4:Create reviewer reasearcher
             String messageResearcherReviewer = "The requiremnts are:\n" + registerResponse.get()
@@ -159,12 +161,15 @@ public class OpenAiService {
             String reviewerResponse = reviewerExtractorResponse.get();
 
             // check if the extractorresearcher gave the willing results
-            if (false && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
-                extractorResearcherResponse = checkReviewerResearcherResult(extractorResearcher,
+            if (!reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+                CompletableFuture<String> correctExtractor = checkReviewerResearcherResult(extractorResearcher,
                         reviewerResponse);
+                CompletableFuture.allOf(correctExtractor).join();
+                extractorResearcher = correctExtractor.get();
+
             }
             researcherResult = new ResearcherResult();
-            researcherResult.setResume(extractorResearcherResponse.get());
+            researcherResult.setResume(extractorResearcher);
             researcherResult.setFileName(file);
             researcherResult.setSessionId(requestSessionId);
             researcherService.saveResearcherResult(researcherResult);
@@ -203,10 +208,10 @@ public class OpenAiService {
         String responseOfReviewerRanking = reviewerRankingResponse.get();
 
         // Check if the ReviewerRanking gave the willing results
-        if (false && !responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
+        if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
             rankingResponse = checkRankingReviewerResult(rankingresponse,
                     responseOfReviewerRanking);
-
+          
         }
 
         // We split the answer of ranking in tokens
@@ -257,6 +262,11 @@ public class OpenAiService {
         // Step 2: Create Thread
         CompletableFuture<String> createThread = thread.createThread(instructions, assistant.getAssistantId());
         CompletableFuture.allOf(createThread).join();
+        if (assistant instanceof ExtractorResearcher) {
+            extractorResearcherThread = createThread.get();
+        } else if (assistant instanceof RankingAgent) {
+            rankingThread = createThread.get();
+        }
 
         // Step 3: Optional File Upload
         // the upload file must have an argument with the cv path or file
@@ -266,7 +276,7 @@ public class OpenAiService {
         }
 
         // Step 4: Add Message
-        CompletableFuture<String> addMessage = thread.addMessage("user", message);
+        CompletableFuture<String> addMessage = thread.addMessage("user", message, createThread.get());
         CompletableFuture.allOf(addMessage).join();
 
         // Step 5: Run Thread
@@ -274,7 +284,7 @@ public class OpenAiService {
         CompletableFuture.allOf(runThread).join();
 
         // Step 6: Get Response
-        CompletableFuture<String> response =thread.getRequest();
+        CompletableFuture<String> response = thread.getRequest();
         CompletableFuture.allOf(response).join();
         return CompletableFuture.completedFuture(response.get());
     }
@@ -322,13 +332,17 @@ public class OpenAiService {
     // We need the assistant to give instruction to another assistant in order to
     // get a more efficient response
     @Async
-    public CompletableFuture<String> correctExtracrorResearcherResponse(String extractorResearcherMessage)
+    public CompletableFuture<String> correctExtracrorResearcherResponse(String extractorResearcherMessage,
+            String reviewer)
             throws Exception {
         // we keep the same thread id
-        extractorResearcherMessage = "The reviewer suggest corrections" + extractorResearcherMessage;
-        extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage).join();
-        extractorResearcherOpenAiThread.run().join();
-        CompletableFuture<String> response =extractorResearcherOpenAiThread.getRequest();
+        extractorResearcherMessage = "The reviewer suggest corrections :" + reviewer
+                + "in the response of extractor agent which match the cv's in the job position"
+                + extractorResearcherMessage + "I want to you  to review  again the CV and the csv of job position  based on the suggesting corrections of reviewer agent and return to me the correct a summary of applicant in a CSV format.  ";
+        CompletableFuture.allOf(extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage, extractorResearcherThread))
+                .join();
+        CompletableFuture.allOf(extractorResearcherOpenAiThread.run()).join();
+        CompletableFuture<String> response = extractorResearcherOpenAiThread.getRequest();
         CompletableFuture.allOf(response).join();
         return CompletableFuture.completedFuture(response.get());
     }
@@ -340,9 +354,9 @@ public class OpenAiService {
             throws Exception {
         // we keep the same thread id
         rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
-        reviewerRankingThread.addMessage("assistant", rankingAgentMessage).join();
-        reviewerRankingThread.run().join();
-        CompletableFuture<String> response =rankingAgentThread.getRequest();
+        CompletableFuture.allOf(reviewerRankingThread.addMessage("assistant", rankingAgentMessage, rankingThread)).join();
+        CompletableFuture.allOf(reviewerRankingThread.run()).join();
+        CompletableFuture<String> response = rankingAgentThread.getRequest();
         CompletableFuture.allOf(response).join();
         return CompletableFuture.completedFuture(response.get());
 
@@ -359,11 +373,13 @@ public class OpenAiService {
         do {
             System.out.println("THE REVIEWER SUGGEST CORRECTIONS");
             CompletableFuture<String> extarctorResearcherCorrections = correctExtracrorResearcherResponse(
+                    extractorReasercherResult,
                     reviewerResponse);
             CompletableFuture.allOf(extarctorResearcherCorrections).join();
 
             extractorReasercherResult = "The response of extractorReasearcher after corrections is: "
                     + extarctorResearcherCorrections.get();
+                System.out.println(extractorReasercherResult);
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(extractorReasercherResult);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
 
@@ -371,7 +387,7 @@ public class OpenAiService {
             finalResponse = extarctorResearcherCorrections.get();
             count++;
             System.out.println(reviewerResponse.toString());
-        } while (count < 3 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
 
         return CompletableFuture.completedFuture(finalResponse);
     }
@@ -398,7 +414,7 @@ public class OpenAiService {
             count++;
             System.out.println(reviewerResponse.toString());
 
-        } while (count < 3 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
+        } while (count < 1 && !reviewerResponse.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----"));
         return CompletableFuture.completedFuture(finalResponse);
 
     }
