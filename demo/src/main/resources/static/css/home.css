@@ -61,7 +61,7 @@ header {
 
 .navbar nav li a{
   text-decoration: none;
-  color: rgb(32, 182, 9) ;
+  color:  rgb(76, 108, 163);
   font-size: 1.3rem;
   padding: 0.7rem 0.6rem;
   border-radius: 6px;
@@ -74,7 +74,7 @@ header {
 }
 
 .navbar nav li .active {
-  background-color: #5366b6;
+  background-color:#172d5c;
 }
 
 .content{

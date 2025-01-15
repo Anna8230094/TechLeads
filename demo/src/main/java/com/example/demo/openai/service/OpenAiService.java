@@ -48,6 +48,7 @@ import com.example.demo.openai.agents.RankingAgent;
 import com.example.demo.openai.agents.Register;
 import com.example.demo.openai.agents.ReviewerRanking;
 import com.example.demo.openai.agents.ReviewerResearcher;
+import com.example.demo.openai.agents.SummaryAgent;
 import com.example.demo.openai.threads.ExtractorThread;
 import com.example.demo.openai.threads.OpenAiThread;
 
@@ -74,6 +75,8 @@ public class OpenAiService {
     public ReviewerRanking reviewerRanking;
     @Autowired
     public RankingAgent rankingAgent;
+    @Autowired
+    public SummaryAgent summaryAgent;
 
     @Autowired
     @Qualifier(value = "OpenAiThread")
@@ -93,6 +96,9 @@ public class OpenAiService {
     @Autowired
     @Qualifier(value = "OpenAiThread")
     public OpenAiThread rankingAgentThread;
+    @Autowired
+    @Qualifier(value = "OpenAiThread")
+    public OpenAiThread summaryThread;
 
     @Autowired
     UsersService usersService;
@@ -168,8 +174,14 @@ public class OpenAiService {
                 extractorResearcher = correctExtractor.get();
 
             }
+            String summaryMessage = "The csv that i want to extract summary in text based in suitability of applicant for the specific job position is :" + extractorResearcher+"I dont want the summary in csv format but want to return a small text(paragraph)";
+            CompletableFuture<String> summary =  summaryResponse(summaryMessage);
+            CompletableFuture.allOf(summary).join();
+            System.out.println(summary.get());
+
+
             researcherResult = new ResearcherResult();
-            researcherResult.setResume(extractorResearcher);
+            researcherResult.setResume(summary.get());
             researcherResult.setFileName(file);
             researcherResult.setSessionId(requestSessionId);
             researcherService.saveResearcherResult(researcherResult);
@@ -276,7 +288,7 @@ public class OpenAiService {
         }
 
         // Step 4: Add Message
-        CompletableFuture<String> addMessage = thread.addMessage("user", message, createThread.get());
+        CompletableFuture<String> addMessage = thread.addMessage("user", message, thread.getThreadId() );
         CompletableFuture.allOf(addMessage).join();
 
         // Step 5: Run Thread
@@ -312,6 +324,11 @@ public class OpenAiService {
     public CompletableFuture<String> reviewerExtractorResponse(String reviewerMessage) throws Exception {
         return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher,
                 reviewerResearcherThread, false, null, null);
+    }
+    @Async
+    public CompletableFuture<String> summaryResponse(String summaryMessage) throws Exception {
+        return processRequest(summaryMessage, SummaryAgent.INSTRUCTIONS, summaryAgent,
+                summaryThread, false, null, null);
     }
 
     @Async
