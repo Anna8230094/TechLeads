@@ -16,7 +16,19 @@ The process of using the application is as follows:
 
 ## Workflow Illustration
 
-Provide images showcasing the program's functionality.
+The following images will illustrate the workflow or the prodject
+
+![Our Home page](./src/main/resources/static/readme-images/Home1.png)
+![Our Services](./src/main/resources/static/readme-images/Home2.png)
+![About us](./src/main/resources/static/readme-images/Home3.png)
+![Contact us information](./src/main/resources/static/readme-images/Home4.png)
+![Steps to fill out the Registration Form](./src/main/resources/static/readme-images/Reg1.png)
+![Steps to Fill Out the Registration Form](./src/main/resources/static/readme-images/Reg2.png)
+![Dragging all the Files at once](./src/main/resources/static/readme-images/Reg3.png)
+![Registration Successful](./src/main/resources/static/readme-images/RegSuccess.png)
+![Email with Link Sent to your Inbox](./src/main/resources/static/readme-images/Email.png)
+![The Ranked Candidates](./src/main/resources/static/readme-images/RankedCandidates.png)
+
 
 ---
 
@@ -25,6 +37,7 @@ Provide images showcasing the program's functionality.
 ### Prerequisites
 - **Java Development Kit (JDK)** version 17 or higher  
 - **Apache Maven**
+- **PostgreSQL**
 
 ### Compilation Steps
 1. Check Maven installation:  
@@ -49,11 +62,15 @@ Provide images showcasing the program's functionality.
    ```bash
    java -jar target/<file-name>.jar
 
+---
+
 ## Execution Instructions 
 
 1. To run the program:
    ```bash
    mvn spring-boot:run
+
+---
 
 ## User Guide
 
@@ -61,7 +78,7 @@ Provide images showcasing the program's functionality.
    ```bash
    git clone https://github.com/Anna8230094/TechLeads.git
 2. Set Up env.properties: Create an env.properties file based on the env.properties.example file. Populate the required fields in the resources/templates directory, including:
-    - **Database connection details**
+   - **Database connection details**
    - **OpenAI key**
    - **User's email address**
 3. Install PostgreSQL: Ensure that PostgreSQL is installed on your system before running the application.
@@ -70,11 +87,19 @@ Provide images showcasing the program's functionality.
    ```text   
    http://localhost:8081/hireandgo/home/
 
-   
+---
+
+## UML Diagram: Code Design
+
+![UML Diagram of our Code](./src/main/resources/static/readme-images/techleadsUML.png)
+
+---
 
 ## Licenses
 
 This project integrates OpenAI services. Use of OpenAI APIs and services is governed by OpenAI's Terms of Service ([Terms of Service](https://openai.com/terms)) and API Terms ([API Terms](https://openai.com/api-terms)). Users of this project must comply with these terms.
+
+---
 
 ## Dependencies and their Licenses
 
