@@ -33,7 +33,7 @@ class ResearcherResultTest {
     void testGettersAndSetters() {
         ResearcherResult researcherResult = new ResearcherResult();
 
-        // Test default state
+    
         assertNull(researcherResult.getIdResearcher());
         assertNull(researcherResult.getResume());
         assertNull(researcherResult.getFileName());
@@ -55,7 +55,7 @@ class ResearcherResultTest {
 
     @Test
     void testParameterizedConstructor() {
-        // Test parameterized constructor
+        // Test constructor with parameters 
         ResearcherResult researcherResult = new ResearcherResult("cv.pdf", "resume example");
 
         researcherResult.setSessionId("session123");

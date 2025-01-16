@@ -53,20 +53,20 @@ class ResearcherServiceTest {
 
     @Test
     void testSaveResearcherResult() {
-        // Create a new ResearcherResult instance
+        // Create a new ResearcherResult object
         ResearcherResult researcherResult = new ResearcherResult("cv.pdf", "resume example 1");
 
         researcherResult.setSessionId("session123");
         // Mock the repository's save method to return the same object
         when(researcherRepository.save(researcherResult)).thenReturn(researcherResult);
 
-        // Call the service method
+        // Call the researcher service method
         researcherService.saveResearcherResult(researcherResult);
 
-        // Verify that the repository's save method was called exactly once
+        // Verify that the repository's save method was called one time
         verify(researcherRepository, times(1)).save(researcherResult);
 
-        // Assert the variables of ResearcherResult
+        // Assert the variables of ResearcherResult 
         assertNotNull(researcherResult);
         assertEquals("resume example 1", researcherResult.getResume());
         assertEquals("cv.pdf", researcherResult.getFileName());
@@ -81,10 +81,10 @@ class ResearcherServiceTest {
 
         List<ResearcherResult> mockResults = List.of(researcherResult1, researcherResult2);
 
-        // Mock the repository method
+        // Mock the repository method findBySessionId
         when(researcherRepository.findBySessionId("session123")).thenReturn(mockResults);
 
-        // Call the service method
+        // Call the ranking service method
         List<ResearcherResult> results = researcherService.getAllresearcher("session123");
 
         // Verify the repository call and assert results
