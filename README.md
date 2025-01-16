@@ -19,15 +19,15 @@ The process of using the application is as follows:
 The following images will illustrate the workflow or the prodject
 
 ![Our Home page](demo/src/main/resources/static/readme-images/Home1.png)
-![Our Services](./src/main/resources/static/readme-images/Home2.png)
-![About us](./src/main/resources/static/readme-images/Home3.png)
-![Contact us information](./src/main/resources/static/readme-images/Home4.png)
-![Steps to fill out the Registration Form](./src/main/resources/static/readme-images/Reg1.png)
-![Steps to Fill Out the Registration Form](./src/main/resources/static/readme-images/Reg2.png)
-![Dragging all the Files at once](./src/main/resources/static/readme-images/Reg3.png)
-![Registration Successful](./src/main/resources/static/readme-images/RegSuccess.png)
-![Email with Link Sent to your Inbox](./src/main/resources/static/readme-images/Email.png)
-![The Ranked Candidates](./src/main/resources/static/readme-images/RankedCandidates.png)
+![Our Services](demo/src/main/resources/static/readme-images/Home2.png)
+![About us](demo/src/main/resources/static/readme-images/Home3.png)
+![Contact us information](demo/src/main/resources/static/readme-images/Home4.png)
+![Steps to fill out the Registration Form](demo/src/main/resources/static/readme-images/Reg1.png)
+![Steps to Fill Out the Registration Form](demo/src/main/resources/static/readme-images/Reg2.png)
+![Dragging all the Files at once](demo/src/main/resources/static/readme-images/Reg3.png)
+![Registration Successful](demo/src/main/resources/static/readme-images/RegSuccess.png)
+![Email with Link Sent to your Inbox](demo/src/main/resources/static/readme-images/Email.png)
+![The Ranked Candidates](demo/src/main/resources/static/readme-images/RankedCandidates.png)
 
 
 ---
