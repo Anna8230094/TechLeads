@@ -91,7 +91,7 @@ The following images will illustrate the workflow or the prodject
 
 ## UML Diagram: Code Design
 
-![UML Diagram of our Code](./src/main/resources/static/readme-images/techleadsUML.png)
+![UML Diagram of our Code](demo/src/main/resources/static/readme-images/techleadsUML.png)
 
 ---
 
