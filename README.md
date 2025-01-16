@@ -18,19 +18,27 @@ The process of using the application is as follows:
 
 The following images will illustrate the workflow or the prodject
 
+
  Welcome to our Home Page! Here, you can learn about our Services, discover key details About Us, and find our Contact Information.
  When you click on "Get Started," you’ll be redirected to our Registration Form.
+
 ![Our Home page](demo/src/main/resources/static/readme-images/Home1.png)
 ![Our Services](demo/src/main/resources/static/readme-images/Home2.png)
 ![About us](demo/src/main/resources/static/readme-images/Home3.png)
 ![Contact us information](demo/src/main/resources/static/readme-images/Home4.png)
+
  Fill in the required fields to complete your registration.
+
 ![Steps to fill out the Registration Form](demo/src/main/resources/static/readme-images/Reg1.png)
 ![Steps to Fill Out the Registration Form](demo/src/main/resources/static/readme-images/Reg2.png)
 ![Dragging all the Files at once](demo/src/main/resources/static/readme-images/Reg3.png)
+
  Your Registration is Successful! Shortly, you will receive an email from Us with a link to the Ranked Candidates.
+
 ![Registration Successful](demo/src/main/resources/static/readme-images/RegSuccess.png)
+
  Follow the link to view the Ranked Candidates!
+ 
 ![Email with Link Sent to your Inbox](demo/src/main/resources/static/readme-images/Email.png)
 ![The Ranked Candidates](demo/src/main/resources/static/readme-images/RankedCandidates.png)
 
