@@ -18,7 +18,7 @@ The process of using the application is as follows:
 
 The following images will illustrate the workflow or the prodject
 
-![Our Home page](./src/main/resources/static/readme-images/Home1.png)
+![Our Home page](demo/src/main/resources/static/readme-images/Home1.png)
 ![Our Services](./src/main/resources/static/readme-images/Home2.png)
 ![About us](./src/main/resources/static/readme-images/Home3.png)
 ![Contact us information](./src/main/resources/static/readme-images/Home4.png)
