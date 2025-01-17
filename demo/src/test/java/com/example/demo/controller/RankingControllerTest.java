@@ -23,14 +23,23 @@
  */
 package com.example.demo.controller;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.example.demo.database.ranking.RankingRepository;
+import com.example.demo.database.ranking.RankingResult;
 
 /**
  * @author Maria Spachou
@@ -41,11 +50,30 @@ public class RankingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private RankingRepository rankingRepository; // Μπορείς να χρησιμοποιήσεις @MockBean για να κάνεις mock το RankingRepository
+
     @Test
     void testRankingControl() throws Exception {
-        this.mockMvc.perform(get("/hireandgo/home/ranking"))
+        String id = "123";  // Εδώ το id που θα χρησιμοποιήσεις για το mock
+
+        // Δημιουργία mock δεδομένων
+        RankingResult rankingResult = new RankingResult("Resume1", "Summary of resume"); // Δημιουργία ενός mock αντικειμένου RankingResult
+        rankingResult.setIdRanking(1L); // Ρύθμιση του ID για το RankingResult
+        rankingResult.setSessionId(id);
+        when(rankingRepository.findBySessionId(id)).thenReturn(Collections.singletonList(rankingResult));
+
+        // Δημιουργία της αναμενόμενης JSON μορφής ως string
+        String expectedJsonString = "[{\"resume\":\"Resume1\",\"idRanking\":1,\"sessionId\":\"123\",\"resumeSummary\":\"Summary of resume\"}]";
+
+            
+        this.mockMvc.perform(get("/hireandgo/home/ranking/{id}", id))
                 .andExpect(status().isOk()) // Ελέγχει ότι το status της απόκρισης είναι 200 (OK)
                 .andExpect(view().name("ranking")) // Ελέγχει ότι επιστρέφεται το όνομα της όψης "ranking"
-                ; // Ελέγχει ότι το attribute "message" είναι σωστό
+                .andExpect(model().attributeExists("items"))  // Ελέγχει ότι το μοντέλο έχει το attribute "items"
+                .andExpect(model().attribute("items", expectedJsonString));
+
+        // Επαλήθευση ότι το repository καλείται με το σωστό sessionId
+        verify(rankingRepository).findBySessionId(id);
     }
 }

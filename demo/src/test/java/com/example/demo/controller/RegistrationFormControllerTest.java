@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.database.user.Users;
 import com.example.demo.database.user.UsersService;
+import com.example.demo.mail.EmailService;
 import com.example.demo.openai.service.OpenAiService;
 
 /**
@@ -54,6 +57,9 @@ class RegistrationFormControllerTest {
 
         @MockBean
         private OpenAiService openAiService;
+
+        @MockBean
+        private EmailService emailService;
 
         @Test
         void testRegistration() throws Exception {
@@ -98,5 +104,34 @@ class RegistrationFormControllerTest {
                 // Επιβεβαίωση ότι οι υπηρεσίες καλούνται
                 verify(usersService, times(1)).saveUsers(any(Users.class));
                 verify(openAiService, times(1)).startRankingProcess(any(), any(Users.class));
+        }
+
+        @Test
+        void testSendResultEmail() {
+            // Mock δεδομένα
+            String name = "Maria";
+            String email = "maria@example.com";
+            String sessionId = "12345";
+            String subject = " Results Ready!";
+            String body = "Your processed data and results are ready. Please check provided link for further detailss.";
+        
+            // Mock απάντηση από το emailService
+            CompletableFuture<String> mockEmailResponse = CompletableFuture.completedFuture("Email sent successfully");
+            
+            // Ρύθμιση του mock για το emailService.sendResultEmail
+            when(emailService.sendResultEmail(email, subject, body, name, sessionId)).thenReturn(mockEmailResponse);
+        
+            // Δημιουργία instance του controller
+            RegistrationFormController controller = new RegistrationFormController();
+            controller.emailService = emailService; // Χειροκίνητη ρύθμιση του emailService mock
+        
+            // Κλήση της μεθόδου sendResultEmail
+            CompletableFuture<Void> result = controller.sendResultEmail(name, email, sessionId);
+        
+            // Επαλήθευση ότι το emailService καλείται σωστά
+            verify(emailService, times(1)).sendResultEmail(email, subject, body, name, sessionId);
+        
+            // Επαλήθευση ότι το CompletableFuture ολοκληρώνεται χωρίς σφάλματα
+            result.join();
         }
 }
