@@ -24,7 +24,9 @@
 package com.example.demo.openai.agents;
 
 import org.springframework.stereotype.Service;
-
+/**
+ * @author Valeria Soumelidi
+ */
 @Service
 public class ReviewerResearcher extends OpenAiAssistant {
 
