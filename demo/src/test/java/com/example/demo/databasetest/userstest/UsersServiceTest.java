@@ -20,7 +20,7 @@ class UsersServiceTest {
     private UserRepository userRepository; // Mocking the repository
 
     @InjectMocks
-    private UsersService usersService; // Service to be tested
+    private UsersService usersService; // Service i want to test
 
     @BeforeEach
     void setUp() {
@@ -29,7 +29,7 @@ class UsersServiceTest {
 
     @Test
     void testSaveUsers() {
-        // Create a new user with updated details
+        // Create a new user with some values
         Users user = new Users();
         user.setName("Finovatech Solutions");
         user.setEmail("oly.meg@finovatech.com");
@@ -38,16 +38,16 @@ class UsersServiceTest {
         user.setSoftSkills("Analytical thinking, Attention to detail, Risk management mindset");
         user.setOtherTraits("Integrity, Curiosity, Resilience, Discipline");
 
-        // Mock the repository save method
+        // Mock the user's repository save method
         when(userRepository.save(user)).thenReturn(user);
 
-        // Call the service method asynchronously
+        // Call the service method asynchronously cause i used the async annotation in the usersservice class
         CompletableFuture<Void> result = usersService.saveUsers(user);
 
-        // Wait for the result to complete without throwing an exception
-        result.join();  // join() blocks until the async operation completes
+        // Wait for the result to complete 
+        result.join();  // wait until the async operation completes
 
-        // Verify the repository's save method was called once
+        // Verify the repository's save method was called one time
         verify(userRepository, times(1)).save(user);
     }
 }
