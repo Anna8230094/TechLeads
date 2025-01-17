@@ -30,6 +30,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+/**
+ * This class represents my class in Java.
+ * 
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 
 public class EmailSender {
     
