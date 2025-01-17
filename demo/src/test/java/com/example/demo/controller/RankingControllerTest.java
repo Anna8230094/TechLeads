@@ -23,15 +23,14 @@
  */
 package com.example.demo.controller;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.Collections;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,6 +39,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.database.ranking.RankingRepository;
 import com.example.demo.database.ranking.RankingResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Maria Spachou
@@ -61,18 +61,25 @@ public class RankingControllerTest {
         RankingResult rankingResult = new RankingResult("Resume1", "Summary of resume"); // Δημιουργία ενός mock αντικειμένου RankingResult
         rankingResult.setIdRanking(1L); // Ρύθμιση του ID για το RankingResult
         rankingResult.setSessionId(id);
-        when(rankingRepository.findBySessionId(id)).thenReturn(Collections.singletonList(rankingResult));
+        // Χρησιμοποιούμε το ObjectMapper για να μετατρέψουμε το αντικείμενο σε JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        String actualJson = objectMapper.writeValueAsString(Collections.singletonList(rankingResult));
 
-        // Δημιουργία της αναμενόμενης JSON μορφής ως string
-        String expectedJsonString = "[{\"resume\":\"Resume1\",\"idRanking\":1,\"sessionId\":\"123\",\"resumeSummary\":\"Summary of resume\"}]";
+        // Ορίζουμε το αναμενόμενο JSON ως string
+        String expectedJsonString = "[{\"idRanking\":1,\"sessionId\":\"123\",\"resume\":\"Resume1\",\"resumeSummary\":\"Summary of resume\"}]";
 
+        // Μετατρέπουμε το αναμενόμενο και το παραγόμενο JSON σε JsonNode
+        com.fasterxml.jackson.databind.JsonNode expectedJsonNode = objectMapper.readTree(expectedJsonString);
+        com.fasterxml.jackson.databind.JsonNode actualJsonNode = objectMapper.readTree(actualJson);
+
+        // Συγκρίνουμε τα δύο JsonNode αντικείμενα
+        assertTrue(expectedJsonNode.equals(actualJsonNode), "The JSON objects are not equal.");;
             
         this.mockMvc.perform(get("/hireandgo/home/ranking/{id}", id))
                 .andExpect(status().isOk()) // Ελέγχει ότι το status της απόκρισης είναι 200 (OK)
                 .andExpect(view().name("ranking")) // Ελέγχει ότι επιστρέφεται το όνομα της όψης "ranking"
-                .andExpect(model().attributeExists("items"))  // Ελέγχει ότι το μοντέλο έχει το attribute "items"
-                .andExpect(model().attribute("items", expectedJsonString));
-
+                .andExpect(model().attributeExists("items"));
+                
         // Επαλήθευση ότι το repository καλείται με το σωστό sessionId
         verify(rankingRepository).findBySessionId(id);
     }

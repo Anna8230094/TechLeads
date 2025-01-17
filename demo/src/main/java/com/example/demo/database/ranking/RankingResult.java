@@ -74,7 +74,6 @@ public class RankingResult {
     }
 
     // Getters and Setters
-
     public Long getIdRanking() {
         return idRanking;
     }
