@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
@@ -51,6 +50,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * This class represents my class in Java.
+ * 
+ * @author Anna Maria Megalou
+ * @version 1.0
+ */
+
 @ExtendWith(SpringExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 public class OpenAiThreadTest {
@@ -67,7 +73,6 @@ public class OpenAiThreadTest {
     public static final String AssistantId = "assistant-id-123";
     public static final String MODEL = "gpt-4o-mini";
     public static final String NAME = "Register";
-   
 
     @BeforeAll
     void setUp() throws IOException {
@@ -76,8 +81,8 @@ public class OpenAiThreadTest {
         ReflectionTestUtils.setField(openAiAssistant, "instructions", INSTRUCTIONS);
         ReflectionTestUtils.setField(openAiAssistant, "name", NAME);
         ReflectionTestUtils.setField(openAiAssistant, "model", MODEL);
-        ReflectionTestUtils.setField(openAiAssistant, "assistantId","assistant-id-123" );
-        ReflectionTestUtils.setField(openAiThread, "threadId","thread-id-123" );
+        ReflectionTestUtils.setField(openAiAssistant, "assistantId", "assistant-id-123");
+        ReflectionTestUtils.setField(openAiThread, "threadId", "thread-id-123");
 
     }
 
@@ -116,12 +121,13 @@ public class OpenAiThreadTest {
                 .build();
         doReturn(response).when(runtimeClass).getrequest();
     }
+
     @Test
     void loadKeyTest() {
         assertNotNull(openAiAssistant.loadKey(), "The key must not be null");
     }
 
-     @Test
+    @Test
     void testSendRequest_Success() throws IOException {
         String url = "https://api.openai.com/v1/threads";
         mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
@@ -153,7 +159,7 @@ public class OpenAiThreadTest {
 
         mockHttpClient(openAiThread, "{\"id\": \"thread-id-123\"}");
         mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
-        
+
         assertNotNull(openAiAssistant.getAssistantId(), "Assistant ID should not be null after creation.");
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
 
@@ -178,6 +184,7 @@ public class OpenAiThreadTest {
 
         assertEquals("assistant-id-123", id);
     }
+
     @Test
     void testGetRequest() throws IOException {
 
@@ -186,7 +193,6 @@ public class OpenAiThreadTest {
 
         assertNotNull(openAiAssistant.getAssistantId());
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
-
 
         openAiThread.addMessage("user", "Tell me hi in german", openAiThread.getThreadId()).join();
         openAiThread.run().join();
