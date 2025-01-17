@@ -24,6 +24,13 @@
 package com.example.demo.openai.agents;
 
 import org.springframework.stereotype.Service;
+
+/**
+ * This class represents my class in Java.
+ * 
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
 @Service
 public class ReviewerRanking extends OpenAiAssistant{
     
