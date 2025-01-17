@@ -98,7 +98,7 @@ The following images will illustrate the workflow or the prodject
 1. Clone the Repository: Clone the TechLeads repository from GitHub using the command:
    ```bash
    git clone https://github.com/Anna8230094/TechLeads.git
-2. Set Up env.properties: Create an env.properties file based on the env.properties.example file. Populate the required fields in the resources/templates directory, including:
+2. Set Up env.properties: Create an env.properties file based on the env.properties.example file. Populate the required fields in the resources directory, including:
    - **Database connection details**
    - **OpenAI key**
 3. Install PostgreSQL: Ensure that PostgreSQL is installed on your system before running the application.
