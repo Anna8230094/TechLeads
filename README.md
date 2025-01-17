@@ -34,9 +34,11 @@ The following images will illustrate the workflow or the prodject
 
 ![Steps to fill out the Registration Form](demo/src/main/resources/static/readme-images/Reg1.png)
 
-![Steps to Fill Out the Registration Form](demo/src/main/resources/static/readme-images/Reg2.png)
+ Drag all the files at once.
 
 ![Dragging all the Files at once](demo/src/main/resources/static/readme-images/Reg3.png)
+
+![Steps to Fill Out the Registration Form](demo/src/main/resources/static/readme-images/Reg2.png)
 
  Your Registration is Successful! Shortly, you will receive an email from Us with a link to the Ranked Candidates.
 
@@ -99,7 +101,6 @@ The following images will illustrate the workflow or the prodject
 2. Set Up env.properties: Create an env.properties file based on the env.properties.example file. Populate the required fields in the resources/templates directory, including:
    - **Database connection details**
    - **OpenAI key**
-   - **User's email address**
 3. Install PostgreSQL: Ensure that PostgreSQL is installed on your system before running the application.
 4. Upload Resumes: When running the program, all resumes must be uploaded simultaneously by dragging them into the form on the `RegistrationForm.html` page.
 5. Tip: During execution, the first page users will see is the **Home Page**. Access it in a browser using:
