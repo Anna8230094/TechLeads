@@ -42,7 +42,7 @@ public class ReviewerRanking extends OpenAiAssistant{
                                         "If changes are required you will need to add feedback for the agents to correct their response Otherwise you are free to respond only with the /'---- NO CHANGES REQUIRED, ANALYSIS GOOD ----/'";
 
     public static final String MODEL = "gpt-4o-mini";
-    public static final String NAME = "Reviewer";
+    public static final String NAME = "ReviewerRanking";
 
     {
         instructions = INSTRUCTIONS;
