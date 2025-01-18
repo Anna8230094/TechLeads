@@ -1,4 +1,4 @@
-package com.example.demo.openaiclasses;
+package com.example.demo.openai;
 
 public class OpenAiExtractorThread {
 
