@@ -1,6 +1,3 @@
-package com.example.demo.openaiclasses;
-
-
 // /*
 //  * Copyright [2024-2025] [TechLeads]
 //  *
@@ -24,6 +21,8 @@ package com.example.demo.openaiclasses;
 //  * See the applicable licenses for the specific language governing permissions and
 //  * limitations under those licenses.
 //  */
+
+package com.example.demo.openaiclasses;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

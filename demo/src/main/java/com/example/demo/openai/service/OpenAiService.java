@@ -174,11 +174,12 @@ public class OpenAiService {
                 extractorResearcher = correctExtractor.get();
 
             }
-            String summaryMessage = "The csv that i want to extract summary in text based in suitability of applicant for the specific job position is :" + extractorResearcher+"I dont want the summary in csv format but want to return a small text(paragraph)";
-            CompletableFuture<String> summary =  summaryResponse(summaryMessage);
+            String summaryMessage = "The csv that i want to extract summary in text based in suitability of applicant for the specific job position is :"
+                    + extractorResearcher
+                    + "I dont want the summary in csv format but want to return a small text(paragraph)";
+            CompletableFuture<String> summary = summaryResponse(summaryMessage);
             CompletableFuture.allOf(summary).join();
             System.out.println(summary.get());
-
 
             researcherResult = new ResearcherResult();
             researcherResult.setResume(summary.get());
@@ -195,9 +196,14 @@ public class OpenAiService {
         List<ResearcherResult> databaseData = researcherService.getAllresearcher(requestSessionId);
         System.out.println(databaseData);
 
-        String messageRanking = " The resume and the id of every resume from the database are:" +
-                databaseData +
-                "I want to ranking the resumes based on that job position csv: " +
+        String messageRanking = " The resume and the id of every resume from the database are:\n";
+
+        for (ResearcherResult dbData : databaseData) {
+            messageRanking += dbData.getFileName() + ": " + dbData.getResume() + "\n";
+        }
+
+        messageRanking = messageRanking +
+                "\nI want to ranking the resumes based on that job position csv: " +
                 registerResponse.get() +
                 "I WANT TO RETURN ME A CSV of fileNames(ONLY THE file names) FROM DATABASE SORTING. THAT MEANS IN THE FIRST POSITION OF CSV MUST BE THE file name of BEST RESUME AND IN THE LAST THE file name of  WORST resume . I want to return me only the csv and the csv to split the filename with , ";
         ;
@@ -223,7 +229,7 @@ public class OpenAiService {
         if (!responseOfReviewerRanking.contains("---- NO CHANGES REQUIRED, ANALYSIS GOOD ----")) {
             rankingResponse = checkRankingReviewerResult(rankingresponse,
                     responseOfReviewerRanking);
-          
+
         }
 
         // We split the answer of ranking in tokens
@@ -288,7 +294,7 @@ public class OpenAiService {
         }
 
         // Step 4: Add Message
-        CompletableFuture<String> addMessage = thread.addMessage("user", message, thread.getThreadId() );
+        CompletableFuture<String> addMessage = thread.addMessage("user", message, thread.getThreadId());
         CompletableFuture.allOf(addMessage).join();
 
         // Step 5: Run Thread
@@ -325,6 +331,7 @@ public class OpenAiService {
         return processRequest(reviewerMessage, ReviewerResearcher.INSTRUCTIONS, reviewerResearcher,
                 reviewerResearcherThread, false, null, null);
     }
+
     @Async
     public CompletableFuture<String> summaryResponse(String summaryMessage) throws Exception {
         return processRequest(summaryMessage, SummaryAgent.INSTRUCTIONS, summaryAgent,
@@ -355,8 +362,11 @@ public class OpenAiService {
         // we keep the same thread id
         extractorResearcherMessage = "The reviewer suggest corrections :" + reviewer
                 + "in the response of extractor agent which match the cv's in the job position"
-                + extractorResearcherMessage + "I want to you  to review  again the CV and the csv of job position  based on the suggesting corrections of reviewer agent and return to me the correct a summary of applicant in a CSV format.  ";
-        CompletableFuture.allOf(extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage, extractorResearcherThread))
+                + extractorResearcherMessage
+                + "I want to you  to review  again the CV and the csv of job position  based on the suggesting corrections of reviewer agent and return to me the correct a summary of applicant in a CSV format.  ";
+        CompletableFuture
+                .allOf(extractorResearcherOpenAiThread.addMessage("assistant", extractorResearcherMessage,
+                        extractorResearcherThread))
                 .join();
         CompletableFuture.allOf(extractorResearcherOpenAiThread.run()).join();
         CompletableFuture<String> response = extractorResearcherOpenAiThread.getRequest();
@@ -371,7 +381,8 @@ public class OpenAiService {
             throws Exception {
         // we keep the same thread id
         rankingAgentMessage = "The revier of your result suggrst correction in rsnking process" + rankingAgentMessage;
-        CompletableFuture.allOf(reviewerRankingThread.addMessage("assistant", rankingAgentMessage, rankingThread)).join();
+        CompletableFuture.allOf(reviewerRankingThread.addMessage("assistant", rankingAgentMessage, rankingThread))
+                .join();
         CompletableFuture.allOf(reviewerRankingThread.run()).join();
         CompletableFuture<String> response = rankingAgentThread.getRequest();
         CompletableFuture.allOf(response).join();
@@ -396,7 +407,7 @@ public class OpenAiService {
 
             extractorReasercherResult = "The response of extractorReasearcher after corrections is: "
                     + extarctorResearcherCorrections.get();
-                System.out.println(extractorReasercherResult);
+            System.out.println(extractorReasercherResult);
             CompletableFuture<String> reviewerExtractorResponse = reviewerExtractorResponse(extractorReasercherResult);
             CompletableFuture.allOf(reviewerExtractorResponse).join();
 

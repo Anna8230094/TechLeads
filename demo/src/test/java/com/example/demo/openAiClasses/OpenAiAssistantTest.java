@@ -1,4 +1,4 @@
-package com.example.demo.openaiclasses;
+
 /*
  * Copyright [2024-2025] [TechLeads]
  *
@@ -28,7 +28,7 @@ package com.example.demo.openaiclasses;
 * @author Anna Maria Megalou
 * @version 1.0
 */
-
+package com.example.demo.openaiclasses;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

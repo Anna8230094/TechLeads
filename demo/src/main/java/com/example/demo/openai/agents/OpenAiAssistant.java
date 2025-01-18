@@ -66,6 +66,8 @@ public class OpenAiAssistant {
         String jsonRequest = buildJsonForAssistant();
         CompletableFuture<Response> response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
+        CompletableFuture.allOf(response).join();
+        
         if (response != null && response.get().isSuccessful()) {
             assistantId = extractId(response.get());
             System.out.println("Assistant created successfully. ID: " + getAssistantId());

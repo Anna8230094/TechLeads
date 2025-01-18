@@ -75,7 +75,8 @@ public class ExtractorThread extends OpenAiThread {
 
     @Override
     @Async
-    public CompletableFuture<String> addMessage(String role, String message, String thread) throws IOException, InterruptedException, ExecutionException {
+    public CompletableFuture<String> addMessage(String role, String message, String thread)
+            throws IOException, InterruptedException, ExecutionException {
         JSONObject jsonObject = new JSONObject()
                 .put("role", role)
                 .put("content", message)
@@ -87,6 +88,8 @@ public class ExtractorThread extends OpenAiThread {
 
         CompletableFuture<Response> response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + thread + "/messages");
+
+        CompletableFuture.allOf(response).join();
 
         if (response.get().isSuccessful() && response.get().body() != null) {
             System.out.println("Message add message successfully.");

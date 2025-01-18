@@ -91,7 +91,8 @@ public class OpenAiThread {
     }
 
     @Async
-    public CompletableFuture<String> createThread(String instructions, String assistantId) throws IOException, JSONException, InterruptedException, ExecutionException {
+    public CompletableFuture<String> createThread(String instructions, String assistantId)
+            throws IOException, JSONException, InterruptedException, ExecutionException {
         this.instructions = instructions;
         this.assistantId = assistantId;
 
@@ -111,7 +112,8 @@ public class OpenAiThread {
 
     // Adding message to the assistant
     @Async
-    public CompletableFuture<String> addMessage(String role, String message, String thread) throws IOException, InterruptedException, ExecutionException {
+    public CompletableFuture<String> addMessage(String role, String message, String thread)
+            throws IOException, InterruptedException, ExecutionException {
 
         JSONObject jsonObject = new JSONObject()
                 .put("role", role)
@@ -121,7 +123,7 @@ public class OpenAiThread {
 
         CompletableFuture<Response> response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + thread + "/messages");
-                CompletableFuture.allOf(response).join();
+        CompletableFuture.allOf(response).join();
         if (response.get().isSuccessful() && response.get().body() != null) {
             System.out.println("Message add message successfully.");
             return CompletableFuture.completedFuture(response.get().body().string());
@@ -142,7 +144,8 @@ public class OpenAiThread {
 
         String jsonRequest = jsonObject.toString();
 
-        CompletableFuture<Response> response = sendRequest(jsonRequest, "https://api.openai.com/v1/threads/" + getThreadId() + "/runs");
+        CompletableFuture<Response> response = sendRequest(jsonRequest,
+                "https://api.openai.com/v1/threads/" + getThreadId() + "/runs");
         CompletableFuture.allOf(response).join();
 
         if (response.get().isSuccessful() && response.get().body() != null) {
@@ -160,6 +163,8 @@ public class OpenAiThread {
     public CompletableFuture<String> getRequest() throws IOException, InterruptedException, ExecutionException {
 
         CompletableFuture<Response> response = getrequest();
+        CompletableFuture.allOf(response).join();
+
         if (response.get().isSuccessful() && response.get().body() != null) {
             String responseBody = response.get().body().string();
             JSONObject jsonResponse = new JSONObject(responseBody);
@@ -195,7 +200,6 @@ public class OpenAiThread {
     }
 
     // some getters and setters for private fields
-
     public String getInstructions() {
         return this.instructions;
     }
