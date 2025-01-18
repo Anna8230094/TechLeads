@@ -49,7 +49,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.example.demo.openai.agents.ExtractorResearcher;
 import com.example.demo.openai.agents.OpenAiAssistant;
-import com.example.demo.openai.agents.Register;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -59,7 +58,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
- * This class represents my class in Java.
+ * This class represents the ExtractorResearcher class in Java.
  * 
  * @author Ellisavet Alexia Pothitou 
  * @version 1.0
@@ -97,9 +96,9 @@ public class ExtractorResearcherTest {
 
         mockHttpClient(extractorResearcher, "{\"id\": \"assistant-id-123\"}");
 
-        assertEquals(extractorResearcher.getModel(), Register.MODEL);
-        assertEquals(extractorResearcher.getInstructions(), Register.INSTRUCTIONS);
-        assertEquals(extractorResearcher.getName(), Register.NAME);
+        assertEquals(extractorResearcher.getModel(), ExtractorResearcher.MODEL);
+        assertEquals(extractorResearcher.getInstructions(), ExtractorResearcher.INSTRUCTIONS);
+        assertEquals(extractorResearcher.getName(), ExtractorResearcher.NAME);
         CompletableFuture<String> future = extractorResearcher.createAiAssistant();
         future.join();
         assertEquals("assistant-id-123", future.get());
@@ -113,7 +112,7 @@ public class ExtractorResearcherTest {
         mockHttpClient(extractorResearcher, mockResponseBody);
 
         assertEquals(extractorResearcher.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(extractorResearcher.getName(), "Register");
+        assertEquals(extractorResearcher.getName(), "ExtractorResearcher");
         CompletableFuture<String> response = extractorResearcher.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
@@ -131,9 +130,9 @@ public class ExtractorResearcherTest {
 
         assertEquals("gpt-4o-mini", jsonObject.getString("model"));
         assertEquals(
-                "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)",
+                "You are responsible for a cv ranking procedure where other agents are part of as well. Your role is to receive a job description(in a csv format) as well as a cv (in csv format) and based on that I want you to review a CV and return a summary in a CSV format. ",
                 jsonObject.getString("instructions"));
-        assertEquals("Register", jsonObject.getString("name"));
+        assertEquals("ExtractorResearcher", jsonObject.getString("name"));
         assertTrue(!jsonObject.has("tools"));
     }
 
