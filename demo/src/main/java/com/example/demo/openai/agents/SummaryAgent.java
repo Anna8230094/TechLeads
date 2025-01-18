@@ -36,7 +36,7 @@ public class SummaryAgent extends OpenAiAssistant {
     
     public static final String INSTRUCTIONS = "You are responsible for a cv ranking procedure where other agents are part of as well. Your role is to get a csv that match a csv resume with a job position in csv format and RETURN A TEXT WITH A SUMMARY (20-30 WORDS) OF HOW ABLE IS THE APPLICANT FOR THAT JOB POSITION. ALSO TO EMPHASIZE IN ABILITIES OF APPLICANTS AND DISABILITIES FOR THE SPECIFIC JOB POSITION .I dont want the summary in csv format but want to return a small text(paragraph)";
     public static final String MODEL = "gpt-4o-mini";
-    public static final String NAME = "Extractor";
+    public static final String NAME = "Summary";
 
     {
         instructions = INSTRUCTIONS;

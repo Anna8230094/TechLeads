@@ -23,7 +23,7 @@ import org.mockito.Spy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import com.example.demo.openai.agents.OpenAiAssistant;
-import com.example.demo.openai.agents.Register;
+import com.example.demo.openai.agents.SummaryAgent;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -45,13 +45,13 @@ public class SummaryTest {
 
     @Spy
     @InjectMocks
-    private SummaryTest summary;
+    private SummaryAgent summary;
 
     @BeforeAll
     void setUp() throws IOException {
-        ReflectionTestUtils.setField(summary, "instructions", SummaryTest.INSTRUCTIONS);
-        ReflectionTestUtils.setField(summary, "name", SummaryTest.NAME);
-        ReflectionTestUtils.setField(summary, "model", SummaryTest.MODEL);
+        ReflectionTestUtils.setField(summary, "instructions", SummaryAgent.INSTRUCTIONS);
+        ReflectionTestUtils.setField(summary, "name", SummaryAgent.NAME);
+        ReflectionTestUtils.setField(summary, "model", SummaryAgent.MODEL);
     }
 
     private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
@@ -71,9 +71,9 @@ public class SummaryTest {
 
         mockHttpClient(summary, "{\"id\": \"assistant-id-123\"}");
 
-        assertEquals(summary.getModel(), SummaryTest.MODEL);
-        assertEquals(summary.getInstructions(), SummaryTest.INSTRUCTIONS);
-        assertEquals(summary.getName(), SummaryTest.NAME);
+        assertEquals(summary.getModel(), SummaryAgent.MODEL);
+        assertEquals(summary.getInstructions(), SummaryAgent.INSTRUCTIONS);
+        assertEquals(summary.getName(), SummaryAgent.NAME);
         CompletableFuture<String> future = summary.createAiAssistant();
         future.join();
         assertEquals("assistant-id-123", future.get());
@@ -87,7 +87,7 @@ public class SummaryTest {
         mockHttpClient(summary, mockResponseBody);
 
         assertEquals(summary.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(summary.getName(), "Register");
+        assertEquals(summary.getName(), "Summary");
         CompletableFuture<String> response = summary.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
@@ -105,9 +105,9 @@ public class SummaryTest {
 
         assertEquals("gpt-4o-mini", jsonObject.getString("model"));
         assertEquals(
-                "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)",
+                "You are responsible for a cv ranking procedure where other agents are part of as well. Your role is to get a csv that match a csv resume with a job position in csv format and RETURN A TEXT WITH A SUMMARY (20-30 WORDS) OF HOW ABLE IS THE APPLICANT FOR THAT JOB POSITION. ALSO TO EMPHASIZE IN ABILITIES OF APPLICANTS AND DISABILITIES FOR THE SPECIFIC JOB POSITION .I dont want the summary in csv format but want to return a small text(paragraph)",
                 jsonObject.getString("instructions"));
-        assertEquals("SummaryTest", jsonObject.getString("name"));
+        assertEquals("Summary", jsonObject.getString("name"));
         assertTrue(!jsonObject.has("tools"));
     }
 
