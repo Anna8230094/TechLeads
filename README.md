@@ -154,6 +154,7 @@ L---demo
     ο   ο   ο               ο       
     ο   ο   ο               +---database
     ο   ο   ο               ο   +---ranking
+    ο   ο   ο               ο   ο       EqualsAndHashCode.java
     ο   ο   ο               ο   ο       RankingRepository.java
     ο   ο   ο               ο   ο       RankingResult.java
     ο   ο   ο               ο   ο       RankingService.java
@@ -261,10 +262,17 @@ L---demo
     ο                       ο       EmailSenderTest.java
     ο                       ο       EmailServiceTest.java
     ο                       ο       
-    ο                       L---openAiClasses
+    ο                       L---openai
+    ο                               ExtractorResearcherTest.java
+    ο                               ExtractorTest.java
     ο                               OpenAiAssistantTest.java
     ο                               OpenAiExtractorThread.java
     ο                               OpenAiThreadTest.java
+    ο                               RankingTest.java
+    ο                               RegisterTest.java
+    ο                               ReviewerRankingTest.java
+    ο                               ReviewerResearcherTest.java
+    ο                               SummaryTest.java
     ο                               
     L---target
         +---classes
@@ -284,6 +292,7 @@ L---demo
         ο   ο           ο       
         ο   ο           +---database
         ο   ο           ο   +---ranking
+        ο   ο           ο   ο       EqualsAndHashCode.class
         ο   ο           ο   ο       RankingRepository.class
         ο   ο           ο   ο       RankingResult.class
         ο   ο           ο   ο       RankingService.class
@@ -386,9 +395,17 @@ L---demo
                         ο       EmailSenderTest.class
                         ο       EmailServiceTest.class
                         ο       
-                        L---openAiClasses
+                        L---openai
+                                ExtractorResearcherTest.class
+                                ExtractorTest.class
                                 OpenAiAssistantTest.class
                                 OpenAiExtractorThread.class
+                                OpenAiThreadTest.class
+                                RankingTest.class
+                                RegisterTest.class
+                                ReviewerRankingTest.class
+                                ReviewerResearcherTest.class
+                                SummaryTest.class
                                 
 ```
 
