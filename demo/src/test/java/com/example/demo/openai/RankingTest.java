@@ -59,7 +59,7 @@ import okhttp3.ResponseBody;
 /**
  * This class represents my class in Java.
  * 
- * @author Anna Maria Megalou
+ * @author Konstantia Nikoleta Stergiou
  * @version 1.0
  */
 
@@ -111,7 +111,7 @@ public class RankingTest {
         mockHttpClient(ranking, mockResponseBody);
 
         assertEquals(ranking.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(ranking.getName(), RankingAgent.NAME);
+        assertEquals(ranking.getName(), "Ranking Applicants");
         CompletableFuture<String> response = ranking.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
@@ -130,8 +130,8 @@ public class RankingTest {
         assertEquals("gpt-4o-mini", jsonObject.getString("model"));
         assertEquals(
                 "You are responsible for a cv ranking procedure where other agents are part of as well. Your role is to receive a list of resumes in a csv format and return the applicant’s resumes ranked from most suitable to least suitable and return to me the id's of ranking cvs.",
-                ranking.getInstructions());
-        assertEquals("Ranking Applicants", ranking.getName());
+                jsonObject.getString("instructions"));
+        assertEquals("Ranking Applicants", jsonObject.getString("name"));
         assertTrue(!jsonObject.has("tools"));
     }
 
