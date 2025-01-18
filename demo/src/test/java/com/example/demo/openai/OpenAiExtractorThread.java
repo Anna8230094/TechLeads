@@ -21,6 +21,12 @@
 //  * See the applicable licenses for the specific language governing permissions and
 //  * limitations under those licenses.
 //  */
+
+/**
+* This class represents my class in Java.
+* @author Anna Maria Megalou
+* @version 1.0
+*/
 package com.example.demo.openai;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

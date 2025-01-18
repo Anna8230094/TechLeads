@@ -60,7 +60,7 @@ import okhttp3.ResponseBody;
 /**
  * This class represents my class in Java.
  * 
- * @author Anna Maria Megalou
+ * @author Maria Spachou
  * @version 1.0
  */
 
