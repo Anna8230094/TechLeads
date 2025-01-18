@@ -22,6 +22,13 @@
 //  * limitations under those licenses.
 //  */
 
+/**
+ * This class represents my class in Java.
+ * 
+ * @author Aggeliki Despoina Megalou
+ * @version 1.0
+ */
+
 package com.example.demo.openai;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,8 +53,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import com.example.demo.openai.agents.ReviewerResearcher;
+import com.example.demo.openai.agents.OpenAiAssistant;
+import com.example.demo.openai.agents.ReviewerRanking;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -56,29 +63,23 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * This class represents my class in Java.
- * 
- * @author Valeria Soumelidi
- * @version 1.0
- */
 
 @ExtendWith(SpringExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class ReviewerResearcherTest {
+public class ReviewerRankingTest {
 
     @Spy
     @InjectMocks
-    private ReviewerResearcher reviewerResearcher;
+    private ReviewerRanking reviewerRanking;
 
     @BeforeAll
     void setUp() throws IOException {
-        ReflectionTestUtils.setField(reviewerResearcher, "instructions", ReviewerResearcher.INSTRUCTIONS);
-        ReflectionTestUtils.setField(reviewerResearcher, "name", ReviewerResearcher.NAME);
-        ReflectionTestUtils.setField(reviewerResearcher, "model", ReviewerResearcher.MODEL);
+        ReflectionTestUtils.setField(reviewerRanking, "instructions", ReviewerRanking.INSTRUCTIONS);
+        ReflectionTestUtils.setField(reviewerRanking, "name", ReviewerRanking.NAME);
+        ReflectionTestUtils.setField(reviewerRanking, "model", ReviewerRanking.MODEL);
     }
 
-    private static void mockHttpClient(ReviewerResearcher runtimeClass, final String serializedBody) throws IOException {
+    private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
         Response response = new Response.Builder()
                 .request(new Request.Builder().url("http://url.com").build())
                 .protocol(Protocol.HTTP_1_1)
@@ -93,12 +94,12 @@ public class ReviewerResearcherTest {
     @Test
     void createAssistantTest() throws IOException, InterruptedException, ExecutionException {
 
-        mockHttpClient(reviewerResearcher, "{\"id\": \"assistant-id-123\"}");
+        mockHttpClient(reviewerRanking, "{\"id\": \"assistant-id-123\"}");
 
-        assertEquals(reviewerResearcher.getModel(), ReviewerResearcher.MODEL);
-        assertEquals(reviewerResearcher.getInstructions(), ReviewerResearcher.INSTRUCTIONS);
-        assertEquals(reviewerResearcher.getName(), ReviewerResearcher.NAME);
-        CompletableFuture<String> future = reviewerResearcher.createAiAssistant();
+        assertEquals(reviewerRanking.getModel(), ReviewerRanking.MODEL);
+        assertEquals(reviewerRanking.getInstructions(), ReviewerRanking.INSTRUCTIONS);
+        assertEquals(reviewerRanking.getName(), ReviewerRanking.NAME);
+        CompletableFuture<String> future = reviewerRanking.createAiAssistant();
         future.join();
         assertEquals("assistant-id-123", future.get());
     }
@@ -108,38 +109,44 @@ public class ReviewerResearcherTest {
         // Simulate successful response
         // when(mockResponse.isSuccessful()).thenReturn(true);
         String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-        mockHttpClient(reviewerResearcher, mockResponseBody);
+        mockHttpClient(reviewerRanking, mockResponseBody);
 
-        assertEquals(reviewerResearcher.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(reviewerResearcher.getName(), ReviewerResearcher.NAME);
-        CompletableFuture<String> response = reviewerResearcher.createAiAssistant();
+        assertEquals(reviewerRanking.loadKey(), "${OPENAI_API_KEY}");
+        assertEquals(reviewerRanking.getName(), "ReviewerRanking");
+        CompletableFuture<String> response = reviewerRanking.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
 
     @Test
     void loadKeyTest() {
-        assertNotNull(reviewerResearcher.loadKey(), "The key must not be null");
+        assertNotNull(reviewerRanking.loadKey(), "The key must not be null");
     }
 
     @Test
     void testBuildJsonForAssistant() {
         // Generate JSON and verify its structure
-        String json = reviewerResearcher.buildJsonForAssistant();
+        String json = reviewerRanking.buildJsonForAssistant();
         JSONObject jsonObject = new JSONObject(json);
 
         assertEquals("gpt-4o-mini", jsonObject.getString("model"));
-        assertEquals(ReviewerResearcher.INSTRUCTIONS,
+        assertEquals(
+                "You are part of a system that reviews CVs from candidates on different domains. YOU ARE THE REVIEWER IN THAT HIRING COMPANY THAT TAKES THE FINAL DECISION. YOUR ANSWER WILL IMPACT THE COMPANY."+
+                                        "Based on that I want you to review  the RankingAgent’s result and estimate if the ranking of applicants is correct./n"+
+                                        "Your answer should consist of either 2 responses:"+
+                                        "1. ---- REQUIRES CHANGES ----/n"+
+                                        "2. ---- NO CHANGES REQUIRED, ANALYSIS GOOD ----/n"+
+                                        "If changes are required you will need to add feedback for the agents to correct their response Otherwise you are free to respond only with the /'---- NO CHANGES REQUIRED, ANALYSIS GOOD ----/'",
                 jsonObject.getString("instructions"));
-        assertEquals(ReviewerResearcher.NAME, jsonObject.getString("name"));
+        assertEquals("ReviewerRanking", jsonObject.getString("name"));
         assertTrue(!jsonObject.has("tools"));
     }
 
     @Test
     void testSendRequestSuccess() throws IOException {
     
-        String jsonRequest = reviewerResearcher.buildJsonForAssistant();
+        String jsonRequest = reviewerRanking.buildJsonForAssistant();
         String url = "https://api.openai.com/v1/assistants";
-        CompletableFuture<Response> response = reviewerResearcher.sendRequest(jsonRequest, url);
+        CompletableFuture<Response> response = reviewerRanking.sendRequest(jsonRequest, url);
 
         assertNotNull(response);
     }
@@ -155,7 +162,7 @@ public class ReviewerResearcherTest {
                                 MediaType.parse("application/json")))
                 .build();
 
-        String id = reviewerResearcher.extractId(response);
+        String id = reviewerRanking.extractId(response);
 
         assertEquals("assistant-id-123", id);
     }
@@ -165,10 +172,10 @@ public class ReviewerResearcherTest {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.openai.com/v1/assistants/" + reviewerResearcher.getAssistantId())
+                .url("https://api.openai.com/v1/assistants/" + reviewerRanking.getAssistantId())
                 .delete()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer " + reviewerResearcher.loadKey())
+                .addHeader("Authorization", "Bearer " + reviewerRanking.loadKey())
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
@@ -177,3 +184,4 @@ public class ReviewerResearcherTest {
             System.out.println("The delete of assistant is unable");
     }
 }
+
