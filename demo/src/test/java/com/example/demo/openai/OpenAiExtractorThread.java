@@ -6,11 +6,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Handler;
+
 
 import org.json.JSONException;
 import org.junit.jupiter.api.AfterAll;
@@ -62,17 +61,17 @@ public class OpenAiExtractorThread {
         ReflectionTestUtils.setField(extractorThread, "threadId", "thread-id-123");
 
     }
-    private static void mockHttpClientUpload(ExtractorThread runtimeClass, final String serializedBody) throws IOException {
-        Response response = new Response.Builder()
-                .request(new Request.Builder().url("http://url.com").build())
-                .protocol(Protocol.HTTP_1_1)
-                .code(200).message("").body(
-                        ResponseBody.create(
-                                serializedBody,
-                                MediaType.parse("application/json")))
-                .build();
-        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).uploadFile(anyString(), any());
-    }
+    // private static void mockHttpClientUpload(ExtractorThread runtimeClass, final String serializedBody) throws IOException {
+    //     Response response = new Response.Builder()
+    //             .request(new Request.Builder().url("http://url.com").build())
+    //             .protocol(Protocol.HTTP_1_1)
+    //             .code(200).message("").body(
+    //                     ResponseBody.create(
+    //                             serializedBody,
+    //                             MediaType.parse("application/json")))
+    //             .build();
+    //     doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).uploadFile(anyString(), any());
+    // }
 
     private static void mockHttpClient(ExtractorThread runtimeClass, final String serializedBody) throws IOException {
         Response response = new Response.Builder()

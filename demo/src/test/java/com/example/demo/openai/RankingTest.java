@@ -111,7 +111,7 @@ public class RankingTest {
         mockHttpClient(ranking, mockResponseBody);
 
         assertEquals(ranking.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(ranking.getName(), "RankingAgent");
+        assertEquals(ranking.getName(), RankingAgent.NAME);
         CompletableFuture<String> response = ranking.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
@@ -129,15 +129,15 @@ public class RankingTest {
 
         assertEquals("gpt-4o-mini", jsonObject.getString("model"));
         assertEquals(
-                "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)",
-                jsonObject.getString("instructions"));
-        assertEquals("RankingAgent", jsonObject.getString("name"));
+                "You are responsible for a cv ranking procedure where other agents are part of as well. Your role is to receive a list of resumes in a csv format and return the applicant’s resumes ranked from most suitable to least suitable and return to me the id's of ranking cvs.",
+                ranking.getInstructions());
+        assertEquals("Ranking Applicants", ranking.getName());
         assertTrue(!jsonObject.has("tools"));
     }
 
     @Test
     void testSendRequestSuccess() throws IOException {
-    
+
         String jsonRequest = ranking.buildJsonForAssistant();
         String url = "https://api.openai.com/v1/assistants";
         CompletableFuture<Response> response = ranking.sendRequest(jsonRequest, url);
