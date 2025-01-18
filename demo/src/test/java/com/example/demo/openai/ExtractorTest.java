@@ -46,8 +46,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import com.example.demo.openai.agents.OpenAiAssistant;
-import com.example.demo.openai.agents.Register;
+
+import com.example.demo.openai.agents.Extractor;
+
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -69,16 +70,16 @@ public class ExtractorTest {
 
     @Spy
     @InjectMocks
-    private Register register;
+    private Extractor extractor;
 
     @BeforeAll
     void setUp() throws IOException {
-        ReflectionTestUtils.setField(register, "instructions", Register.INSTRUCTIONS);
-        ReflectionTestUtils.setField(register, "name", Register.NAME);
-        ReflectionTestUtils.setField(register, "model", Register.MODEL);
+        ReflectionTestUtils.setField(extractor, "instructions", Extractor.INSTRUCTIONS);
+        ReflectionTestUtils.setField(extractor, "name", Extractor.NAME);
+        ReflectionTestUtils.setField(extractor, "model", Extractor.MODEL);
     }
 
-    private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
+    private static void mockHttpClient(Extractor runtimeClass, final String serializedBody) throws IOException {
         Response response = new Response.Builder()
                 .request(new Request.Builder().url("http://url.com").build())
                 .protocol(Protocol.HTTP_1_1)
@@ -93,12 +94,12 @@ public class ExtractorTest {
     @Test
     void createAssistantTest() throws IOException, InterruptedException, ExecutionException {
 
-        mockHttpClient(register, "{\"id\": \"assistant-id-123\"}");
+        mockHttpClient(extractor, "{\"id\": \"assistant-id-123\"}");
 
-        assertEquals(register.getModel(), Register.MODEL);
-        assertEquals(register.getInstructions(), Register.INSTRUCTIONS);
-        assertEquals(register.getName(), Register.NAME);
-        CompletableFuture<String> future = register.createAiAssistant();
+        assertEquals(extractor.getModel(), Extractor.MODEL);
+        assertEquals(extractor.getInstructions(), Extractor.INSTRUCTIONS);
+        assertEquals(extractor.getName(), Extractor.NAME);
+        CompletableFuture<String> future = extractor.createAiAssistant();
         future.join();
         assertEquals("assistant-id-123", future.get());
     }
@@ -108,39 +109,38 @@ public class ExtractorTest {
         // Simulate successful response
         // when(mockResponse.isSuccessful()).thenReturn(true);
         String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
-        mockHttpClient(register, mockResponseBody);
+        mockHttpClient(extractor, mockResponseBody);
 
-        assertEquals(register.loadKey(), "${OPENAI_API_KEY}");
-        assertEquals(register.getName(), "Register");
-        CompletableFuture<String> response = register.createAiAssistant();
+        assertEquals(extractor.loadKey(), "${OPENAI_API_KEY}");
+        assertEquals(extractor.getName(), "Extractor");
+        CompletableFuture<String> response = extractor.createAiAssistant();
         assertEquals("assistant-id-123", response.join());
     }
 
     @Test
     void loadKeyTest() {
-        assertNotNull(register.loadKey(), "The key must not be null");
+        assertNotNull(extractor.loadKey(), "The key must not be null");
     }
 
     @Test
     void testBuildJsonForAssistant() {
         // Generate JSON and verify its structure
-        String json = register.buildJsonForAssistant();
+        String json = extractor.buildJsonForAssistant();
         JSONObject jsonObject = new JSONObject(json);
 
-        assertEquals("gpt-4o-mini", jsonObject.getString("model"));
-        assertEquals(
-                "You are responsible for a procedure of cv ranking where other agents are part of as well. Your role is to receive a job description and turn it in csv format (return it in text form)",
+        assertEquals("gpt-4o", jsonObject.getString("model"));
+        assertEquals(Extractor.INSTRUCTIONS,
                 jsonObject.getString("instructions"));
-        assertEquals("Register", jsonObject.getString("name"));
-        assertTrue(!jsonObject.has("tools"));
+        assertEquals("Extractor", jsonObject.getString("name"));
+        assertTrue(jsonObject.has("tools"));
     }
 
     @Test
     void testSendRequestSuccess() throws IOException {
     
-        String jsonRequest = register.buildJsonForAssistant();
+        String jsonRequest = extractor.buildJsonForAssistant();
         String url = "https://api.openai.com/v1/assistants";
-        CompletableFuture<Response> response = register.sendRequest(jsonRequest, url);
+        CompletableFuture<Response> response = extractor.sendRequest(jsonRequest, url);
 
         assertNotNull(response);
     }
@@ -156,7 +156,7 @@ public class ExtractorTest {
                                 MediaType.parse("application/json")))
                 .build();
 
-        String id = register.extractId(response);
+        String id = extractor.extractId(response);
 
         assertEquals("assistant-id-123", id);
     }
@@ -166,10 +166,10 @@ public class ExtractorTest {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.openai.com/v1/assistants/" + register.getAssistantId())
+                .url("https://api.openai.com/v1/assistants/" + extractor.getAssistantId())
                 .delete()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer " + register.loadKey())
+                .addHeader("Authorization", "Bearer " + extractor.loadKey())
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
