@@ -28,7 +28,7 @@
 * @author Anna Maria Megalou
 * @version 1.0
 */
-package com.example.demo.openaiclasses;
+package com.example.demo.openai;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

@@ -1,4 +1,4 @@
-package com.example.demo.openaiclasses;
+package com.example.demo.openai;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
