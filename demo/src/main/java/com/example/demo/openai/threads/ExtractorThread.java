@@ -25,6 +25,7 @@ package com.example.demo.openai.threads;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -74,7 +75,7 @@ public class ExtractorThread extends OpenAiThread {
 
     @Override
     @Async
-    public CompletableFuture<String> addMessage(String role, String message, String thread) throws IOException {
+    public CompletableFuture<String> addMessage(String role, String message, String thread) throws IOException, InterruptedException, ExecutionException {
         JSONObject jsonObject = new JSONObject()
                 .put("role", role)
                 .put("content", message)
@@ -84,12 +85,12 @@ public class ExtractorThread extends OpenAiThread {
 
         String jsonRequest = jsonObject.toString();
 
-        Response response = sendRequest(jsonRequest,
+        CompletableFuture<Response> response = sendRequest(jsonRequest,
                 "https://api.openai.com/v1/threads/" + thread + "/messages");
 
-        if (response.isSuccessful() && response.body() != null) {
+        if (response.get().isSuccessful() && response.get().body() != null) {
             System.out.println("Message add message successfully.");
-            return CompletableFuture.completedFuture(response.body().string());
+            return CompletableFuture.completedFuture(response.get().body().string());
         } else {
             System.err.println("Failed to add message ");
             throw new Error();

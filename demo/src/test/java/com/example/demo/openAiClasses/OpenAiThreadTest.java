@@ -28,7 +28,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -95,7 +98,7 @@ public class OpenAiThreadTest {
                                 serializedBody,
                                 MediaType.parse("application/json")))
                 .build();
-        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).sendRequest(anyString(), anyString());
     }
 
     private static void mockHttpClient(OpenAiAssistant runtimeClass, final String serializedBody) throws IOException {
@@ -107,7 +110,7 @@ public class OpenAiThreadTest {
                                 serializedBody,
                                 MediaType.parse("application/json")))
                 .build();
-        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).sendRequest(anyString(), anyString());
     }
 
     private static void mockHttpClientget(OpenAiThread runtimeClass, final String serializedBody) throws IOException {
@@ -119,7 +122,7 @@ public class OpenAiThreadTest {
                                 serializedBody,
                                 MediaType.parse("application/json")))
                 .build();
-        doReturn(response).when(runtimeClass).getrequest();
+        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).getrequest();
     }
 
     @Test
@@ -131,12 +134,12 @@ public class OpenAiThreadTest {
     void testSendRequest_Success() throws IOException {
         String url = "https://api.openai.com/v1/threads";
         mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
-        Response response = openAiThread.sendRequest("{\"id\": \"assistant-id-123\"}", url);
+        CompletableFuture<Response> response = openAiThread.sendRequest("{\"id\": \"assistant-id-123\"}", url);
         assertNotNull(response);
     }
 
     @Test
-    void buildThreadTest() throws IOException {
+    void buildThreadTest() throws IOException, JSONException, InterruptedException, ExecutionException {
         mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
 
         assertNotNull(openAiThread.createThread("You are a german translator", "assistant-id-123"),
@@ -145,7 +148,7 @@ public class OpenAiThreadTest {
     }
 
     @Test
-    void testAddMessage() throws IOException {
+    void testAddMessage() throws IOException, InterruptedException, ExecutionException {
         mockHttpClient(openAiThread, "{\"id\": \"assistant-id-123\"}");
         openAiThread.getThreadId();
         assertNotNull(openAiThread.getThreadId(), "Thread ID should not be null after creation.");
@@ -155,7 +158,7 @@ public class OpenAiThreadTest {
     }
 
     @Test
-    void testRun() throws IOException {
+    void testRun() throws IOException, InterruptedException, ExecutionException {
 
         mockHttpClient(openAiThread, "{\"id\": \"thread-id-123\"}");
         mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
@@ -186,7 +189,7 @@ public class OpenAiThreadTest {
     }
 
     @Test
-    void testGetRequest() throws IOException {
+    void testGetRequest() throws IOException, InterruptedException, ExecutionException {
 
         mockHttpClient(openAiAssistant, "{\"id\": \"assistant-id-123\"}");
         mockHttpClient(openAiThread, "{\"id\": \"thread-id-123\"}");

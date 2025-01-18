@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 
@@ -87,7 +88,7 @@ public class OpenAiAssistantTest {
                                 serializedBody,
                                 MediaType.parse("application/json")))
                 .build();
-        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).sendRequest(anyString(), anyString());
     }
 
     @Test
@@ -104,7 +105,7 @@ public class OpenAiAssistantTest {
     }
 
     @Test
-    void testCreateAiAssistant() throws IOException {
+    void testCreateAiAssistant() throws IOException, JSONException, InterruptedException, ExecutionException {
         // Simulate successful response
         // when(mockResponse.isSuccessful()).thenReturn(true);
         String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
@@ -145,7 +146,7 @@ public class OpenAiAssistantTest {
         String url = "https://api.openai.com/v1/assistants";
 
         // Mock the method behavior
-        Response response = openAiAssistant.sendRequest(jsonRequest, url);
+        CompletableFuture<Response> response = openAiAssistant.sendRequest(jsonRequest, url);
 
         assertNotNull(response);
     }

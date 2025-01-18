@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -87,7 +88,7 @@ public class RegisterTest {
                                 serializedBody,
                                 MediaType.parse("application/json")))
                 .build();
-        doReturn(response).when(runtimeClass).sendRequest(anyString(), anyString());
+        doReturn(CompletableFuture.completedFuture(response)).when(runtimeClass).sendRequest(anyString(), anyString());
     }
 
     @Test
@@ -104,7 +105,7 @@ public class RegisterTest {
     }
 
     @Test
-    void testCreateAiAssistant() throws IOException {
+    void testCreateAiAssistant() throws IOException, JSONException, InterruptedException, ExecutionException {
         // Simulate successful response
         // when(mockResponse.isSuccessful()).thenReturn(true);
         String mockResponseBody = "{\"id\":\"assistant-id-123\"}";
@@ -137,15 +138,10 @@ public class RegisterTest {
 
     @Test
     void testSendRequestSuccess() throws IOException {
-        // Mocking Response
-        // when(mockResponse.isSuccessful()).thenReturn(true);
-
-        // Create a sample JSON request
+    
         String jsonRequest = register.buildJsonForAssistant();
         String url = "https://api.openai.com/v1/assistants";
-
-        // Mock the method behavior
-        Response response = register.sendRequest(jsonRequest, url);
+        CompletableFuture<Response> response = register.sendRequest(jsonRequest, url);
 
         assertNotNull(response);
     }

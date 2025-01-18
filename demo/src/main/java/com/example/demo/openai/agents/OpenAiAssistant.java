@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,12 +62,12 @@ public class OpenAiAssistant {
 
     // creatAssistant
     @Async
-    public CompletableFuture <String> createAiAssistant() throws IOException {
+    public CompletableFuture <String> createAiAssistant() throws IOException, JSONException, InterruptedException, ExecutionException {
         String jsonRequest = buildJsonForAssistant();
-        Response response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
+        CompletableFuture<Response> response = sendRequest(jsonRequest, "https://api.openai.com/v1/assistants");
 
-        if (response != null && response.isSuccessful()) {
-            assistantId = extractId(response);
+        if (response != null && response.get().isSuccessful()) {
+            assistantId = extractId(response.get());
             System.out.println("Assistant created successfully. ID: " + getAssistantId());
             return CompletableFuture.completedFuture(assistantId);
         } else {
@@ -88,7 +89,8 @@ public class OpenAiAssistant {
     }
 
     // send request to assistant API
-    public Response sendRequest(String jsonRequest, String url) throws IOException {
+    @Async
+    public CompletableFuture<Response> sendRequest(String jsonRequest, String url) throws IOException {
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         MediaType mediaType = MediaType.parse("application/json");
@@ -104,7 +106,7 @@ public class OpenAiAssistant {
                 .addHeader("OpenAI-Beta", "assistants=v2")
                 .build();
 
-        return client.newCall(request).execute();
+        return CompletableFuture.completedFuture(client.newCall(request).execute());
     }
 
     // The method that load key from application.properties
