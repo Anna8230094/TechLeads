@@ -24,9 +24,9 @@
     <!-- Fieldset No1 -->
     <fieldset>
       <p>Company's Information</p>
-      <label th:field="*{name}" for="name">Company's Name<input id="name" name="name" type="text" required /></label>
-      <label th:field="*{field}"for="field">Job Position<input id="field" name="field" type="text" required /></label>
-      <label th:field="*{email}" for="email">User's Email<input id="email" name="email" type="email" required /></label>
+      <label th:field="*{name}" for="name">Company's Name<input id="name" name="name" type="text" placeholder="Hire&Go" required /></label>
+      <label th:field="*{field}"for="field">Job Position<input id="field" name="field" type="text" placeholder="Data Analyst" required /></label>
+      <label th:field="*{email}" for="email">User's Email<input id="email" name="email" type="email" placeholder="example@email.com" required /></label>
     </fieldset>
 
 
@@ -34,13 +34,13 @@
     <fieldset>
       <p>Job Position's Requirements</p>
       <label th:field="*{hardSkills}" for="hardSkills">Hard Skills</label>
-      <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" required></textarea>
+      <textarea id="hardSkills" name="hardSkills" rows="4" cols="50" placeholder="Microsoft Tools, Proficiency in English, German, SQL" required></textarea>
 
       <label th:field="*{softSkills}" for="softSkills">Soft Skills</label>
-      <textarea id="softSkills" name="softSkills" rows="4" cols="50" required></textarea>
+      <textarea id="softSkills" name="softSkills" rows="4" cols="50" placeholder="Teamwork, Problem Solving, Time Management" required></textarea>
 
       <label th:field="*{otherTraits}" for="otherTraits">Other Traits</label>
-      <textarea id="otherTraits" name="otherTraits" rows="4" cols="50"></textarea>
+      <textarea id="otherTraits" name="otherTraits" rows="4" cols="50" placeholder="1-2 Years of work experience"></textarea>
     </fieldset>
 
 
